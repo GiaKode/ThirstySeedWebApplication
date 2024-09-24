@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ThirstySeed
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -37,3 +38,7 @@ npm run build
 ```sh
 npm run lint
 ```
+=======
+# ThirstySeedWebApplication
+ThisrtySeed Web Application
+>>>>>>> 96e1d02fac02eb2d295c8748926d5957c0bf15f2
