@@ -18,7 +18,7 @@
 
 <script>
 import { plotService } from "@/plot/services/plot.service.js";
-import { nodeService } from "@/plot/services/node.service.js";
+import { nodeService } from "@/node/services/node.service.js";
 import NodeStatusCard from "@/plot/components/NodeStatusCard.vue";
 
 export default {
