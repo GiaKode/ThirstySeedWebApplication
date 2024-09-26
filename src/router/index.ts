@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import PlotStatusView from "@/plot/pages/PlotStatusView.vue";
 import PlotRegisterComponent from '@/plot/components/PlotRegisterComponent.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
+import NodeRegisterComponent from '@/node/components/NodeRegisterComponent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,7 +23,11 @@ const router = createRouter({
       name: 'plotregister',
       component: PlotRegisterComponent
     },
-
+    {
+      path: '/hola',
+      name: 'hola',
+      component: NodeRegisterComponent
+    },
     {
       path: '/about',
       name: 'about',

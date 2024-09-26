@@ -15,6 +15,14 @@
       "size": 100,
       "lastIrrigationDate": "2024-09-26T04:53:55.626Z",
       "imageUrl": ""
+    },
+    {
+      "id": "2e64",
+      "name": "minecraft",
+      "location": "arequipa",
+      "size": 200,
+      "lastIrrigationDate": "2024-09-26T18:01:47.937Z",
+      "imageUrl": ""
     }
   ],
   "nodes": [
@@ -57,6 +65,38 @@
       "status": "Error",
       "statusClass": "status-error",
       "iconClass": "pi pi-exclamation-triangle"
+    },
+    {
+      "id": "9c4f",
+      "landName": "hola",
+      "nodeType": "2",
+      "location": "mi casa"
+    },
+    {
+      "id": "4435",
+      "landName": "lima",
+      "nodeType": "2",
+      "location": ""
+    },
+    {
+      "id": 1,
+      "plotId": 1,
+      "location": "lima",
+      "moisture": 100,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
+    },
+    {
+      "id": 1,
+      "plotId": 1,
+      "location": "west",
+      "moisture": 200,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
     }
   ]
 }
