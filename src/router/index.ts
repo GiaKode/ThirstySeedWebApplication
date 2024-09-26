@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import PlotStatusView from "@/plot/pages/PlotStatusView.vue";
-import plotregister from '@/plot/components/plotregister.vue'
+import PlotRegisterComponent from '@/plot/components/PlotRegisterComponent.vue'
+import HelloWorld from '@/components/HelloWorld.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,7 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: PlotStatusView
+      component: HelloWorld
     },
     {
       path: '/plotstatus',
@@ -19,8 +20,9 @@ const router = createRouter({
     {
       path: '/plotregister',
       name: 'plotregister',
-      component: plotregister
+      component: PlotRegisterComponent
     },
+
     {
       path: '/about',
       name: 'about',
