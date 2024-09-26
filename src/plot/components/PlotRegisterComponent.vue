@@ -13,8 +13,8 @@
         </div>
 
         <div class="image-box">
-          <div class="image-content" v-if="image">
-            <img :src="image" alt="Plot Image" />
+          <div class="image-content" v-if="plot.imageUrl">
+            <img :src="plot.imageUrl" alt="Plot Image" />
           </div>
           <div class="placeholder" v-else>
             <span>Insert Image</span>
@@ -36,7 +36,7 @@
           <label for="landName">Land Name</label>
           <input
             type="text"
-            v-model="plot.landName"
+            v-model="plot.name"
             id="landName"
             placeholder="Land Name"
             required
@@ -55,18 +55,21 @@
         </div>
 
         <div class="form-group">
-          <label for="extension">Extension of Land</label>
+          <label for="size">Extension of Land (size)</label>
           <input
-            type="text"
-            v-model="plot.extension"
-            id="extension"
-            placeholder="Extension Of Land"
+            type="number"
+            v-model="plot.size"
+            id="size"
+            placeholder="Extension of Land"
             required
           />
         </div>
 
         <div class="form-actions">
-          <router-link :to="{ name: 'register-nodes' }" class="register-link">Register Nodes</router-link>
+          <!-- Botón de registro de nodos comentado ya que no es necesario -->
+          <!-- <router-link :to="{ name: 'register-nodes' }" class="register-link">
+            Register Nodes
+          </router-link> -->
           <button type="submit" class="submit-button">Submit</button>
         </div>
       </form>
@@ -75,38 +78,55 @@
 </template>
 
 <script>
+import { plotService } from '@/plot/services/plot.service.js'
+
 export default {
   data() {
     return {
       plot: {
-        landName: '',
+        name: '',
         location: '',
-        extension: ''
-      },
-      image: null
+        size: '',
+        lastIrrigationDate: new Date().toISOString(), // Fecha de último riego
+        imageUrl: '' // URL de la imagen
+      }
     };
   },
   methods: {
     onImageUpload(event) {
       const file = event.target.files[0];
       if (file) {
-        this.image = URL.createObjectURL(file);
+        this.plot.imageUrl = URL.createObjectURL(file);
       }
     },
-    registerPlot() {
-      if (!this.plot.landName || !this.plot.location || !this.plot.extension) {
+    async registerPlot() {
+      if (!this.plot.name || !this.plot.location || !this.plot.size) {
         alert("Please fill out all fields.");
         return;
       }
-      console.log("Plot Registered", this.plot);
-      // Aquí puedes agregar lógica para enviar el formulario a un backend
+      try {
+        // Llamar al servicio para crear el plot
+        await plotService.createPlot(this.plot);
+        console.log("Plot Registered", this.plot);
+        alert("Plot registered successfully!");
+        // Reiniciar el formulario
+        this.plot = {
+          name: '',
+          location: '',
+          size: '',
+          lastIrrigationDate: new Date().toISOString(),
+          imageUrl: ''
+        };
+      } catch (error) {
+        console.error("Error registering plot:", error);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-/* General Styles */
+/* Estilos mantenidos sin cambios */
 .container {
   display: flex;
   justify-content: center;
@@ -136,7 +156,6 @@ h1 {
   margin-bottom: 30px;
 }
 
-/* Estilos del contenedor de imagen */
 .image-upload-container {
   display: flex;
   justify-content: center;
@@ -177,7 +196,6 @@ input[type="file"] {
   cursor: pointer;
 }
 
-/* Líneas decorativas */
 .decorative-lines {
   display: flex;
   flex-direction: column;
@@ -211,7 +229,6 @@ input[type="file"] {
   width: 20px;
 }
 
-/* Form Styles */
 .form-group {
   margin-bottom: 20px;
 }
@@ -238,7 +255,6 @@ input:focus {
   outline: none;
 }
 
-/* Botones */
 .form-actions {
   display: flex;
   justify-content: space-between;
