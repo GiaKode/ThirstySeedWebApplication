@@ -1,0 +1,54 @@
+{
+  "plots": [
+    {
+      "id": 1,
+      "name": "Pucará",
+      "size": 100,
+      "nodes": 4,
+      "lastIrrigationDate": "2024-09-15T14:45:00",
+      "imageUrl": "https://th.bing.com/th/id/OIP.jssbDThMuwLbPO1m7uGWuAHaDP?rs=1&pid=ImgDetMain"
+    }
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "plotId": 1,
+      "location": "South",
+      "moisture": 40,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
+    },
+    {
+      "id": 2,
+      "plotId": 1,
+      "location": "South",
+      "moisture": 40,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
+    },
+    {
+      "id": 3,
+      "plotId": 1,
+      "location": "West",
+      "moisture": 30,
+      "indicator": "Water",
+      "status": "Error",
+      "statusClass": "status-error",
+      "iconClass": "pi pi-exclamation-triangle"
+    },
+    {
+      "id": 4,
+      "plotId": 1,
+      "location": "West",
+      "moisture": 30,
+      "indicator": "Water",
+      "status": "Error",
+      "statusClass": "status-error",
+      "iconClass": "pi pi-exclamation-triangle"
+    }
+  ]
+}
