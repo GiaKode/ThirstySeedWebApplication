@@ -5,6 +5,8 @@ import NodeRegisterComponent from '@/node/components/NodeRegisterComponent.vue'
 import ActivateIrrigationNodes from '@/irrigation-management/components/activate-irrigation-nodes.vue'
 import PlotStatusView from "@/plot/components/PlotStatusView.vue";
 import ActivateIrrigationInPlotView from "@/irrigation-management/components/ActivateIrrigationInPlotView.vue";
+import ProfileView from '@/profile/components/ProfileView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,12 +18,12 @@ const router = createRouter({
     { path: '/register-node', name: 'registernode', component: NodeRegisterComponent },
     {path: '/activate-irrigation-nodes', name: 'activateirrigationnodes', component: ActivateIrrigationNodes},
     { path: '/plot-status', name: 'plotstatus', component: PlotStatusView },
-    { path: '/irrigation-schedule', name: 'irrigationschedule', component: ActivateIrrigationInPlotView }
+    { path: '/irrigation-schedule', name: 'irrigationschedule', component: ActivateIrrigationInPlotView },
+    { path: '/account', name: 'Account', component: ProfileView },
     //{ path: '/scheduled-irrigations', name: 'ScheduledIrrigations', component: ScheduledIrrigationsView },
     //{ path: '/irrigation-reports', name: 'IrrigationReports', component: IrrigationReportsView },
     //{ path: '/notifications', name: 'Notifications', component: NotificationsView },
-    //{ path: '/account', name: 'Account', component: AccountView },
-    //{ path: '/support', name: 'Support', component: SupportView },
+    //{ path: '/support', name: 'Support', component: SupportView }
   ]
 })
 

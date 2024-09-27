@@ -2,43 +2,30 @@
   "plots": [
     {
       "id": 1,
-      "name": "prueba",
-      "location": "casa",
-      "size": 100,
+      "name": "Pucará",
+      "size": "100 m2",
+      "installedNodes": 4,
+      "lastIrrigationDate": "15th September 2024, 02:45 pm",
       "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
     },
     {
       "id": 2,
-      "name": "prueba2",
-      "location": "west",
-      "size": 200,
-      "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
-    },
-    {
-      "id": 3,
-      "name": "prueba3",
-      "location": "south",
-      "size": 300,
-      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
-    },
-    {
-      "id": 4,
-      "name": "prueba",
+      "name": "Loreto Plot",
       "location": "lima",
       "size": 100,
       "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
     },
     {
-      "id": 5,
-      "name": "prueba5",
-      "location": "venezuela",
-      "size": 400,
-      "imageUrl": "https://i.pinimg.com/736x/26/06/58/260658949d47f39d7349b2b10e3d84a5.jpg"
+      "id": 3,
+      "name": "Puno Plot",
+      "location": "west",
+      "size": 200,
+      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
     }
   ],
   "nodes": [
     {
-      "id": "1",
+      "id": 1,
       "plotId": 1,
       "location": "South",
       "moisture": 40,
@@ -48,19 +35,9 @@
       "iconClass": "pi pi-check"
     },
     {
-      "id": "2",
+      "id": 2,
       "plotId": 1,
       "location": "South",
-      "moisture": 40,
-      "indicator": "Water",
-      "status": "Correct",
-      "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
-    },
-    {
-      "id": "3",
-      "plotId": 1,
-      "location": "West",
       "moisture": 30,
       "indicator": "Water",
       "status": "Error",
@@ -68,56 +45,14 @@
       "iconClass": "pi pi-exclamation-triangle"
     },
     {
-      "id": "4",
-      "plotId": 1,
+      "id": 3,
+      "plotId": 2,
       "location": "West",
       "moisture": 30,
       "indicator": "Water",
       "status": "Error",
       "statusClass": "status-error",
       "iconClass": "pi pi-exclamation-triangle"
-    },
-    {
-      "id": "9c4f",
-      "landName": "hola",
-      "nodeType": "2",
-      "location": "mi casa"
-    },
-    {
-      "id": "4435",
-      "landName": "lima",
-      "nodeType": "2",
-      "location": ""
-    },
-    {
-      "id": 1,
-      "plotId": 1,
-      "location": "lima",
-      "moisture": 100,
-      "indicator": "Water",
-      "status": "Correct",
-      "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
-    },
-    {
-      "id": 1,
-      "plotId": 1,
-      "location": "west",
-      "moisture": 200,
-      "indicator": "Water",
-      "status": "Correct",
-      "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
-    },
-    {
-      "id": 1,
-      "plotId": 1,
-      "location": "lima",
-      "moisture": 300,
-      "indicator": "Water",
-      "status": "Correct",
-      "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
     }
   ],
   "irrigationSchedules": [
@@ -126,13 +61,18 @@
       "id": "1"
     },
     {
-      "irrigationMode": "Manual",
+      "irrigationMode": "Automatic",
       "id": "2"
+    },
+    {
+      "irrigationMode": "Manual",
+      "id": "3"
     }
   ],
   "irrigations": [
     {
-      "id": "9922",
+      "id": "1",
+      "plotId": 1,
       "expectedMoisture": "40%",
       "plotSize": "100 m2",
       "estimatedTime": "3 horas",
@@ -141,8 +81,57 @@
       "sprinklerRadius": "7 m",
       "angle": "30 grados",
       "pressure": "50 psi",
-      "isAutomatic": true,
-      "plotId": 2
+      "isAutomatic": true
+    },
+    {
+      "id": "2",
+      "plotId": 2,
+      "expectedMoisture": "35%",
+      "plotSize": "200 m2",
+      "estimatedTime": "4 horas",
+      "setTime": "10:00 am",
+      "requiredWaterAmount": "600 cm3 (600 l)",
+      "sprinklerRadius": "8 m",
+      "angle": "40 grados",
+      "pressure": "55 psi",
+      "isAutomatic": false
+    },
+    {
+      "id": "3",
+      "plotId": 3,
+      "expectedMoisture": "45%",
+      "plotSize": "300 m2",
+      "estimatedTime": "2 horas",
+      "setTime": "07:30 pm",
+      "requiredWaterAmount": "700 cm3 (700 l)",
+      "sprinklerRadius": "6 m",
+      "angle": "35 grados",
+      "pressure": "60 psi",
+      "isAutomatic": true
     }
-  ]
+  ],
+  "user": {
+    "id": 1,
+    "name": "Sam Elioth Quispe Ramos",
+    "phone": "+51 974837226",
+    "email": "sam.farmer40@outlook.com",
+    "location": "Puno",
+    "profileImage": "https://us.123rf.com/450wm/stockbroker/stockbroker2306/stockbroker230600044/207473089-retrato-de-un-hombre-mayor-sonriente-parado-al-aire-libre-en-el-parque-jard%C3%ADn-o-en-el-campo.jpg?ver=6",
+    "waterSupplier": {
+      "name": "Sedapal",
+      "logo": "https://pbs.twimg.com/profile_images/1557423579599446016/yC3WRAP6_200x200.jpg"
+    },
+    "plots": [
+      {
+        "id": 1,
+        "name": "Loreto Plot",
+        "image": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSS6lwsRARp6AIliaP06qi4WokbeHKNPcyArMB2rwpOSHFDPAyd"
+      },
+      {
+        "id": 2,
+        "name": "Puno Plot",
+        "image": "https://economiasustentable.com/wp-content/uploads/2020/04/cultivos-300x170.jpg"
+      }
+    ]
+  }
 }
