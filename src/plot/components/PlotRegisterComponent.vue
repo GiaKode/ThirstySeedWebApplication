@@ -4,6 +4,7 @@
       <h1>Plot Registration</h1>
 
       <form @submit.prevent="registerPlot">
+        <!-- Formulario del plot -->
         <div class="form-group">
           <label for="imageUrl">Image URL</label>
           <input
@@ -59,6 +60,7 @@
 
       </form>
 
+      <!-- Mensaje de confirmación o error -->
       <div v-if="confirmationMessage" class="confirmation-message">
         {{ confirmationMessage }}
       </div>
@@ -96,20 +98,26 @@ export default {
       }
 
       try {
+        // Obtener todas las parcelas existentes para determinar el próximo ID
         const response = await plotService.getAllPlots();
         const existingPlots = response.data;
 
+        // Generar automáticamente un ID secuencial
         const newId = existingPlots.length > 0
           ? Math.max(...existingPlots.map(plot => plot.id)) + 1
           : 1;
 
+        // Asignar el nuevo ID
         this.plot.id = newId;
 
+        // Intentar registrar la parcela
         await plotService.createPlot(this.plot);
 
+        // Mensaje de éxito
         this.confirmationMessage = "Plot registered successfully!";
         this.errorMessage = '';
 
+        // Limpiar formulario
         this.plot = {
           id: null,
           name: '',
@@ -119,10 +127,12 @@ export default {
         };
         this.imagePreview = '';
 
+        // Ocultar mensaje de éxito después de 3 segundos
         setTimeout(() => {
           this.confirmationMessage = '';
         }, 3000);
       } catch (error) {
+        // Capturar y mostrar el error
         console.error("Error registering plot:", error);
         this.errorMessage = `Error registering plot: ${error.message}`;
         this.confirmationMessage = '';
@@ -132,6 +142,7 @@ export default {
       this.imagePreview = this.plot.imageUrl;
     },
     goToRegisterNode() {
+      // Redirigir a la vista de registro de nodos
       this.$router.push('/register-node');
     }
   }

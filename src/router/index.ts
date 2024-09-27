@@ -6,12 +6,13 @@ import ActivateIrrigationNodes from '@/irrigation-management/components/activate
 import PlotStatusView from "@/plot/components/PlotStatusView.vue";
 import ActivateIrrigationInPlotView from "@/irrigation-management/components/ActivateIrrigationInPlotView.vue";
 import ProfileView from '@/profile/components/ProfileView.vue'
+import PlotRegisteredView from '@/plot/components/PlotRegisteredView.vue'
 import NotFoundPage from '@/shared/components/not-found-page.vue'
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { path: '/manage-parcels', name: 'ManageParcels', component: PlotRegisteredView },
     { path: '/set-irrigation-mode', name: 'SetIrrigationMode', component: SetIrrigationMode },
     { path: '/register-plot', name: 'registerplot', component: PlotRegisterComponent },
     { path: '/register-node', name: 'registernode', component: NodeRegisterComponent },

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { nodeService } from '@/node/sevices/node.service.js';
+import {nodeService} from '@/node/sevices/node.service.js'
 
 export default {
   data() {
@@ -52,24 +52,25 @@ export default {
       moisture: 0,
       indicator: 'Water',
       successMessage: '',
-      errorMessage: '',
-      isActive: false
+      errorMessage: ''
     };
   },
   methods: {
     async registerNode() {
       try {
-        const nodes = await nodeService.getAllNodes();
-        const nodesData = nodes.data;
 
-        const plotId = nodesData.length ? Math.max(...nodesData.map(node => node.plotId)) + 1 : 1;
-        const id = nodesData.length ? Math.max(...nodesData.map(node => node.id)) + 1 : 1;
+        const nodes = await nodeService.getAllNodes();
+
+
+        const plotId = nodes.length ? Math.max(...nodes.data.map(node => node.plotId)) + 1 : 1;
+
 
         const status = this.moisture > 20 ? 'Correct' : 'Error';
         const statusClass = status === 'Correct' ? 'status-correct' : 'status-error';
 
+
         const newNode = {
-          id,
+          id: nodes.length ? nodes.length + 1 : 1,
           plotId,
           location: this.location,
           moisture: this.moisture,
@@ -77,13 +78,16 @@ export default {
           status,
           statusClass,
           iconClass: status === 'Correct' ? 'pi pi-check' : 'pi pi-exclamation-triangle',
-          isActive: this.isActive
         };
+
 
         await nodeService.createNode(newNode);
 
+
         this.successMessage = 'Node registered successfully!';
         this.errorMessage = '';
+        console.log('Node registered:', newNode);
+
 
         this.registerAnotherNode();
       } catch (error) {
@@ -93,12 +97,12 @@ export default {
       }
     },
     registerAnotherNode() {
+
       this.location = '';
       this.moisture = 0;
       this.indicator = 'Water';
-      this.isActive = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
