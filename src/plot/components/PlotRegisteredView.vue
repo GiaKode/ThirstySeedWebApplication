@@ -10,13 +10,13 @@
       <div class="plot" v-for="plot in plots" :key="plot.id">
         <img :src="plot.imageUrl" alt="Plot Image" class="plot-image" /> <!-- Cambiado a plot.imageUrl -->
         <div class="plot-details">
-          <p><strong>Land Name:</strong> {{ plot.name }}</p>
-          <p><strong>Location:</strong> {{ plot.location }}</p>
-          <p><strong>Extension of Land:</strong> {{ plot.extension }} m2</p>
+          <p><strong>Land Name:</strong> {{ plot.name || 'No disponible' }}</p>
+          <p><strong>Location:</strong> {{ plot.location || 'No disponible' }}</p>
+          <p><strong>Extension of Land:</strong> {{ plot.extension ? plot.extension + ' m2' : 'No disponible' }}</p>
           <p>
             <strong>Plot Status: </strong>
             <span :class="{ 'not-supplied': plot.status === 'Not Supplied' }">
-              {{ plot.status }}
+              {{ plot.status || 'No disponible' }}
             </span>
           </p>
         </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import PlotManagementService from '@/irrigation-management/services/plot-management-service';
 
 export default {
   name: 'ViewPlotStatus',
@@ -41,21 +41,21 @@ export default {
   methods: {
     async fetchPlots() {
       try {
-        const response = await axios.get('http://localhost:3000/plots');
+        const response = await PlotManagementService.getAll();
         this.plots = response.data;
       } catch (error) {
         console.error('Error fetching plot data:', error);
       }
     },
-    // Método para redirigir a /register-plot
     goToRegisterPlot() {
-      this.$router.push('/register-plot'); // Redirige a la ruta /register-plot
+      this.$router.push('/register-plot');
     }
   }
 };
 </script>
 
 <style scoped>
+/* Aquí va el mismo estilo que has venido usando */
 .plots-status {
   margin: 20px;
 }
@@ -93,7 +93,7 @@ export default {
 
 .plots {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   justify-content: center;
   margin-left: 150px;
