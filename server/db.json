@@ -1,27 +1,39 @@
 {
   "plots": [
     {
-      "id": "1",
-      "name": "Pucará",
-      "size": "100 m2",
-      "installedNodes": 4,
-      "lastIrrigationDate": "15th September 2024, 02:45 pm",
-      "imageUrl": "path_to_image.jpg"
-    }
-  ],
-  "irrigations": [
+      "id": 1,
+      "name": "prueba",
+      "location": "casa",
+      "size": 100,
+      "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
+    },
     {
-      "id": "1",
-      "plotId": 1,
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": true
+      "id": 2,
+      "name": "prueba2",
+      "location": "west",
+      "size": 200,
+      "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
+    },
+    {
+      "id": 3,
+      "name": "prueba3",
+      "location": "south",
+      "size": 300,
+      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
+    },
+    {
+      "id": 4,
+      "name": "prueba",
+      "location": "lima",
+      "size": 100,
+      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
+    },
+    {
+      "id": 5,
+      "name": "prueba5",
+      "location": "venezuela",
+      "size": 400,
+      "imageUrl": "https://i.pinimg.com/736x/26/06/58/260658949d47f39d7349b2b10e3d84a5.jpg"
     }
   ],
   "nodes": [
@@ -34,12 +46,88 @@
       "status": "Correct",
       "statusClass": "status-correct",
       "iconClass": "pi pi-check"
+    },
+    {
+      "id": "2",
+      "plotId": 1,
+      "location": "South",
+      "moisture": 40,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
+    },
+    {
+      "id": "3",
+      "plotId": 1,
+      "location": "West",
+      "moisture": 30,
+      "indicator": "Water",
+      "status": "Error",
+      "statusClass": "status-error",
+      "iconClass": "pi pi-exclamation-triangle"
+    },
+    {
+      "id": "4",
+      "plotId": 1,
+      "location": "West",
+      "moisture": 30,
+      "indicator": "Water",
+      "status": "Error",
+      "statusClass": "status-error",
+      "iconClass": "pi pi-exclamation-triangle"
+    },
+    {
+      "id": "9c4f",
+      "landName": "hola",
+      "nodeType": "2",
+      "location": "mi casa"
+    },
+    {
+      "id": "4435",
+      "landName": "lima",
+      "nodeType": "2",
+      "location": ""
+    },
+    {
+      "id": 1,
+      "plotId": 1,
+      "location": "lima",
+      "moisture": 100,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
+    },
+    {
+      "id": 1,
+      "plotId": 1,
+      "location": "west",
+      "moisture": 200,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
+    },
+    {
+      "id": 1,
+      "plotId": 1,
+      "location": "lima",
+      "moisture": 300,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
     }
   ],
   "irrigationSchedules": [
     {
       "irrigationMode": "Manual",
       "id": "1"
+    },
+    {
+      "irrigationMode": "Manual",
+      "id": "2"
     }
   ]
 }
