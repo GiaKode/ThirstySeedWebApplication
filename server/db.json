@@ -93,6 +93,20 @@
       "pressure": "50 psi",
       "isAutomatic": true,
       "plotId": "1"
+    },
+    {
+      "id": "8a2b",
+      "expectedMoisture": "45%",
+      "plotSize": "150 m2",
+      "estimatedTime": "4 horas",
+      "setTime": "07:30 pm",
+      "requiredWaterAmount": "600 cm3 (600 l)",
+      "sprinklerRadius": "8 m",
+      "angle": "45 grados",
+      "pressure": "55 psi",
+      "isAutomatic": false,
+      "plotId": "2",
+      "isActive": true
     }
   ],
   "user": {
