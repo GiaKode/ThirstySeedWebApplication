@@ -4,10 +4,10 @@
       <img src="https://cdn-icons-png.flaticon.com/256/3527/3527044.png" alt="Irrigation" class="icon"/>
     </div>
     <div class="irrigation-card-body">
-      <p><strong>Plot:</strong> {{ plotName }}</p> <!-- Aquí se muestra el nombre del plot -->
+      <p><strong>Plot:</strong> {{ plotName }}</p>
       <p><strong>Moisture:</strong> {{ node.moisture }}%</p>
-      <p><strong>Irrigation time:</strong> {{ schedule ? schedule.irrigationTime : 'Not scheduled' }}</p> <!-- Manejo para cuando no hay schedule -->
-      <p><strong>Irrigation mode:</strong> {{ schedule ? schedule.irrigationMode : 'N/A' }}</p> <!-- Manejo para cuando no hay schedule -->
+      <p><strong>Irrigation time:</strong> {{ schedule ? schedule.irrigationTime : 'Not scheduled' }}</p>
+      <p><strong>Irrigation mode:</strong> {{ schedule ? schedule.irrigationMode : 'N/A' }}</p>
       <button v-if="schedule && schedule.irrigationMode === 'Automático'" class="cancel-btn" @click="cancelIrrigation">
         Cancel
       </button>
@@ -31,7 +31,7 @@ export default {
       type: Object,
       required: true,
     },
-    plotName: { // Asegúrate de que se pase el nombre del plot como prop
+    plotName: {
       type: String,
       default: '',
     },
