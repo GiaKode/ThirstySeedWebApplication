@@ -3,35 +3,23 @@
     <div class="plot-registration">
       <h1>Plot Registration</h1>
 
-      <!-- Imagen del campo -->
-      <div class="image-upload-container">
-
-        <div class="decorative-lines left">
-          <span class="line large"></span>
-          <span class="line medium"></span>
-          <span class="line small"></span>
-        </div>
-
-        <div class="image-box">
-          <div class="image-content" v-if="plot.imageUrl">
-            <img :src="plot.imageUrl" alt="Plot Image" />
-          </div>
-          <div class="placeholder" v-else>
-            <span>Insert Image</span>
-          </div>
-          <input id="imageUpload" type="file" @change="onImageUpload" />
-        </div>
-
-
-        <div class="decorative-lines right">
-          <span class="line large"></span>
-          <span class="line medium"></span>
-          <span class="line small"></span>
-        </div>
-      </div>
-
-
       <form @submit.prevent="registerPlot">
+        <!-- Formulario del plot -->
+        <div class="form-group">
+          <label for="imageUrl">Image URL</label>
+          <input
+            type="url"
+            v-model="plot.imageUrl"
+            id="imageUrl"
+            placeholder="Insert Image URL"
+            @input="updateImagePreview"
+            required
+          />
+          <div class="image-preview" v-if="imagePreview">
+            <img :src="imagePreview" alt="Image Preview" />
+          </div>
+        </div>
+
         <div class="form-group">
           <label for="landName">Land Name</label>
           <input
@@ -55,78 +43,113 @@
         </div>
 
         <div class="form-group">
-          <label for="size">Extension of Land (size)</label>
+          <label for="size">Size (in hectares)</label>
           <input
             type="number"
             v-model="plot.size"
             id="size"
-            placeholder="Extension of Land"
+            placeholder="Size in hectares"
             required
           />
         </div>
 
-        <div class="form-actions">
+        <button type="submit" class="submit-button">Register Plot</button>
+        <router-link to="/register-node">
+          <button class="node-register-button">Register Node</button>
+        </router-link>
 
-          <!-- <router-link :to="{ name: 'register-nodes' }" class="register-link">
-            Register Nodes
-          </router-link> -->
-          <button type="submit" class="submit-button">Submit</button>
-        </div>
       </form>
+
+      <!-- Mensaje de confirmación o error -->
+      <div v-if="confirmationMessage" class="confirmation-message">
+        {{ confirmationMessage }}
+      </div>
+
+      <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { plotService } from '@/plot/services/plot.service.js'
+import { plotService } from '@/plot/services/plot.service.js';
 
 export default {
   data() {
     return {
       plot: {
+        id: null,
         name: '',
         location: '',
         size: '',
-        lastIrrigationDate: new Date().toISOString(), // Fecha de último riego
-        imageUrl: '' // URL de la imagen
-      }
+        imageUrl: ''
+      },
+      confirmationMessage: '',
+      errorMessage: '',
+      imagePreview: ''
     };
   },
   methods: {
-    onImageUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.plot.imageUrl = URL.createObjectURL(file);
-      }
-    },
     async registerPlot() {
-      if (!this.plot.name || !this.plot.location || !this.plot.size) {
+      if (!this.plot.name || !this.plot.location || !this.plot.size || !this.plot.imageUrl) {
         alert("Please fill out all fields.");
         return;
       }
+
       try {
+        // Obtener todas las parcelas existentes para determinar el próximo ID
+        const response = await plotService.getAllPlots();
+        const existingPlots = response.data;
 
+        // Generar automáticamente un ID secuencial
+        const newId = existingPlots.length > 0
+          ? Math.max(...existingPlots.map(plot => plot.id)) + 1
+          : 1;
+
+        // Asignar el nuevo ID
+        this.plot.id = newId;
+
+        // Intentar registrar la parcela
         await plotService.createPlot(this.plot);
-        console.log("Plot Registered", this.plot);
-        alert("Plot registered successfully!");
 
+        // Mensaje de éxito
+        this.confirmationMessage = "Plot registered successfully!";
+        this.errorMessage = '';
+
+        // Limpiar formulario
         this.plot = {
+          id: null,
           name: '',
           location: '',
           size: '',
-          lastIrrigationDate: new Date().toISOString(),
           imageUrl: ''
         };
+        this.imagePreview = '';
+
+        // Ocultar mensaje de éxito después de 3 segundos
+        setTimeout(() => {
+          this.confirmationMessage = '';
+        }, 3000);
       } catch (error) {
+        // Capturar y mostrar el error
         console.error("Error registering plot:", error);
+        this.errorMessage = `Error registering plot: ${error.message}`;
+        this.confirmationMessage = '';
       }
+    },
+    updateImagePreview() {
+      this.imagePreview = this.plot.imageUrl;
+    },
+    goToRegisterNode() {
+      // Redirigir a la vista de registro de nodos
+      this.$router.push('/register-node');
     }
   }
 };
 </script>
 
 <style scoped>
-
 .container {
   display: flex;
   justify-content: center;
@@ -156,77 +179,12 @@ h1 {
   margin-bottom: 30px;
 }
 
-.image-upload-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.image-box {
-  position: relative;
-  width: 200px;
-  height: 200px;
+.image-preview img {
+  width: 100%;
+  max-width: 200px;
   border: 2px solid #28a745;
   border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-.image-content img {
-  width: 100%;
-  height: auto;
-}
-
-.placeholder {
-  font-size: 16px;
-  color: #28a745;
-  text-align: center;
-  font-weight: bold;
-}
-
-input[type="file"] {
-  position: absolute;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-.decorative-lines {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 60px;
-}
-
-.decorative-lines.left {
-  margin-right: 20px;
-}
-
-.decorative-lines.right {
-  margin-left: 20px;
-}
-
-.decorative-lines .line {
-  display: block;
-  height: 2px;
-  background-color: #28a745;
-}
-
-.line.large {
-  width: 60px;
-}
-
-.line.medium {
-  width: 40px;
-}
-
-.line.small {
-  width: 20px;
+  margin-top: 10px;
 }
 
 .form-group {
@@ -255,14 +213,8 @@ input:focus {
   outline: none;
 }
 
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 30px;
-}
-
-.submit-button {
+.submit-button,
+.node-register-button {
   width: 100%;
   margin-top: 20px;
   background-color: #28a745;
@@ -279,17 +231,17 @@ input:focus {
   background-color: #218838;
 }
 
-.register-link {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  color: #28a745;
-  font-size: 16px;
-  text-decoration: none;
-  transition: color 0.3s ease;
+.node-register-button {
+  background-color: #007bff;
 }
 
-.register-link:hover {
-  color: #218838;
+.node-register-button:hover {
+  background-color: #0056b3;
+}
+
+.confirmation-message {
+  margin-top: 20px;
+  color: green;
+  font-weight: bold;
 }
 </style>
