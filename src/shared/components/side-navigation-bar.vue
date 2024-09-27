@@ -51,8 +51,8 @@ export default {
       activeItem: '',
       items: [
         { label: 'Manage parcels', to: 'manage-parcels' },
-        { label: 'View parcels status', to: 'view-parcels-status' },
-        { label: 'Scheduled irrigations', to: 'scheduled-irrigations' },
+        { label: 'View parcels status', to: 'plot-status' },
+        { label: 'Scheduled irrigations', to: 'irrigation-schedule' },
         { label: 'Irrigation reports', to: 'irrigation-reports' },
         { label: 'Notifications', to: 'notifications' },
         { label: 'Account', to: 'account' },

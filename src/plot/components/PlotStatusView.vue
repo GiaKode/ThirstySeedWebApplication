@@ -8,7 +8,9 @@
         <p><strong>Installed nodes:</strong> <span class="highlight">{{ plot.nodes }}</span></p>
         <p><strong>Last irrigation date:</strong> <span class="highlight">{{ formatDate(plot.lastIrrigationDate) }}</span></p>
       </div>
-      <button class="irrigation-button">Schedule irrigation</button>
+      <router-link to="/irrigation-schedule">
+        <button class="irrigation-button">Schedule irrigation</button>
+      </router-link>
     </div>
 
     <div class="node-status-container" v-if="nodes.length">
