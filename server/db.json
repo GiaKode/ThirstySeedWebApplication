@@ -1,0 +1,31 @@
+{
+    "user": {
+      "id": 1,
+      "name": "Sam Elioth Quispe Ramos",
+      "phone": "+51 974837226",
+      "email": "sam.farmer40@outlook.com",
+      "location": "Puno",
+      "profileImage": "https://us.123rf.com/450wm/stockbroker/stockbroker2306/stockbroker230600044/207473089-retrato-de-un-hombre-mayor-sonriente-parado-al-aire-libre-en-el-parque-jard%C3%ADn-o-en-el-campo.jpg?ver=6",
+      
+      "waterSupplier": 
+      {
+        "name": "Sedapal",
+        "logo": "https://pbs.twimg.com/profile_images/1557423579599446016/yC3WRAP6_200x200.jpg"
+      },
+      
+      "plots": [
+        {
+          "id": 1,
+          "name": "Loreto Plot",
+          "image": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSS6lwsRARp6AIliaP06qi4WokbeHKNPcyArMB2rwpOSHFDPAyd"
+        },
+        {
+          "id": 2,
+          "name": "Puno Plot",
+          "image": "https://economiasustentable.com/wp-content/uploads/2020/04/cultivos-300x170.jpg"
+        }
+      ]
+      
+    }
+  }
+  
