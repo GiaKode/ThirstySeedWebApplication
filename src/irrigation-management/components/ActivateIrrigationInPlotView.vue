@@ -2,10 +2,7 @@
   <div class="irrigation-plot-view">
     <div class="header-container">
       <h2>Schedules irrigation</h2>
-      <router-link to="/set-irrigation-mode">
-        <button class="schedule-btn" @click="scheduleIrrigation">Programar riego</button>
-      </router-link>
-
+      <button class="schedule-btn" @click="scheduleIrrigation">Programar riego</button>
     </div>
     <div class="line"></div>
     <div class="cards-container">
@@ -62,8 +59,7 @@ export default {
           });
     },
     scheduleIrrigation() {
-      alert('Función para programar riego');
-
+      this.$router.push('/set-irrigation-mode');
     },
     formatDate(dateString) {
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -75,8 +71,7 @@ export default {
 
 <style scoped>
 .irrigation-plot-view {
-  padding: 16px;
-  margin-left: 235px;
+  padding: 20px;
 }
 
 .cards-container {

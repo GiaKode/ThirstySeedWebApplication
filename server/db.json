@@ -129,5 +129,20 @@
       "irrigationMode": "Manual",
       "id": "2"
     }
+  ],
+  "irrigations": [
+    {
+      "id": "9922",
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": true,
+      "plotId": 2
+    }
   ]
 }
