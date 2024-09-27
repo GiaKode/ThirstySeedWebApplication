@@ -1,0 +1,92 @@
+{
+  "plots": [
+    {
+      "id": "1",
+      "name": "Pucará",
+      "size": "100 m2",
+      "installedNodes": 4,
+      "lastIrrigationDate": "15th September 2024, 02:45 pm",
+      "imageUrl": "path_to_image.jpg"
+    }
+  ],
+  "irrigations": [
+    {
+      "id": "1",
+      "plotId": 1,
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": true
+    },
+    {
+      "id": "a27d",
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": true,
+      "plotId": 1
+    },
+    {
+      "id": "bb16",
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": true,
+      "plotId": 1
+    },
+    {
+      "id": "c2b4",
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "10 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": false,
+      "plotId": 1
+    },
+    {
+      "id": "e11c",
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "10 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": false,
+      "plotId": 1
+    },
+    {
+      "id": "f161",
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": true,
+      "plotId": 1
+    }
+  ]
+}
