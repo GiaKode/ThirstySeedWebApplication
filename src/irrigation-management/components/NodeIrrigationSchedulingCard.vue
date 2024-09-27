@@ -11,11 +11,15 @@
       <p><strong>Set Time:</strong> {{ schedule.setTime }}</p>
       <p><strong>Pressure:</strong> {{ schedule.pressure }}</p>
       <p><strong>Irrigation Mode:</strong> {{ schedule.isAutomatic ? 'Automatic' : 'Manual' }}</p>
+<<<<<<< Updated upstream
       
+=======
+
+>>>>>>> Stashed changes
       <button v-if="schedule.isAutomatic" class="cancel-btn" @click="cancelIrrigation">
         Cancel
       </button>
-      <button v-else class="activate-btn" @click="activateSprinklers">
+      <button v-else class="activate-btn" @click="activateSprinklers(schedule.id)">
         Activate sprinklers
       </button>
     </div>
@@ -41,8 +45,13 @@ export default {
     },
   },
   methods: {
+<<<<<<< Updated upstream
     cancelIrrigation() {
       IrrigationSettingsService.delete(this.schedule.id)
+=======
+    cancelIrrigation(scheduleId) {
+      IrrigationSettingsService.delete(scheduleId)
+>>>>>>> Stashed changes
         .then(() => {
           alert('Irrigation canceled.');
         })
@@ -50,10 +59,18 @@ export default {
           console.error('Error canceling irrigation:', error);
         });
     },
+<<<<<<< Updated upstream
     activateSprinklers() {
       IrrigationSettingsService.update(this.schedule.id, { ...this.schedule, isActive: true })
         .then(() => {
           alert('Sprinklers activated.');
+=======
+    activateSprinklers(scheduleId) {
+      IrrigationSettingsService.update(scheduleId, { ...this.schedule, isActive: true })
+        .then(() => {
+          alert('Sprinklers activated.');
+          this.$router.push({ name: 'activateirrigationnodes' }); // Redirigir a la vista por nombre
+>>>>>>> Stashed changes
         })
         .catch(error => {
           console.error('Error activating sprinklers:', error);
