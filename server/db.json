@@ -98,5 +98,15 @@
       "statusClass": "status-correct",
       "iconClass": "pi pi-check"
     }
+  ],
+  "irrigationSchedules": [
+    {
+      "irrigationMode": "Manual",
+      "id": "1"
+    },
+    {
+      "irrigationMode": "Manual",
+      "id": "2"
+    }
   ]
 }

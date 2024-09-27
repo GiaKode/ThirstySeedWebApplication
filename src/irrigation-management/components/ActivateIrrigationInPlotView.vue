@@ -15,7 +15,7 @@
 
 <script>
 import NodeIrrigationSchedulingCard from "@/irrigation-management/components/NodeIrrigationSchedulingCard.vue";
-import scheduleirrigationService from "@/plot/services/scheduleirrigation.service.js";
+import irrigationScheduleService from "@/irrigation-management/services/irrigation-schedule.service.js";
 import {plotService} from "@/plot/services/plot.service.js";
 
 export default {
@@ -46,7 +46,7 @@ export default {
           });
 
 
-      scheduleirrigationService.getIrrigationScheduleByPlotId(plotId)
+      irrigationScheduleService.getIrrigationScheduleByPlotId(plotId)
           .then(response => {
             this.nodes = response.nodes;
             this.schedules = response.schedules;

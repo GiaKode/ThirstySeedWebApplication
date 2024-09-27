@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import scheduleirrigationService from "@/plot/services/scheduleirrigation.service.js";
+import irrigationScheduleService from "@/irrigation-management/services/irrigation-schedule.service.js";
 
 export default {
   props: {
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     cancelIrrigation() {
-      scheduleirrigationService.cancelIrrigation(this.schedule.id)
+      irrigationScheduleService.cancelIrrigation(this.schedule.id)
           .then(() => {
             alert('Irrigation canceled.');
           })
@@ -47,7 +47,7 @@ export default {
           });
     },
     activateSprinklers() {
-      scheduleirrigationService.activateIrrigation(this.schedule.id)
+      irrigationScheduleService.activateIrrigation(this.schedule.id)
           .then(() => {
             alert('Sprinklers activated.');
           })
