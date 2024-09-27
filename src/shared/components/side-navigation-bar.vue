@@ -2,7 +2,7 @@
   <div :class="['side-nav', { collapsed: isCollapsed, 'is-mobile': isMobile }]">
     <!-- Logo, Title and Collapsed Icon -->
     <div class="logo-container">
-      <img src="@/assets/images/image.png" alt="ThirstySeed Logo" class="logo" />
+      <img src="@/assets/images/logo.jpeg" alt="ThirstySeed Logo" class="logo" />
       <span v-if="!isCollapsed" class="logo-title">Thirsty Seed</span>
       <button class="toggle-button" v-if="!isCollapsed" @click="toggleSidebar">
         <i class="pi pi-bars"></i>
