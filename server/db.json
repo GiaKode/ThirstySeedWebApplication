@@ -1,62 +1,79 @@
 {
-  "user": {
-    "id": 1,
-    "name": "Sam Elioth Quispe Ramos",
-    "email": "sam.farmer40@outlook.com",
-    "phone": "+51 974837226",
-    "location": "Puno",
-    "profileImage": "https://us.123rf.com/450wm/stockbroker/stockbroker2306/stockbroker230600044/207473089-retrato-de-un-hombre-mayor-sonriente-parado-al-aire-libre-en-el-parque-jard%C3%ADn-o-en-el-campo.jpg?ver=6",
-    "waterSupplier": {
-      "name": "Sedapal",
-      "logo": "https://pbs.twimg.com/profile_images/1557423579599446016/yC3WRAP6_200x200.jpg"
-    }
-  },
   "plots": [
     {
-      "id": 1,
-      "userId": 1,
-      "name": "Loreto Plot",
-      "size": 100,
-      "location": "Loreto",
-      "lastIrrigationDate": "2024-09-15T14:45:00",
-      "imageUrl": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSS6lwsRARp6AIliaP06qi4WokbeHKNPcyArMB2rwpOSHFDPAyd"
+      "id": "1",
+      "name": "Pucará",
+      "size": "100 m2",
+      "installedNodes": 4,
+      "lastIrrigationDate": "15th September 2024, 02:45 pm",
+      "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
     },
     {
-      "id": 2,
-      "userId": 1,
+      "id": "2",
+      "name": "Loreto Plot",
+      "location": "lima",
+      "size": 100,
+      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
+    },
+    {
+      "id": "3",
       "name": "Puno Plot",
+      "location": "west",
       "size": 200,
-      "location": "Puno",
-      "lastIrrigationDate": "2024-09-18T10:30:00",
-      "imageUrl": "https://economiasustentable.com/wp-content/uploads/2020/04/cultivos-300x170.jpg"
+      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
     }
   ],
   "nodes": [
     {
       "id": 1,
       "plotId": 1,
-      "location": "South",
-      "moisture": 40,
+      "location": "prueba",
+      "moisture": 20,
+      "indicator": "Water",
+      "status": "Error",
+      "statusClass": "status-error",
+      "iconClass": "pi pi-exclamation-triangle",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "plotId": 2,
+      "location": "prrueba2",
+      "moisture": 30,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check",
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "plotId": 3,
+      "location": "pueba3",
+      "moisture": 50,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check",
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "plotId": 4,
+      "location": "prueba4",
+      "moisture": 70,
+      "indicator": "Water",
       "status": "Correct",
       "statusClass": "status-correct",
       "iconClass": "pi pi-check",
       "isActive": false
     },
     {
-      "id": 2,
-      "plotId": 1,
-      "location": "West",
-      "moisture": 35,
-      "status": "Error",
-      "statusClass": "status-error",
-      "iconClass": "pi pi-exclamation-triangle",
-      "isActive": false
-    },
-    {
-      "id": 3,
-      "plotId": 2,
-      "location": "East",
-      "moisture": 50,
+      "id": 5,
+      "plotId": 5,
+      "location": "prueba1",
+      "moisture": 40,
+      "indicator": "Water",
       "status": "Correct",
       "statusClass": "status-correct",
       "iconClass": "pi pi-check",
@@ -65,76 +82,81 @@
   ],
   "irrigationSchedules": [
     {
-      "id": 1,
+      "irrigationMode": "Manual",
+      "id": "1"
+    },
+    {
+      "irrigationMode": "Automatic",
+      "id": "2"
+    },
+    {
+      "irrigationMode": "Manual",
+      "id": "3"
+    }
+  ],
+  "irrigations": [
+    {
+      "id": "1",
       "plotId": 1,
       "expectedMoisture": "40%",
-      "requiredWaterAmount": "500 cm3",
-      "sprinklerRadius": "7 m",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
       "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
       "pressure": "50 psi",
       "isAutomatic": true
     },
     {
-      "id": 2,
+      "id": "2",
       "plotId": 2,
-      "expectedMoisture": "45%",
-      "requiredWaterAmount": "600 cm3",
+      "expectedMoisture": "35%",
+      "plotSize": "200 m2",
+      "estimatedTime": "4 horas",
+      "setTime": "10:00 am",
+      "requiredWaterAmount": "600 cm3 (600 l)",
       "sprinklerRadius": "8 m",
-      "setTime": "06:30 am",
-      "pressure": "60 psi",
+      "angle": "40 grados",
+      "pressure": "55 psi",
       "isAutomatic": false
     },
     {
-      "id": "ec66",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": true,
-      "plotId": 1
-    },
-    {
-      "id": "caca",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": true,
-      "plotId": 1
-    },
-    {
-      "id": "7826",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": false,
-      "plotId": 2
-    },
-    {
-      "id": "c0d2",
-      "expectedMoisture": "Prueba",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": false,
-      "plotId": 1
+      "id": "3",
+      "plotId": 3,
+      "expectedMoisture": "45%",
+      "plotSize": "300 m2",
+      "estimatedTime": "2 horas",
+      "setTime": "07:30 pm",
+      "requiredWaterAmount": "700 cm3 (700 l)",
+      "sprinklerRadius": "6 m",
+      "angle": "35 grados",
+      "pressure": "60 psi",
+      "isAutomatic": true
     }
-  ]
+  ],
+  "user": {
+    "id": 1,
+    "name": "Sam Elioth Quispe Ramos",
+    "phone": "+51 974837226",
+    "email": "sam.farmer40@outlook.com",
+    "location": "Puno",
+    "profileImage": "https://us.123rf.com/450wm/stockbroker/stockbroker2306/stockbroker230600044/207473089-retrato-de-un-hombre-mayor-sonriente-parado-al-aire-libre-en-el-parque-jard%C3%ADn-o-en-el-campo.jpg?ver=6",
+    "waterSupplier": {
+      "name": "Sedapal",
+      "logo": "https://pbs.twimg.com/profile_images/1557423579599446016/yC3WRAP6_200x200.jpg"
+    },
+    "plots": [
+      {
+        "id": 1,
+        "name": "Loreto Plot",
+        "image": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSS6lwsRARp6AIliaP06qi4WokbeHKNPcyArMB2rwpOSHFDPAyd"
+      },
+      {
+        "id": 2,
+        "name": "Puno Plot",
+        "image": "https://economiasustentable.com/wp-content/uploads/2020/04/cultivos-300x170.jpg"
+      }
+    ]
+  }
 }
