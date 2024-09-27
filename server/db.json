@@ -1,85 +1,88 @@
 {
   "plots": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Pucará",
-      "location": "Pucará, Peru",
-      "extension": "100",
-      "status": "Supplied",
       "size": "100 m2",
       "installedNodes": 4,
       "lastIrrigationDate": "15th September 2024, 02:45 pm",
-      "imageUrl": "https://www.tonelprivado.com/arquivos/vi%C3%B1edosgenerica.jpg"
+      "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Loreto Plot",
       "location": "lima",
-      "extension": "100",
-      "status": "Supplied",
       "size": 100,
-      "imageUrl": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRsqO0KsZxIcbsz4Bm5fUjHuIisAo2Z4N3uknNAo6_BH1305p1T"
+      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Puno Plot",
       "location": "west",
-      "extension": "100",
-      "status": "Not Supplied",
       "size": 200,
-      "imageUrl": "https://i.ytimg.com/vi/CTdTC4fO89I/maxresdefault.jpg"
+      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
     }
   ],
   "nodes": [
     {
       "id": 1,
       "plotId": 1,
-      "location": "South",
+      "location": "prueba",
+      "moisture": 20,
+      "indicator": "Water",
+      "status": "Error",
+      "statusClass": "status-error",
+      "iconClass": "pi pi-exclamation-triangle",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "plotId": 2,
+      "location": "prrueba2",
+      "moisture": 30,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check",
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "plotId": 3,
+      "location": "pueba3",
+      "moisture": 50,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check",
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "plotId": 4,
+      "location": "prueba4",
+      "moisture": 70,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check",
+      "isActive": false
+    },
+    {
+      "id": 5,
+      "plotId": 5,
+      "location": "prueba1",
       "moisture": 40,
       "indicator": "Water",
       "status": "Correct",
       "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
-    },
-    {
-      "id": 2,
-      "plotId": 1,
-      "location": "South",
-      "moisture": 30,
-      "indicator": "Water",
-      "status": "Error",
-      "statusClass": "status-error",
-      "iconClass": "pi pi-exclamation-triangle"
-    },
-    {
-      "id": 3,
-      "plotId": 2,
-      "location": "West",
-      "moisture": 30,
-      "indicator": "Water",
-      "status": "Error",
-      "statusClass": "status-error",
-      "iconClass": "pi pi-exclamation-triangle"
+      "iconClass": "pi pi-check",
+      "isActive": false
     }
   ],
   "irrigationSchedules": [
     {
-      "irrigationMode": "Manual",
-      "id": "1"
-    },
-    {
-      "irrigationMode": "Automatic",
-      "id": "2"
-    },
-    {
-      "irrigationMode": "Manual",
-      "id": "3"
-    }
-  ],
-  "irrigations": [
-    {
-      "id": "1",
-      "plotId": 1,
+      "id": "7e9f",
       "expectedMoisture": "40%",
       "plotSize": "100 m2",
       "estimatedTime": "3 horas",
@@ -88,33 +91,22 @@
       "sprinklerRadius": "7 m",
       "angle": "30 grados",
       "pressure": "50 psi",
-      "isAutomatic": true
+      "isAutomatic": true,
+      "plotId": "1"
     },
     {
-      "id": "2",
-      "plotId": 2,
-      "expectedMoisture": "35%",
-      "plotSize": "200 m2",
+      "id": "8a2b",
+      "expectedMoisture": "45%",
+      "plotSize": "150 m2",
       "estimatedTime": "4 horas",
-      "setTime": "10:00 am",
+      "setTime": "07:30 pm",
       "requiredWaterAmount": "600 cm3 (600 l)",
       "sprinklerRadius": "8 m",
-      "angle": "40 grados",
+      "angle": "45 grados",
       "pressure": "55 psi",
-      "isAutomatic": false
-    },
-    {
-      "id": "3",
-      "plotId": 3,
-      "expectedMoisture": "45%",
-      "plotSize": "300 m2",
-      "estimatedTime": "2 horas",
-      "setTime": "07:30 pm",
-      "requiredWaterAmount": "700 cm3 (700 l)",
-      "sprinklerRadius": "6 m",
-      "angle": "35 grados",
-      "pressure": "60 psi",
-      "isAutomatic": true
+      "isAutomatic": false,
+      "plotId": "2",
+      "isActive": true
     }
   ],
   "user": {
@@ -142,4 +134,3 @@
     ]
   }
 }
-

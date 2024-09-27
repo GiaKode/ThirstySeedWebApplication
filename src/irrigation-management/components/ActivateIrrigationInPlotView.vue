@@ -11,15 +11,16 @@
           :key="node.id"
           :node="node"
           :schedule="schedules[index]"
-          :plotName="plot ? plot.name : ''" ></NodeIrrigationSchedulingCard>
+          :plotName="plot ? plot.name : ''" >
+      </NodeIrrigationSchedulingCard>
     </div>
   </div>
 </template>
 
 <script>
 import NodeIrrigationSchedulingCard from "@/irrigation-management/components/NodeIrrigationSchedulingCard.vue";
-import irrigationScheduleService from "@/irrigation-management/services/irrigation-schedule.service.js";
-import {plotService} from "@/plot/services/plot.service.js";
+import IrrigationSettingsService from '../services/irrigation-setting-service';
+import PlotService from '../services/plot-management-service.ts';
 
 export default {
   components: {
@@ -39,8 +40,7 @@ export default {
     fetchNodesAndPlot() {
       const plotId = 1;
 
-
-      plotService.getPlotById(plotId)
+      PlotService.get(plotId)
           .then(response => {
             this.plot = response.data;
           })
@@ -48,14 +48,13 @@ export default {
             console.error('Error fetching plot:', error);
           });
 
-
-      irrigationScheduleService.getIrrigationScheduleByPlotId(plotId)
+      IrrigationSettingsService.getAll()
           .then(response => {
-            this.nodes = response.nodes;
-            this.schedules = response.schedules;
+            this.nodes = response.data;
+            this.schedules = response.data;
           })
           .catch(error => {
-            console.error('Error fetching irrigation schedule:', error);
+            console.error('Error fetching irrigation schedules:', error);
           });
     },
     scheduleIrrigation() {
