@@ -3,7 +3,10 @@
     {
       "id": "1",
       "name": "Pucará",
-      "size": "100 m2",
+      "location": "Pucará, Peru",
+      "extension": "100",
+      "status": "Supplied",  
+      "size": "100",
       "installedNodes": 4,
       "lastIrrigationDate": "15th September 2024, 02:45 pm",
       "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
@@ -11,21 +14,25 @@
     {
       "id": "2",
       "name": "Loreto Plot",
-      "location": "lima",
       "size": 100,
-      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
+      "location": "lima",     
+      "extension": "100",   
+      "status": "Supplied",   
+      "imageUrl": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRsqO0KsZxIcbsz4Bm5fUjHuIisAo2Z4N3uknNAo6_BH1305p1T"
     },
     {
       "id": "3",
       "name": "Puno Plot",
       "location": "west",
-      "size": 200,
-      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
+      "extension": "200",   
+      "status": "Not Supplied",
+      "size": "200",
+      "imageUrl": "https://i.ytimg.com/vi/CTdTC4fO89I/maxresdefault.jpg"
     }
   ],
   "nodes": [
     {
-      "id": 1,
+      "id": "1",
       "plotId": 1,
       "location": "prueba",
       "moisture": 20,
@@ -36,7 +43,7 @@
       "isActive": true
     },
     {
-      "id": 2,
+      "id": "2",
       "plotId": 2,
       "location": "prrueba2",
       "moisture": 30,
@@ -47,7 +54,7 @@
       "isActive": true
     },
     {
-      "id": 3,
+      "id": "3",
       "plotId": 3,
       "location": "pueba3",
       "moisture": 50,
@@ -58,7 +65,7 @@
       "isActive": true
     },
     {
-      "id": 4,
+      "id": "4",
       "plotId": 4,
       "location": "prueba4",
       "moisture": 70,
@@ -69,7 +76,7 @@
       "isActive": false
     },
     {
-      "id": 5,
+      "id": "5",
       "plotId": 5,
       "location": "prueba1",
       "moisture": 40,
