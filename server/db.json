@@ -82,22 +82,7 @@
   ],
   "irrigationSchedules": [
     {
-      "irrigationMode": "Manual",
-      "id": "1"
-    },
-    {
-      "irrigationMode": "Automatic",
-      "id": "2"
-    },
-    {
-      "irrigationMode": "Manual",
-      "id": "3"
-    }
-  ],
-  "irrigations": [
-    {
-      "id": "1",
-      "plotId": 1,
+      "id": "7e9f",
       "expectedMoisture": "40%",
       "plotSize": "100 m2",
       "estimatedTime": "3 horas",
@@ -106,33 +91,8 @@
       "sprinklerRadius": "7 m",
       "angle": "30 grados",
       "pressure": "50 psi",
-      "isAutomatic": true
-    },
-    {
-      "id": "2",
-      "plotId": 2,
-      "expectedMoisture": "35%",
-      "plotSize": "200 m2",
-      "estimatedTime": "4 horas",
-      "setTime": "10:00 am",
-      "requiredWaterAmount": "600 cm3 (600 l)",
-      "sprinklerRadius": "8 m",
-      "angle": "40 grados",
-      "pressure": "55 psi",
-      "isAutomatic": false
-    },
-    {
-      "id": "3",
-      "plotId": 3,
-      "expectedMoisture": "45%",
-      "plotSize": "300 m2",
-      "estimatedTime": "2 horas",
-      "setTime": "07:30 pm",
-      "requiredWaterAmount": "700 cm3 (700 l)",
-      "sprinklerRadius": "6 m",
-      "angle": "35 grados",
-      "pressure": "60 psi",
-      "isAutomatic": true
+      "isAutomatic": true,
+      "plotId": "1"
     }
   ],
   "user": {
