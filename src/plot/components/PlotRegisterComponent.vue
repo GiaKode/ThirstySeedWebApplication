@@ -5,7 +5,7 @@
 
       <!-- Imagen del campo -->
       <div class="image-upload-container">
-        <!-- Líneas decorativas a la izquierda -->
+
         <div class="decorative-lines left">
           <span class="line large"></span>
           <span class="line medium"></span>
@@ -22,7 +22,7 @@
           <input id="imageUpload" type="file" @change="onImageUpload" />
         </div>
 
-        <!-- Líneas decorativas a la derecha -->
+
         <div class="decorative-lines right">
           <span class="line large"></span>
           <span class="line medium"></span>
@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <!-- Formulario -->
+
       <form @submit.prevent="registerPlot">
         <div class="form-group">
           <label for="landName">Land Name</label>
@@ -66,7 +66,7 @@
         </div>
 
         <div class="form-actions">
-          <!-- Botón de registro de nodos comentado ya que no es necesario -->
+
           <!-- <router-link :to="{ name: 'register-nodes' }" class="register-link">
             Register Nodes
           </router-link> -->
@@ -105,11 +105,11 @@ export default {
         return;
       }
       try {
-        // Llamar al servicio para crear el plot
+
         await plotService.createPlot(this.plot);
         console.log("Plot Registered", this.plot);
         alert("Plot registered successfully!");
-        // Reiniciar el formulario
+
         this.plot = {
           name: '',
           location: '',
@@ -126,7 +126,7 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos mantenidos sin cambios */
+
 .container {
   display: flex;
   justify-content: center;

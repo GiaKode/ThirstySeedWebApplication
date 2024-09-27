@@ -1,6 +1,6 @@
 <template>
   <div class="node-status">
-    <img class="node-icon" src="@/assets/logo.svg" alt="Water Indicator" />
+    <img src="https://static.vecteezy.com/system/resources/previews/020/813/640/non_2x/watering-icon-for-your-website-design-logo-app-ui-free-vector.jpg" alt="Water Indicator" class="icon"/>
     <p><strong>Location:</strong> {{ node.location }}</p>
     <p><strong>Moisture:</strong> {{ node.moisture }}%</p>
     <p><strong>Indicator:</strong> Water</p>
@@ -37,9 +37,9 @@ export default {
   font-size: 16px;
 }
 
-.node-icon {
-  width: 50px;
-  margin-bottom: 15px;
+.icon {
+  width: 120px;
+  margin-bottom: 5px;
 }
 
 .status-correct {
