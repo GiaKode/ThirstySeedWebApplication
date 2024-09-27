@@ -2,7 +2,10 @@
   <div class="irrigation-plot-view">
     <div class="header-container">
       <h2>Schedules irrigation</h2>
-      <button class="schedule-btn" @click="scheduleIrrigation">Programar riego</button>
+      <router-link to="/set-irrigation-mode">
+        <button class="schedule-btn" @click="scheduleIrrigation">Programar riego</button>
+      </router-link>
+
     </div>
     <div class="line"></div>
     <div class="cards-container">
