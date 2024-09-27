@@ -5,10 +5,14 @@
     </div>
     <div class="irrigation-card-body">
       <p><strong>Plot:</strong> {{ plotName }}</p>
-      <p><strong>Moisture:</strong> {{ node.moisture }}%</p>
-      <p><strong>Irrigation time:</strong> {{ schedule ? schedule.irrigationTime : 'Not scheduled' }}</p>
-      <p><strong>Irrigation mode:</strong> {{ schedule ? schedule.irrigationMode : 'N/A' }}</p>
-      <button v-if="schedule && schedule.irrigationMode === 'Automático'" class="cancel-btn" @click="cancelIrrigation">
+      <p><strong>Expected Moisture:</strong> {{ schedule.expectedMoisture }}</p>
+      <p><strong>Water Amount:</strong> {{ schedule.requiredWaterAmount }}</p>
+      <p><strong>Sprinkler Radius:</strong> {{ schedule.sprinklerRadius }}</p>
+      <p><strong>Set Time:</strong> {{ schedule.setTime }}</p>
+      <p><strong>Pressure:</strong> {{ schedule.pressure }}</p>
+      <p><strong>Irrigation Mode:</strong> {{ schedule.isAutomatic ? 'Automatic' : 'Manual' }}</p>
+      
+      <button v-if="schedule.isAutomatic" class="cancel-btn" @click="cancelIrrigation">
         Cancel
       </button>
       <button v-else class="activate-btn" @click="activateSprinklers">
@@ -19,7 +23,7 @@
 </template>
 
 <script>
-import irrigationScheduleService from "@/irrigation-management/services/irrigation-schedule.service.js";
+import IrrigationSettingsService from '../services/irrigation-setting-service';
 
 export default {
   props: {
@@ -38,22 +42,22 @@ export default {
   },
   methods: {
     cancelIrrigation() {
-      irrigationScheduleService.cancelIrrigation(this.schedule.id)
-          .then(() => {
-            alert('Irrigation canceled.');
-          })
-          .catch(error => {
-            console.error('Error canceling irrigation:', error);
-          });
+      IrrigationSettingsService.delete(this.schedule.id)
+        .then(() => {
+          alert('Irrigation canceled.');
+        })
+        .catch(error => {
+          console.error('Error canceling irrigation:', error);
+        });
     },
     activateSprinklers() {
-      irrigationScheduleService.activateIrrigation(this.schedule.id)
-          .then(() => {
-            alert('Sprinklers activated.');
-          })
-          .catch(error => {
-            console.error('Error activating sprinklers:', error);
-          });
+      IrrigationSettingsService.update(this.schedule.id, { ...this.schedule, isActive: true })
+        .then(() => {
+          alert('Sprinklers activated.');
+        })
+        .catch(error => {
+          console.error('Error activating sprinklers:', error);
+        });
     }
   }
 };

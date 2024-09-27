@@ -1,138 +1,91 @@
 {
+  "user": {
+    "id": 1,
+    "name": "Sam Elioth Quispe Ramos",
+    "email": "sam.farmer40@outlook.com",
+    "phone": "+51 974837226",
+    "location": "Puno",
+    "profileImage": "https://us.123rf.com/450wm/stockbroker/stockbroker2306/stockbroker230600044/207473089-retrato-de-un-hombre-mayor-sonriente-parado-al-aire-libre-en-el-parque-jard%C3%ADn-o-en-el-campo.jpg?ver=6",
+    "waterSupplier": {
+      "name": "Sedapal",
+      "logo": "https://pbs.twimg.com/profile_images/1557423579599446016/yC3WRAP6_200x200.jpg"
+    }
+  },
   "plots": [
     {
       "id": 1,
-      "name": "prueba",
-      "location": "casa",
+      "userId": 1,
+      "name": "Loreto Plot",
       "size": 100,
-      "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
+      "location": "Loreto",
+      "lastIrrigationDate": "2024-09-15T14:45:00",
+      "imageUrl": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSS6lwsRARp6AIliaP06qi4WokbeHKNPcyArMB2rwpOSHFDPAyd"
     },
     {
       "id": 2,
-      "name": "prueba2",
-      "location": "west",
+      "userId": 1,
+      "name": "Puno Plot",
       "size": 200,
-      "imageUrl": "https://i.pinimg.com/564x/41/52/e2/4152e208971ee40322e0dffbc94b2436.jpg"
-    },
-    {
-      "id": 3,
-      "name": "prueba3",
-      "location": "south",
-      "size": 300,
-      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
-    },
-    {
-      "id": 4,
-      "name": "prueba",
-      "location": "lima",
-      "size": 100,
-      "imageUrl": "https://i.pinimg.com/564x/e2/87/55/e28755d8191b08f8898211af12422d66.jpg"
-    },
-    {
-      "id": 5,
-      "name": "prueba5",
-      "location": "venezuela",
-      "size": 400,
-      "imageUrl": "https://i.pinimg.com/736x/26/06/58/260658949d47f39d7349b2b10e3d84a5.jpg"
+      "location": "Puno",
+      "lastIrrigationDate": "2024-09-18T10:30:00",
+      "imageUrl": "https://economiasustentable.com/wp-content/uploads/2020/04/cultivos-300x170.jpg"
     }
   ],
   "nodes": [
     {
-      "id": "1",
+      "id": 1,
       "plotId": 1,
       "location": "South",
       "moisture": 40,
-      "indicator": "Water",
       "status": "Correct",
       "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
+      "iconClass": "pi pi-check",
+      "isActive": false
     },
     {
-      "id": "2",
-      "plotId": 1,
-      "location": "South",
-      "moisture": 40,
-      "indicator": "Water",
-      "status": "Correct",
-      "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
-    },
-    {
-      "id": "3",
+      "id": 2,
       "plotId": 1,
       "location": "West",
-      "moisture": 30,
-      "indicator": "Water",
+      "moisture": 35,
       "status": "Error",
       "statusClass": "status-error",
-      "iconClass": "pi pi-exclamation-triangle"
+      "iconClass": "pi pi-exclamation-triangle",
+      "isActive": false
     },
     {
-      "id": "4",
-      "plotId": 1,
-      "location": "West",
-      "moisture": 30,
-      "indicator": "Water",
-      "status": "Error",
-      "statusClass": "status-error",
-      "iconClass": "pi pi-exclamation-triangle"
-    },
-    {
-      "id": "9c4f",
-      "landName": "hola",
-      "nodeType": "2",
-      "location": "mi casa"
-    },
-    {
-      "id": "4435",
-      "landName": "lima",
-      "nodeType": "2",
-      "location": ""
-    },
-    {
-      "id": 1,
-      "plotId": 1,
-      "location": "lima",
-      "moisture": 100,
-      "indicator": "Water",
+      "id": 3,
+      "plotId": 2,
+      "location": "East",
+      "moisture": 50,
       "status": "Correct",
       "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
-    },
-    {
-      "id": 1,
-      "plotId": 1,
-      "location": "west",
-      "moisture": 200,
-      "indicator": "Water",
-      "status": "Correct",
-      "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
-    },
-    {
-      "id": 1,
-      "plotId": 1,
-      "location": "lima",
-      "moisture": 300,
-      "indicator": "Water",
-      "status": "Correct",
-      "statusClass": "status-correct",
-      "iconClass": "pi pi-check"
+      "iconClass": "pi pi-check",
+      "isActive": false
     }
   ],
   "irrigationSchedules": [
     {
-      "irrigationMode": "Manual",
-      "id": "1"
+      "id": 1,
+      "plotId": 1,
+      "expectedMoisture": "40%",
+      "requiredWaterAmount": "500 cm3",
+      "sprinklerRadius": "7 m",
+      "setTime": "08:15 pm",
+      "pressure": "50 psi",
+      "isAutomatic": true
     },
     {
-      "irrigationMode": "Manual",
-      "id": "2"
-    }
-  ],
-  "irrigations": [
+      "id": 2,
+      "plotId": 2,
+      "expectedMoisture": "45%",
+      "requiredWaterAmount": "600 cm3",
+      "sprinklerRadius": "8 m",
+      "setTime": "06:30 am",
+      "pressure": "60 psi",
+      "isAutomatic": false
+    },
     {
-      "id": "9922",
+      "id": "ec66",
       "expectedMoisture": "40%",
       "plotSize": "100 m2",
       "estimatedTime": "3 horas",
@@ -142,7 +95,46 @@
       "angle": "30 grados",
       "pressure": "50 psi",
       "isAutomatic": true,
+      "plotId": 1
+    },
+    {
+      "id": "caca",
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": true,
+      "plotId": 1
+    },
+    {
+      "id": "7826",
+      "expectedMoisture": "40%",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": false,
       "plotId": 2
+    },
+    {
+      "id": "c0d2",
+      "expectedMoisture": "Prueba",
+      "plotSize": "100 m2",
+      "estimatedTime": "3 horas",
+      "setTime": "08:15 pm",
+      "requiredWaterAmount": "500 cm3 (500 l)",
+      "sprinklerRadius": "7 m",
+      "angle": "30 grados",
+      "pressure": "50 psi",
+      "isAutomatic": false,
+      "plotId": 1
     }
   ]
 }
