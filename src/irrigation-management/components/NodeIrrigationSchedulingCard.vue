@@ -69,8 +69,8 @@ export default {
   width: 250px;
 }
 .irrigation-card-header img {
-  width: 100%;
-  height: auto;
+  width: 120px;
+  margin-bottom: 5px;
 }
 .irrigation-card-body {
   margin-top: 16px;
