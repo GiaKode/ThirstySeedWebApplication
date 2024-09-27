@@ -22,22 +22,24 @@ export default {
 
 <style scoped>
 .node-status {
-  background-color: #fff;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  margin: 10px;
+  flex: 1;
 }
 
 .node-status p {
-  margin: 10px 0;
-  font-size: 14px;
+  margin: 8px 0;
+  font-size: 16px;
 }
 
 .node-icon {
-  width: 40px;
-  margin-bottom: 10px;
+  width: 50px;
+  margin-bottom: 15px;
 }
 
 .status-correct {
