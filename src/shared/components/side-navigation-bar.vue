@@ -9,8 +9,8 @@
       </button>
     </div>
       
-    <hr class="divider" />
-
+    <hr class="divider"/>
+    
     <!-- Collapsed button-->
     <button v-if="isCollapsed" class="toggle-button collapsed" @click="toggleSidebar">
       <i class="pi pi-bars"></i>
@@ -63,6 +63,7 @@ export default {
   methods: {
     toggleSidebar() {
       this.isCollapsed = !this.isCollapsed
+      this.$emit('toggle-collapse');
     },
     selectItem(label) {
       this.activeItem = label
@@ -155,10 +156,10 @@ export default {
 }
 
 .toggle-button.collapsed {
-  margin: 0; /* Elimina el margen adicional */
+  margin: 0;
   width: 100%;
   padding: 10px 0;
-  justify-content: center; /* Alinea al centro el ícono */
+  justify-content: center;
 }
 
 .divider {

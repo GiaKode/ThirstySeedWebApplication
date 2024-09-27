@@ -9,16 +9,21 @@ import PrimeVue from 'primevue/config'
 // PrimeVue Material Design Theme
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
-
-// Theme
+//import Aura from "@primevue/themes/aura";
 
 // PrimeVue Components
-
+import ToastService from 'primevue/toastservice'
+import Toast from 'primevue/toast'
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
 
 // PrimeVue Configuration
-app.use(PrimeVue, { ripple: true })
+//app.use(PrimeVue, {ripple: true});
+app.use(PrimeVue)
+
+// Registrar componentes
+app.use(ToastService)
+app.component('pv-toast', Toast)
 app.mount('#app')
