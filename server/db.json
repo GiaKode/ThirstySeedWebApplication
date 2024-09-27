@@ -22,84 +22,24 @@
       "angle": "30 grados",
       "pressure": "50 psi",
       "isAutomatic": true
-    },
+    }
+  ],
+  "nodes": [
     {
-      "id": "a27d",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": true,
-      "plotId": 1
-    },
+      "id": "1",
+      "plotId": 1,
+      "location": "South",
+      "moisture": 40,
+      "indicator": "Water",
+      "status": "Correct",
+      "statusClass": "status-correct",
+      "iconClass": "pi pi-check"
+    }
+  ],
+  "irrigationSchedules": [
     {
-      "id": "bb16",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": true,
-      "plotId": 1
-    },
-    {
-      "id": "c2b4",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "10 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": false,
-      "plotId": 1
-    },
-    {
-      "id": "e11c",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "10 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": false,
-      "plotId": 1
-    },
-    {
-      "id": "f161",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": true,
-      "plotId": 1
-    },
-    {
-      "id": "0ef1",
-      "expectedMoisture": "40%",
-      "plotSize": "100 m2",
-      "estimatedTime": "3 horas",
-      "setTime": "08:15 pm",
-      "requiredWaterAmount": "500 cm3 (500 l)",
-      "sprinklerRadius": "7 m",
-      "angle": "30 grados",
-      "pressure": "50 psi",
-      "isAutomatic": true,
-      "plotId": 1
+      "irrigationMode": "Manual",
+      "id": "1"
     }
   ]
 }
