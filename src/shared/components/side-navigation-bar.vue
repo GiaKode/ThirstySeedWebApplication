@@ -63,6 +63,7 @@ export default {
   methods: {
     toggleSidebar() {
       this.isCollapsed = !this.isCollapsed
+      this.$emit('toggle-collapse');
     },
     selectItem(label) {
       this.activeItem = label
