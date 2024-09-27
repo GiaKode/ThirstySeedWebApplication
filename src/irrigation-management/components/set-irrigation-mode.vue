@@ -15,9 +15,19 @@
 
         <div class="button-group">
           <button @click="save">Save</button>
-          <button @click="cancel">Cancel</button>
+          <button @click="cancel" >Cancel</button>
         </div>
       </div>
+    </div>
+
+    <div class="plot-select">
+      <label for="plot">Select plot:</label>
+      <select id="plot" v-model="selectedPlotId">
+        <option value="" disabled>Select a plot</option>
+        <option v-for="plot in plots" :key="plot.id" :value="plot.id">
+          {{ plot.name }} ({{ plot.size }})
+        </option>
+      </select>
     </div>
 
     <div class="irrigation-settings-card">
@@ -67,6 +77,7 @@
 </template>
 
 <script>
+import PlotService from '../services/plot-management-service.ts';
 import IrrigationSettingsService from '../services/irrigation-setting-service';
 
 export default {
@@ -84,16 +95,33 @@ export default {
         angle: '30 grados',
         pressure: '50 psi'
       },
+      plots: [], 
+      selectedPlotId: null,
       message: '',
       messageClass: ''
     };
   },
   methods: {
+    getAllPlots() {
+      PlotService.getAll()
+        .then(response => {
+          this.plots = response.data;
+        })
+        .catch(error => {
+          console.error('Error al obtener las parcelas:', error);
+        });
+    },
     save() {
+      if (!this.selectedPlotId) {
+        this.message = 'Please select a plot before saving!';
+        this.messageClass = 'error-message';
+        return;
+      }
+
       const irrigationData = {
         ...this.settings,
         isAutomatic: this.isAutomatic,
-        plotId: 1
+        plotId: this.selectedPlotId
       };
 
       IrrigationSettingsService.create(irrigationData)
@@ -125,8 +153,12 @@ export default {
         });
     },
     cancel() {
-      console.log('Cancel');
+      this.$router.push('/irrigation-schedule');
     }
+  },
+  mounted() {
+    // Obtener los terreno por usuario
+    this.getAllPlots();
   }
 };
 </script>
@@ -134,6 +166,10 @@ export default {
 <style scoped>
 * {
   font-family: 'Poppins', sans-serif;
+}
+
+label {
+  font-weight: 500;
 }
 
 body, h2, label, input {
@@ -228,6 +264,18 @@ button:first-of-type {
 button:last-of-type {
   background-color: #ccc;
   color: black;
+}
+
+.plot-select {
+  margin-bottom: 20px;
+}
+
+.plot-select select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  width: 100%;
 }
 
 .irrigation-settings-card {
