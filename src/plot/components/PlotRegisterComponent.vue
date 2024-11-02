@@ -56,7 +56,6 @@
         <router-link to="/register-node">
           <button class="node-register-button">Register Node</button>
         </router-link>
-
       </form>
 
       <div v-if="confirmationMessage" class="confirmation-message">
@@ -72,6 +71,7 @@
 
 <script>
 import { plotService } from '@/plot/services/plot.service.js';
+import { userService } from '@/plot/services/user-service.js'; // Importa el servicio de usuario
 
 export default {
   data() {
@@ -96,20 +96,26 @@ export default {
       }
 
       try {
+        // Obtener la lista de parcelas existentes para generar un nuevo ID
         const response = await plotService.getAllPlots();
         const existingPlots = response.data;
 
         const newId = existingPlots.length > 0
-          ? Math.max(...existingPlots.map(plot => plot.id)) + 1
+          ? Math.max(...existingPlots.map(plot => parseInt(plot.id))) + 1
           : 1;
 
-        this.plot.id = newId;
+        this.plot.id = newId.toString(); // Asegúrate de convertir a cadena
 
+        // Crear la nueva parcela
         await plotService.createPlot(this.plot);
+
+        // Asociar la parcela al usuario autenticado
+        await userService.addPlotToUser(this.plot.id);
 
         this.confirmationMessage = "Plot registered successfully!";
         this.errorMessage = '';
 
+        // Limpiar el formulario después del registro exitoso
         this.plot = {
           id: null,
           name: '',
@@ -130,9 +136,6 @@ export default {
     },
     updateImagePreview() {
       this.imagePreview = this.plot.imageUrl;
-    },
-    goToRegisterNode() {
-      this.$router.push('/register-node');
     }
   }
 };
@@ -232,5 +235,10 @@ input:focus {
   margin-top: 20px;
   color: green;
   font-weight: bold;
+}
+
+.error-message {
+  color: red;
+  margin-top: 15px;
 }
 </style>

@@ -2,13 +2,12 @@
   <div class="plots-status">
     <div class="header-container">
       <h1 class="plots-header">Registered Plots</h1>
-      <!-- Botón de Registrar Plot -->
       <button class="register-plot-btn" @click="goToRegisterPlot">Register Plot</button>
     </div>
-    
-    <div class="plots">
+
+    <div class="plots" v-if="plots.length">
       <div class="plot" v-for="plot in plots" :key="plot.id">
-        <img :src="plot.imageUrl" alt="Plot Image" class="plot-image" /> <!-- Cambiado a plot.imageUrl -->
+        <img :src="plot.imageUrl" alt="Plot Image" class="plot-image" />
         <div class="plot-details">
           <p><strong>Land Name:</strong> {{ plot.name || 'No disponible' }}</p>
           <p><strong>Location:</strong> {{ plot.location || 'No disponible' }}</p>
@@ -22,40 +21,63 @@
         </div>
       </div>
     </div>
+    <p v-else>No plots available. Please register a new plot.</p>
+
+    <div v-if="confirmationMessage" class="confirmation-message">
+      {{ confirmationMessage }}
+    </div>
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
 <script>
-import PlotManagementService from '@/irrigation-management/services/plot-management-service';
+import { plotService } from '@/plot/services/plot.service.js';
+import { userService as UserService } from '@/plot/services/user-service.js';
 
 export default {
-  name: 'ViewPlotStatus',
   data() {
     return {
-      plots: []
+      plots: [],
+      confirmationMessage: '',
+      errorMessage: '',
     };
   },
-  created() {
-    this.fetchPlots();
+  async created() {
+    try {
+      await this.fetchPlots();
+    } catch (error) {
+      console.error("Error loading plots:", error);
+    }
   },
   methods: {
     async fetchPlots() {
       try {
-        const response = await PlotManagementService.getAll();
-        this.plots = response.data;
+        const currentUser = await UserService.getCurrentUser();
+        if (!currentUser) {
+          this.errorMessage = "User not logged in.";
+          return;
+        }
+
+        const response = await plotService.getAllPlots();
+        // Check if `currentUser.plots` exists; if not, set it as an empty array.
+        const userPlots = currentUser.plots || [];
+        this.plots = response.data.filter(plot => userPlots.includes(plot.id.toString()));
       } catch (error) {
         console.error('Error fetching plot data:', error);
+        this.plots = []; // Ensures `plots` is empty in case of an error
       }
     },
     goToRegisterPlot() {
-      this.$router.push('/register-plot');
+      // Redirige al formulario de registro de parcelas
+      this.$router.push({ name: 'registerplot' }); // Usa el nombre de la ruta
     }
   }
 };
 </script>
 
 <style scoped>
-/* Aquí va el mismo estilo que has venido usando */
 .plots-status {
   margin: 20px;
 }
@@ -108,7 +130,7 @@ export default {
   margin: 10px;
   margin-bottom: 60px;
   padding: 15px;
-  background-color: #f9f9f9;
+  background-color: #FFFFF9;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   height: 350px;
@@ -132,5 +154,17 @@ export default {
   margin: 5px 0;
   font-size: 16px;
   color: #333;
+}
+
+.confirmation-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
 }
 </style>
