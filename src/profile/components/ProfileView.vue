@@ -1,33 +1,21 @@
 <template>
-  <div class="profile">
+  <div class="profile" v-if="user">
     <div class="profile-container">
       <!-- Imagen de perfil -->
       <div class="profile-picture-container">
-        <img :src="user.profileImage" alt="User profile picture" class="profile-picture" />
+        <img :src="user.imageUrl || '../../assets/images/default-profile.png'" alt="User profile picture" class="profile-picture" />
       </div>
 
       <!-- Información básica de la cuenta -->
       <div class="details">
-        <p>
-          <i class="fas fa-user"></i> 
-          <span class="shaded-text">{{ user.name }}</span>
-        </p>
-        <p>
-          <i class="fas fa-phone-alt"></i>
-          <span class="shaded-text">{{ user.phone }}</span>
-        </p>
-        <p>
-          <i class="fas fa-envelope"></i> 
-          <span class="shaded-text">{{ user.email }}</span>
-        </p>
-        <p>
-          <i class="fas fa-map-marker-alt"></i> 
-          <span class="shaded-text">{{ user.location }}</span>
-        </p>
+        <p><i class="fas fa-user"></i><span class="shaded-text">{{ user.name }} {{ user.lastName }}</span></p>
+        <p><i class="fas fa-phone-alt"></i><span class="shaded-text">{{ user.telephone }}</span></p>
+        <p><i class="fas fa-envelope"></i><span class="shaded-text">{{ user.email }}</span></p>
+        <p><i class="fas fa-map-marker-alt"></i><span class="shaded-text">{{ user.city }}</span></p>
       </div>
 
-      <!-- Proveedor de Agua -->
-      <div class="water-supplier">
+      <!-- Proveedor de Agua (si aplica) -->
+      <div class="water-supplier" v-if="user.waterSupplier">
         <h3><i class="fas fa-tint"></i> Water Supplier</h3>
         <img :src="user.waterSupplier.logo" alt="Water Supplier" class="supplier-logo" />
       </div>
@@ -52,6 +40,8 @@
   </div>
 </template>
 
+
+
 <script>
 import axios from 'axios';
 
@@ -59,17 +49,32 @@ export default {
   name: 'ProfileView',
   data() {
     return {
-      user: null, // Definimos la propiedad 'user' como null inicialmente
+      user: null, // Inicializa el usuario en null
     };
   },
   created() {
-    this.fetchUserData(); // Llamamos al método para obtener los datos del usuario
+    this.fetchUserData(); // Llama al método para obtener los datos del usuario
   },
   methods: {
     async fetchUserData() {
       try {
-        const response = await axios.get('http://localhost:3000/user'); // Asegúrate de que la API esté configurada correctamente
-        this.user = response.data; // Asignamos los datos recibidos a la propiedad 'user'
+        const email = localStorage.getItem('userEmail'); // Obtiene el email del usuario autenticado
+
+        if (!email) {
+          console.error('No se encontró el email en localStorage.');
+          return;
+        }
+
+        // Llama a la API para obtener los datos de todos los usuarios
+        const response = await axios.get('http://localhost:3000/users');
+        const users = response.data;
+
+        // Busca el usuario por el email
+        this.user = users.find(user => user.email === email);
+
+        if (!this.user) {
+          console.error('Usuario no encontrado');
+        }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -77,6 +82,8 @@ export default {
   },
 };
 </script>
+
+
 
 <style scoped>
 /* Contenedor general */
