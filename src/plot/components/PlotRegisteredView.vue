@@ -1,27 +1,29 @@
 <template>
   <div class="plots-status">
     <div class="header-container">
-      <h1 class="plots-header">Registered Plots</h1>
-      <button class="register-plot-btn" @click="goToRegisterPlot">Register Plot</button>
+      <div class="title-and-message">
+        <h1 class="plots-header">{{ $t('plotsStatus.registeredPlots') }}</h1>
+        <p v-if="plots && !plots.length" class="no-plots-message">{{ $t('plotsStatus.noPlotsAvailable') }}</p>
+      </div>
+      <button class="register-plot-btn" @click="goToRegisterPlot">{{ $t('plotsStatus.registerPlot') }}</button>
     </div>
 
-    <div class="plots" v-if="plots.length">
+    <div class="plots" v-if="plots && plots.length">
       <div class="plot" v-for="plot in plots" :key="plot.id">
         <img :src="plot.imageUrl" alt="Plot Image" class="plot-image" />
         <div class="plot-details">
-          <p><strong>Land Name:</strong> {{ plot.name || 'No disponible' }}</p>
-          <p><strong>Location:</strong> {{ plot.location || 'No disponible' }}</p>
-          <p><strong>Extension of Land:</strong> {{ plot.extension ? plot.extension + ' m2' : 'No disponible' }}</p>
+          <p><strong>{{ $t('plotsStatus.landName') }}:</strong> {{ plot.name || $t('plotsStatus.notAvailable') }}</p>
+          <p><strong>{{ $t('plotsStatus.location') }}:</strong> {{ plot.location || $t('plotsStatus.notAvailable') }}</p>
+          <p><strong>{{ $t('plotsStatus.extensionOfLand') }}:</strong> {{ plot.extension ? plot.extension + ' m2' : $t('plotsStatus.notAvailable') }}</p>
           <p>
-            <strong>Plot Status: </strong>
+            <strong>{{ $t('plotsStatus.plotStatus') }}: </strong>
             <span :class="{ 'not-supplied': plot.status === 'Not Supplied' }">
-              {{ plot.status || 'No disponible' }}
+              {{ plot.status || $t('plotsStatus.notAvailable') }}
             </span>
           </p>
         </div>
       </div>
     </div>
-    <p v-else>No plots available. Please register a new plot.</p>
 
     <div v-if="confirmationMessage" class="confirmation-message">
       {{ confirmationMessage }}
@@ -39,7 +41,7 @@ import { userService as UserService } from '@/plot/services/user-service.js';
 export default {
   data() {
     return {
-      plots: [],
+      plots: [], // Inicializa `plots` como un arreglo vacío
       confirmationMessage: '',
       errorMessage: '',
     };
@@ -56,28 +58,35 @@ export default {
       try {
         const currentUser = await UserService.getCurrentUser();
         if (!currentUser) {
-          this.errorMessage = "User not logged in.";
+          this.errorMessage = this.$t('plotsStatus.userNotLoggedIn');
           return;
         }
 
         const response = await plotService.getAllPlots();
-        // Check if `currentUser.plots` exists; if not, set it as an empty array.
         const userPlots = currentUser.plots || [];
         this.plots = response.data.filter(plot => userPlots.includes(plot.id.toString()));
       } catch (error) {
         console.error('Error fetching plot data:', error);
-        this.plots = []; // Ensures `plots` is empty in case of an error
+        this.errorMessage = this.$t('plotsStatus.errorFetchingData'); // Mensaje de error traducido
+        this.plots = [];
       }
     },
     goToRegisterPlot() {
-      // Redirige al formulario de registro de parcelas
-      this.$router.push({ name: 'registerplot' }); // Usa el nombre de la ruta
+      this.$router.push({ name: 'registerplot' });
     }
   }
 };
 </script>
 
+
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
 .plots-status {
   margin: 20px;
 }
@@ -89,11 +98,22 @@ export default {
   margin-bottom: 20px;
 }
 
-.plots-header {
-  font-size: 24px;
-  margin-left: 130px;
+.title-and-message {
+  display: flex;
+  align-items: center;
 }
 
+.plots-header {
+  font-size: 24px;
+  margin-right: 20px; /* Espacio entre el título y el mensaje */
+}
+
+.no-plots-message {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Diseño original del botón de registro */
 .register-plot-btn {
   background-color: #3D703B;
   color: white;

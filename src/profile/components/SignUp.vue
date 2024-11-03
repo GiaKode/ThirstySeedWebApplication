@@ -1,17 +1,55 @@
 <template>
   <div class="signup-container">
     <div class="signup-card">
-      <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" />
-      <img src="../../assets/images/register-logo.png" alt="Profile Icon" class="profile-icon" @click="triggerFileUpload" />
+      <!-- Botón para insertar enlace de imagen -->
+      <button @click="toggleImageUrlInput" class="profile-button">
+        Presione aquí para foto de perfil
+      </button>
+      <input
+        v-if="showImageUrlInput"
+        v-model="imageUrl"
+        type="text"
+        placeholder="Paste image URL here"
+        class="image-url-input"
+      />
+      <img
+        :src="imageUrl || '../../assets/images/register-logo.png'"
+        alt="Profile Icon"
+        class="profile-icon"
+      />
       <h2>-- Create New Account --</h2>
       <form @submit.prevent="onSubmit">
         <div class="input-group">
-          <input v-model="name" type="text" placeholder="Name" required />
-          <input v-model="lastName" type="text" placeholder="Last Name" required />
+          <input
+            v-model="name"
+            type="text"
+            placeholder="Name"
+            required
+            @input="validateText($event, 'name')"
+          />
+          <input
+            v-model="lastName"
+            type="text"
+            placeholder="Last Name"
+            required
+            @input="validateText($event, 'lastName')"
+          />
         </div>
         <div class="input-group">
-          <input v-model="city" type="text" placeholder="City" required />
-          <input v-model="telephone" type="tel" placeholder="Telephone" required />
+          <input
+            v-model="city"
+            type="text"
+            placeholder="City"
+            required
+            @input="validateText($event, 'city')"
+          />
+          <input
+            v-model="telephone"
+            type="tel"
+            placeholder="+51 XXX-XXX-XXX"
+            required
+            @input="validateTelephone"
+          />
         </div>
         <div class="input-field">
           <input v-model="email" type="email" placeholder="Email" required />
@@ -42,10 +80,11 @@ export default {
       name: '',
       lastName: '',
       city: '',
-      telephone: '',
+      telephone: '+51 ', // Prefijo inicial para Perú
       email: '',
       password: '',
       imageUrl: '', // Para almacenar la URL de la imagen seleccionada
+      showImageUrlInput: false, // Controla la visualización del input de URL
       showPlanModal: false
     };
   },
@@ -53,14 +92,26 @@ export default {
     PlanSelectionModal
   },
   methods: {
-    triggerFileUpload() {
-      this.$refs.fileInput.click();
+    toggleImageUrlInput() {
+      this.showImageUrlInput = !this.showImageUrlInput;
     },
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.imageUrl = URL.createObjectURL(file); // Genera una URL temporal para previsualizar la imagen
+    validateText(event, field) {
+      const regex = /^[A-Za-z\s]*$/;
+      if (!regex.test(event.target.value)) {
+        this[field] = this[field].replace(/[^A-Za-z\s]/g, '');
       }
+    },
+    validateTelephone(event) {
+      // Asegura que el valor comience con "+51 " y elimina caracteres no numéricos
+      if (!this.telephone.startsWith("+51 ")) {
+        this.telephone = "+51 ";
+      }
+
+      // Mantiene solo los números después del prefijo
+      const cleanedNumber = this.telephone.replace(/\D/g, "").substring(2); // Quita el "+51"
+
+      // Limita el número a 9 dígitos y lo formatea en el formato XXX-XXX-XXX
+      this.telephone = "+51 " + cleanedNumber.slice(0, 9).replace(/(\d{3})(\d{3})(\d{3})/, '$1-$2-$3');
     },
     async onSubmit() {
       // Validación de campos
@@ -107,16 +158,30 @@ export default {
 };
 </script>
 
-
-
-
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+.profile-button {
+  margin-bottom: 1rem;
+  background-color: #4caf50;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .profile-icon {
   width: 120px;
-  margin-bottom: -1rem;
-  cursor: pointer; /* Hace que el icono sea clickeable */
+  margin-bottom: 1rem; /* Añadido un margen inferior para separar la imagen del título */
+}
+
+.image-url-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem;
 }
 
 * {
@@ -124,21 +189,12 @@ export default {
   box-sizing: border-box;
 }
 
-.signup-card {
-  transition: transform 0.5s ease-in-out;
-}
-
-.signup-card.move-left {
-  transform: translateX(-50%);
-}
-
-
 .signup-container {
   display: flex;
   height: 100vh;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff; /* Cambié el color de fondo a un gris claro para que coincida con la tarjeta */
+  background-color: #ffffff;
 }
 
 .signup-card {
@@ -148,11 +204,6 @@ export default {
   border-radius: 8px;
   width: 400px;
   text-align: center;
-}
-
-.profile-icon {
-  width: 120px;
-  margin-bottom: -1rem;
 }
 
 h2 {
@@ -173,7 +224,7 @@ h2 {
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-right: 1%; /* Espaciado pequeño entre los inputs */
+  margin-right: 1%;
 }
 
 .input-field {

@@ -5,7 +5,7 @@
       "name": "Richard",
       "lastName": "Acuña",
       "city": "USA",
-      "telephone": "+51 960-330-881",
+      "telephone": "+51 999-999-999",
       "email": "prueba@gmail.com",
       "password": "prueba",
       "imageUrl": "https://www.zoobioparqueamaru.com/nuestros-animales/aves/51-zoo-cuenca.jpg",
@@ -28,29 +28,17 @@
       ]
     },
     {
-      "id": "c6f7",
-      "name": "Raul",
-      "lastName": "Erasmo",
-      "city": "Lima, Chorrillos",
-      "telephone": "111222333",
-      "email": "RaulE@gmail.com",
+      "id": "648a",
+      "name": "Alexis",
+      "lastName": "Vargas",
+      "city": "Lima",
+      "telephone": "+51 960-330-880",
+      "email": "av.varquispe@gmail.com",
       "password": "123",
-      "imageUrl": "blob:http://localhost:5173/87210074-da61-4f49-be4a-bebc9d90f1ee",
+      "imageUrl": "https://media.es.wired.com/photos/6519015ce1045b93e30d62e9/1:1/w_2008,h_2008,c_limit/51071209",
       "plots": [
         "4"
       ]
-    },
-    {
-      "id": "81eb",
-      "name": "Alexis Vargas",
-      "email": "a.varquispe@gmail.com",
-      "password": "hola123"
-    },
-    {
-      "id": "6633",
-      "name": "Alexis Vargas",
-      "email": "a.varquispe@gmail.com",
-      "password": "hola123"
     }
   ],
   "plots": [
@@ -85,10 +73,10 @@
     },
     {
       "id": "4",
-      "name": "Chorrillos",
-      "location": "Chorrillos",
-      "size": 4,
-      "imageUrl": "https://i.ytimg.com/vi/8WIHuPANoZo/maxresdefault.jpg"
+      "name": "Parcela AV",
+      "location": "San Juan de Miraflores",
+      "size": 2,
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuEiDHO0dyjYHJ1UGyVpX4hdCifuQcizPZng&s"
     }
   ],
   "cards": [
