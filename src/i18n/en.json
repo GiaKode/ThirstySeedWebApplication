@@ -14,6 +14,7 @@
     "landName": "Land Name",
     "location": "Location",
     "extensionOfLand": "Extension of Land",
+    "plotSize": "Size",
     "plotStatus": "Plot Status",
     "notAvailable": "Not available",
     "noPlotsAvailable": "No plots available. Please register a new plot.",

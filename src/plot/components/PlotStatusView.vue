@@ -10,7 +10,15 @@
         <p><strong>Installed nodes:</strong> <span class="highlight">{{ plot.nodes }}</span></p>
         <p><strong>Last irrigation date:</strong> <span class="highlight">{{ formatDate(plot.lastIrrigationDate) }}</span></p>
       </div>
+
+
+    <div class="register-node-button">
+      <router-link to="/register-node">
+        <button class="register-button">Register Node</button>
+      </router-link>
     </div>
+  </div>
+
 
     <div class="node-status-container" v-if="nodes.length">
       <div class="top-layout">
@@ -58,7 +66,9 @@ export default {
       return new Date(dateString).toLocaleDateString('en-GB', options);
     },
     fetchPlotAndNodes() {
-      plotService.getPlotById(1)
+      const plotId = this.$route.params.plotId; // Obtener el plotId de la URL
+
+      plotService.getPlotById(plotId)
           .then(response => {
             this.plot = response.data;
           })
@@ -66,7 +76,7 @@ export default {
             console.error('Error fetching plot:', error);
           });
 
-      nodeService.getNodesByPlotId(1)
+      nodeService.getNodesByPlotId(plotId)
           .then(response => {
             this.nodes = response.data;
             this.plot.nodes = this.nodes.length;
@@ -101,6 +111,19 @@ export default {
   width: 100%;
 }
 
+.register-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.register-button:hover {
+  background-color: #0056b3;
+}
 .plot-image-container {
   display: flex;
   justify-content: center;
