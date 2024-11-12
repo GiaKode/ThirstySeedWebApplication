@@ -12,7 +12,7 @@ export const nodeService = {
     },
 
     getNodesByPlotId(plotId) {
-        return axios.get(`${API_URL}?plotId=${plotId}`);
+        return axios.get(`${API_URL}/plot/${plotId}`);
     },
 
     createNode(nodeData) {

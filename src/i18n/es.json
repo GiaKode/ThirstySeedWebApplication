@@ -15,6 +15,7 @@
     "location": "Ubicación",
     "extensionOfLand": "Extensión de la Parcela",
     "plotStatus": "Estado de la Parcela",
+    "plotSize": "Tamaño de la Parcela",
     "notAvailable": "No disponible",
     "noPlotsAvailable": "No hay parcelas disponibles. Por favor, registre una nueva parcela.",
     "userNotLoggedIn": "Usuario no ha iniciado sesión.",

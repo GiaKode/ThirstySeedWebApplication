@@ -31,7 +31,7 @@ const routes = [
   { path: '/register-plot', name: 'registerplot', component: PlotRegisterComponent, meta: { requiresAuth: true } },
   { path: '/register-node', name: 'registernode', component: NodeRegisterComponent, meta: { requiresAuth: true } },
   { path: '/activate-irrigation-nodes', name: 'activateirrigationnodes', component: ActivateIrrigationNodes, meta: { requiresAuth: true } },
-  { path: '/plot-status', name: 'plotstatus', component: PlotStatusView, meta: { requiresAuth: true } },
+  { path: '/plot-status/:plotId', name: 'plotstatus', component: PlotStatusView, meta: { requiresAuth: true } },
   { path: '/irrigation-schedule', name: 'irrigationschedule', component: ActivateIrrigationInPlotView, meta: { requiresAuth: true } },
   { path: '/account', name: 'Account', component: ProfileView, meta: { requiresAuth: true } },
   {path: '/support', name: 'Support', component: Support, meta: { requiresAuth: true } },

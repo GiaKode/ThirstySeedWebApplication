@@ -40,7 +40,16 @@
             required
           />
         </div>
-
+        <div class="form-group">
+          <label for="extension">Extension</label>
+          <input
+              type="text"
+              v-model="plot.extension"
+              id="extension"
+              placeholder="Extension"
+              required
+          />
+        </div>
         <div class="form-group">
           <label for="size">Size (in hectares)</label>
           <input
@@ -50,6 +59,7 @@
             placeholder="Size in hectares"
             required
           />
+
         </div>
 
         <button type="submit" class="submit-button">Register Plot</button>

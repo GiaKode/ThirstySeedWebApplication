@@ -9,12 +9,13 @@
     </div>
 
     <div class="plots" v-if="plots && plots.length">
-      <div class="plot" v-for="plot in plots" :key="plot.id">
+      <div class="plot" v-for="plot in plots" :key="plot.id" @click="goToPlotStatus(plot.id)">
         <img :src="plot.imageUrl" alt="Plot Image" class="plot-image" />
         <div class="plot-details">
           <p><strong>{{ $t('plotsStatus.landName') }}:</strong> {{ plot.name || $t('plotsStatus.notAvailable') }}</p>
           <p><strong>{{ $t('plotsStatus.location') }}:</strong> {{ plot.location || $t('plotsStatus.notAvailable') }}</p>
           <p><strong>{{ $t('plotsStatus.extensionOfLand') }}:</strong> {{ plot.extension ? plot.extension + ' m2' : $t('plotsStatus.notAvailable') }}</p>
+          <p><strong>{{ $t('plotsStatus.plotSize') }}:</strong> {{ plot.size ? plot.size  : $t('plotsStatus.notAvailable') }}</p>
           <p>
             <strong>{{ $t('plotsStatus.plotStatus') }}: </strong>
             <span :class="{ 'not-supplied': plot.status === 'Not Supplied' }">
@@ -41,7 +42,7 @@ import { userService as UserService } from '@/plot/services/user-service.js';
 export default {
   data() {
     return {
-      plots: [], // Inicializa `plots` como un arreglo vacío
+      plots: [],
       confirmationMessage: '',
       errorMessage: '',
     };
@@ -67,16 +68,21 @@ export default {
         this.plots = response.data.filter(plot => userPlots.includes(plot.id.toString()));
       } catch (error) {
         console.error('Error fetching plot data:', error);
-        this.errorMessage = this.$t('plotsStatus.errorFetchingData'); // Mensaje de error traducido
+        this.errorMessage = this.$t('plotsStatus.errorFetchingData');
         this.plots = [];
       }
     },
     goToRegisterPlot() {
       this.$router.push({ name: 'registerplot' });
+    },
+    goToPlotStatus(plotId) {
+
+      this.$router.push(`/plot-status/${plotId}`);
     }
   }
 };
 </script>
+
 
 
 <style scoped>
@@ -105,7 +111,7 @@ export default {
 
 .plots-header {
   font-size: 24px;
-  margin-right: 20px; /* Espacio entre el título y el mensaje */
+  margin-right: 20px;
 }
 
 .no-plots-message {
@@ -113,7 +119,7 @@ export default {
   color: #666;
 }
 
-/* Diseño original del botón de registro */
+
 .register-plot-btn {
   background-color: #3D703B;
   color: white;
