@@ -19,7 +19,9 @@
 
       <!-- Mostrar el formulario de pago si se selecciona un plan -->
       <div v-if="paymentFormVisible">
-        <PaymentForm />
+        <!-- Pasar el plan seleccionado a PaymentForm -->
+        <PaymentForm ref="paymentForm" :selectedPlan="selectedPlan" :userId="userId" />
+
       </div>
 
       <button class="close-btn" @click="closeModal">Close</button>
@@ -33,7 +35,8 @@ import PaymentForm from './PaymentForm.vue';
 export default {
   data() {
     return {
-      paymentFormVisible: false // Estado para mostrar el formulario de pago
+      paymentFormVisible: false,
+      selectedPlan: '' // Estado para almacenar el plan seleccionado
     };
   },
   components: {
@@ -43,16 +46,40 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    userId: { // Recibe el userId desde signup.vue
+      type: String,
+      required: true
     }
   },
   methods: {
     closeModal() {
-      this.$emit('close');
+      // Verifica si el pago fue exitoso antes de redirigir
+      if (this.paymentFormVisible && this.$refs.paymentForm.paymentSuccess) {
+        // Redirige al login después de un pago exitoso
+        this.$router.push('/login');
+      } else {
+        // Simplemente cierra el modal si el pago no ha sido realizado
+        this.$emit('close');
+      }
     },
-    selectPlan(plan) {
-      this.paymentFormVisible = true; // Mostrar el formulario de pago al seleccionar un plan
-      console.log("Plan seleccionado:", plan);
-      // Aquí puedes enviar la información del plan al backend si es necesario
+    async selectPlan(plan) {
+      this.selectedPlan = plan;
+      this.paymentFormVisible = true;
+    },
+
+    async handlePaymentSuccess(code, nodeCount) {
+      // Actualizar el usuario con los detalles del plan
+      await axios.patch(`http://localhost:3000/users/${this.$parent.userId}`, {
+        plan: {
+          type: this.selectedPlan,
+          code,
+          nodeCount
+        }
+      });
+
+      // Redirigir o cerrar el modal tras el pago exitoso
+      this.$emit('close');
     }
   }
 };
@@ -66,11 +93,11 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Fondo negro translúcido */
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; /* Asegúrate de que esté por encima del resto del contenido */
+  z-index: 999;
 }
 
 .modal-content {
@@ -87,6 +114,7 @@ export default {
   display: flex;
   justify-content: space-around;
   margin: 2rem 0;
+
 }
 
 .plan-card {
@@ -102,6 +130,7 @@ export default {
 
 .plan-card:hover {
   transform: scale(1.05);
+
 }
 
 .btn {
@@ -112,15 +141,17 @@ export default {
   color: white;
   cursor: pointer;
   border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .close-btn {
   margin-top: 1rem;
-  background-color: #ff4d4d;
+  background-color: #ff0000;
   padding: 0.75rem;
   border: none;
   color: white;
   cursor: pointer;
   border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
 }
 </style>

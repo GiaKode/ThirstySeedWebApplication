@@ -40,32 +40,20 @@
             required
           />
         </div>
-        <div class="form-group">
-          <label for="extension">Extension</label>
-          <input
-              type="text"
-              v-model="plot.extension"
-              id="extension"
-              placeholder="Extension"
-              required
-          />
-        </div>
+
         <div class="form-group">
           <label for="size">Size (in hectares)</label>
           <input
             type="number"
-            v-model="plot.size"
+            v-model.number="plot.size"
             id="size"
             placeholder="Size in hectares"
-            required
+            min="0"
+          required
           />
-
         </div>
 
         <button type="submit" class="submit-button">Register Plot</button>
-        <router-link to="/register-node">
-          <button class="node-register-button">Register Node</button>
-        </router-link>
       </form>
 
       <div v-if="confirmationMessage" class="confirmation-message">
@@ -81,7 +69,7 @@
 
 <script>
 import { plotService } from '@/plot/services/plot.service.js';
-import { userService } from '@/plot/services/user-service.js'; // Importa el servicio de usuario
+import { userService } from '@/plot/services/user-service.js';
 
 export default {
   data() {
@@ -106,7 +94,6 @@ export default {
       }
 
       try {
-        // Obtener la lista de parcelas existentes para generar un nuevo ID
         const response = await plotService.getAllPlots();
         const existingPlots = response.data;
 
@@ -114,18 +101,15 @@ export default {
           ? Math.max(...existingPlots.map(plot => parseInt(plot.id))) + 1
           : 1;
 
-        this.plot.id = newId.toString(); // Asegúrate de convertir a cadena
+        this.plot.id = newId.toString();
 
-        // Crear la nueva parcela
         await plotService.createPlot(this.plot);
 
-        // Asociar la parcela al usuario autenticado
         await userService.addPlotToUser(this.plot.id);
 
         this.confirmationMessage = "Plot registered successfully!";
         this.errorMessage = '';
 
-        // Limpiar el formulario después del registro exitoso
         this.plot = {
           id: null,
           name: '',
@@ -136,7 +120,7 @@ export default {
         this.imagePreview = '';
 
         setTimeout(() => {
-          this.confirmationMessage = '';
+          this.$router.push('/manage-parcels'); // Redirige a /manage-parcels después de un registro exitoso
         }, 3000);
       } catch (error) {
         console.error("Error registering plot:", error);
@@ -191,6 +175,7 @@ h1 {
 
 .form-group {
   margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
 label {
@@ -208,6 +193,7 @@ input {
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
 }
 
 input:focus {
@@ -215,8 +201,7 @@ input:focus {
   outline: none;
 }
 
-.submit-button,
-.node-register-button {
+.submit-button {
   width: 100%;
   margin-top: 20px;
   background-color: #28a745;
@@ -227,18 +212,11 @@ input:focus {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-family: 'Poppins', sans-serif;
 }
 
 .submit-button:hover {
   background-color: #218838;
-}
-
-.node-register-button {
-  background-color: #007bff;
-}
-
-.node-register-button:hover {
-  background-color: #0056b3;
 }
 
 .confirmation-message {

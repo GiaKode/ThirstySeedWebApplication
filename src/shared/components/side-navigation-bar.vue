@@ -57,39 +57,71 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
-import { nextTick } from 'vue';
+import { watch, ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute } from 'vue-router';
 
 export default {
   name: 'SideNavigationBar',
   setup() {
     const { locale } = useI18n();
-    return { locale };
-  },
-  data() {
-    return {
-      isCollapsed: false,
-      isMobile: false,
-      activeItem: 'manage_parcels',
-      isEnglish: true, // Ahora está en inglés al inicio
-      items: [
-        { label: 'manage_parcels', to: 'manage-parcels' },
-        { label: 'view_parcels_status', to: 'plot-status' },
-        { label: 'scheduled_irrigations', to: 'irrigation-schedule' },
-        { label: 'irrigation_reports', to: 'irrigation-reports' },
-        { label: 'notifications', to: 'notifications' },
-        { label: 'account', to: 'account' },
-        { label: 'support', to: 'support' }
-      ]
-    };
-  },
-  created() {
-    // Configura el idioma predeterminado a inglés
-    this.$i18n.locale = 'en';
+    const route = useRoute();
 
-    // Asegura que el estado inicial de `isEnglish` esté encendido
-    nextTick(() => {
-      this.isEnglish = true;
+    const isCollapsed = ref(false);
+    const isMobile = ref(window.innerWidth <= 768); // Detecta si la vista es móvil
+    const activeItem = ref('manage_parcels');
+    const isEnglish = ref(true);
+
+    // Función para actualizar isMobile al redimensionar la ventana
+    const handleResize = () => {
+      isMobile.value = window.innerWidth <= 768;
+    };
+
+    // Escucha el evento de redimensionamiento de la ventana
+    onMounted(() => {
+      window.addEventListener('resize', handleResize);
+      locale.value = 'en';
+      isEnglish.value = true;
+      setActiveItemFromRoute(); // Establece el elemento activo inicial después de montar el componente
     });
+
+    // Limpia el evento de redimensionamiento al desmontar
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', handleResize);
+    });
+
+    // Configuración inicial de elementos de menú
+    const items = [
+      { label: 'manage_parcels', to: '/manage-parcels' },
+      { label: 'view_parcels_status', to: '/plot-status' },
+      { label: 'scheduled_irrigations', to: '/irrigation-schedule' },
+      { label: 'irrigation_reports', to: '/irrigation-reports' },
+      { label: 'account', to: '/account' },
+      { label: 'support', to: '/support' }
+    ];
+
+    // Función para establecer el elemento activo basado en la ruta actual
+    const setActiveItemFromRoute = () => {
+      const currentPath = route.path;
+      const activeMenuItem = items.find(item => item.to === currentPath);
+      activeItem.value = activeMenuItem ? activeMenuItem.label : '';
+    };
+
+    // Observa los cambios en la ruta para actualizar el elemento activo
+    watch(
+      () => route.path,
+      () => setActiveItemFromRoute(),
+      { immediate: true }
+    );
+
+    return {
+      locale,
+      isCollapsed,
+      isMobile,
+      activeItem,
+      isEnglish,
+      items,
+      setActiveItemFromRoute
+    };
   },
   methods: {
     toggleSidebar() {
@@ -121,9 +153,7 @@ export default {
     },
     toggleLanguage() {
       this.isEnglish = !this.isEnglish;
-      this.$i18n.locale = this.isEnglish ? 'en' : 'es'; // Cambia el idioma usando $i18n.locale
-      console.log('Idioma cambiado a:', this.isEnglish ? 'Inglés' : 'Español');
-      // Guarda el idioma preferido en localStorage para próximas visitas
+      this.$i18n.locale = this.isEnglish ? 'en' : 'es';
       localStorage.setItem('preferredLanguage', this.$i18n.locale);
     },
     handleLogout() {
@@ -134,7 +164,14 @@ export default {
 };
 </script>
 
+
 <style scoped>
+
+li.active .nav-link {
+  background-color: #dfffda;
+  color: #2b9846; /* Asegúrate de que el color se aplica para el texto */
+}
+
 .side-nav {
   width: 250px;
   background-color: #ffffff;

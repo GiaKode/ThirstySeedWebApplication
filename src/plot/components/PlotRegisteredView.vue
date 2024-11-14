@@ -3,25 +3,40 @@
     <div class="header-container">
       <div class="title-and-message">
         <h1 class="plots-header">{{ $t('plotsStatus.registeredPlots') }}</h1>
-        <p v-if="plots && !plots.length" class="no-plots-message">{{ $t('plotsStatus.noPlotsAvailable') }}</p>
       </div>
       <button class="register-plot-btn" @click="goToRegisterPlot">{{ $t('plotsStatus.registerPlot') }}</button>
     </div>
 
+    <p v-if="plots && !plots.length" class="no-plots-message">
+      {{ $t('plotsStatus.noPlotsRegistered') }}
+    </p>
+
     <div class="plots" v-if="plots && plots.length">
-      <div class="plot" v-for="plot in plots" :key="plot.id" @click="goToPlotStatus(plot.id)">
+      <div class="plot" v-for="plot in orderedPlots" :key="plot.id">
         <img :src="plot.imageUrl" alt="Plot Image" class="plot-image" />
         <div class="plot-details">
-          <p><strong>{{ $t('plotsStatus.landName') }}:</strong> {{ plot.name || $t('plotsStatus.notAvailable') }}</p>
-          <p><strong>{{ $t('plotsStatus.location') }}:</strong> {{ plot.location || $t('plotsStatus.notAvailable') }}</p>
-          <p><strong>{{ $t('plotsStatus.extensionOfLand') }}:</strong> {{ plot.extension ? plot.extension + ' m2' : $t('plotsStatus.notAvailable') }}</p>
-          <p><strong>{{ $t('plotsStatus.plotSize') }}:</strong> {{ plot.size ? plot.size  : $t('plotsStatus.notAvailable') }}</p>
-          <p>
-            <strong>{{ $t('plotsStatus.plotStatus') }}: </strong>
-            <span :class="{ 'not-supplied': plot.status === 'Not Supplied' }">
-              {{ plot.status || $t('plotsStatus.notAvailable') }}
-            </span>
-          </p>
+          <p><strong>{{ $t('plotsStatus.landName') }}: </strong>{{ plot.name || $t('plotsStatus.notAvailable') }}</p>
+          <p><strong>{{ $t('plotsStatus.location') }}: </strong>{{ plot.location || $t('plotsStatus.notAvailable') }}</p>
+          <p><strong>{{ $t('plotsStatus.extensionOfLand') }}: </strong>{{ plot.size ? plot.size + ' m²' : $t('plotsStatus.notAvailable') }}</p>
+
+          <!-- Mostrar "Nodos Instalados" solo si nodeQuantity es mayor a 0 -->
+          <p v-if="plot.nodeQuantity > 0"><strong>{{ $t('plotsStatus.installedNodes') }}: </strong>{{ plot.nodeQuantity }}</p>
+
+          <div v-if="plot.isEditing">
+            <p><strong>{{ $t('plotsStatus.imageUrl') }}: </strong></p>
+            <input v-model="plot.imageUrl" type="url" :placeholder="$t('plotsStatus.enterImageUrl')" />
+          </div>
+
+          <button v-if="!plot.isEditing" @click="enableEditMode(plot)" class="edit-plot-btn">{{ $t('plotsStatus.edit') }}</button>
+          <button v-else @click="savePlot(plot)" class="save-plot-btn">{{ $t('plotsStatus.save') }}</button>
+          <button class="delete-plot-btn" @click="deletePlot(plot.id)">{{ $t('plotsStatus.deletePlot') }}</button>
+
+          <!-- Botón "Install Nodes" solo se muestra si los nodos no están instalados -->
+          <button v-if="!plot.nodesInstalled && !plot.isInstallingNodes" @click="enableNodeInstallation(plot)" class="install-nodes-btn">{{ $t('plotsStatus.installNodes') }}</button>
+          <div v-else-if="plot.isInstallingNodes" class="install-code">
+            <input v-model="plot.nodeCode" type="text" :placeholder="$t('plotsStatus.enterCode')" />
+            <button @click="validateNodeCode(plot)" class="save-plot-btn">{{ $t('plotsStatus.validate') }}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -35,6 +50,7 @@
   </div>
 </template>
 
+
 <script>
 import { plotService } from '@/plot/services/plot.service.js';
 import { userService as UserService } from '@/plot/services/user-service.js';
@@ -46,6 +62,11 @@ export default {
       confirmationMessage: '',
       errorMessage: '',
     };
+  },
+  computed: {
+    orderedPlots() {
+      return this.plots.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    }
   },
   async created() {
     try {
@@ -59,30 +80,106 @@ export default {
       try {
         const currentUser = await UserService.getCurrentUser();
         if (!currentUser) {
-          this.errorMessage = this.$t('plotsStatus.userNotLoggedIn');
+          this.showErrorMessage(this.$t('plotsStatus.userNotLoggedIn'));
           return;
         }
 
         const response = await plotService.getAllPlots();
         const userPlots = currentUser.plots || [];
         this.plots = response.data.filter(plot => userPlots.includes(plot.id.toString()));
+
+        this.plots.forEach(plot => {
+          plot.isEditing = false;
+          plot.isInstallingNodes = false;
+          plot.nodesInstalled = plot.nodesInstalled || false; // Aseguramos que se traiga correctamente del backend
+          plot.nodeCode = '';
+          plot.nodeQuantity = plot.nodeQuantity || 0; // Inicializa en 0 si no hay nodos instalados
+        });
       } catch (error) {
         console.error('Error fetching plot data:', error);
-        this.errorMessage = this.$t('plotsStatus.errorFetchingData');
+        this.showErrorMessage(this.$t('plotsStatus.errorFetchingData'));
         this.plots = [];
+      }
+    },
+    async validateNodeCode(plot) {
+      try {
+        const currentUser = await UserService.getCurrentUser();
+        if (currentUser.plan.code === plot.nodeCode) {
+          // Si el código es válido, asignamos el número de nodos según el tipo de plan
+          plot.nodeQuantity = currentUser.plan.type === 'plus' ? 12 : (currentUser.plan.type === 'premium' ? 5 : 0);
+
+          // Actualizamos nodeQuantity y nodesInstalled en el backend para que persista al recargar
+          await plotService.updatePlotNodeQuantity(plot.id, plot.nodeQuantity);
+          await plotService.updatePlotNodeStatus(plot.id, true); // Actualiza nodesInstalled a true
+
+          // Actualizamos el estado local para reflejar los cambios
+          plot.isInstallingNodes = false;
+          plot.nodesInstalled = true;  // Cambiamos a `true` para evitar que vuelva a mostrar el botón
+          plot.nodeCode = ''; // Limpiar el código ingresado
+
+          this.showConfirmationMessage("Node installed successfully!");
+        } else {
+          this.showErrorMessage("Invalid code, please try again.");
+        }
+      } catch (error) {
+        console.error('Error validating code:', error);
+        this.showErrorMessage("Error validating code.");
+      }
+    },
+    enableNodeInstallation(plot) {
+      plot.isInstallingNodes = true;
+    },
+    enableEditMode(plot) {
+      plot.isEditing = true;
+    },
+    async savePlot(plot) {
+      try {
+        if (plot.size < 0) {
+          this.showErrorMessage("The extension of land cannot be negative.");
+          return;
+        }
+
+        plot.isEditing = false;
+        await plotService.updatePlot(plot.id, {
+          name: plot.name,
+          location: plot.location,
+          size: plot.size,
+          imageUrl: plot.imageUrl
+        });
+        this.showConfirmationMessage("Plot updated successfully!");
+      } catch (error) {
+        console.error('Error updating plot:', error);
+        this.showErrorMessage("Error updating plot.");
+      }
+    },
+    async deletePlot(plotId) {
+      try {
+        await plotService.deletePlot(plotId);
+        this.plots = this.plots.filter(plot => plot.id !== plotId);
+        this.showConfirmationMessage("Plot deleted successfully!");
+      } catch (error) {
+        console.error('Error deleting plot:', error);
+        this.showErrorMessage("Error deleting plot.");
       }
     },
     goToRegisterPlot() {
       this.$router.push({ name: 'registerplot' });
     },
-    goToPlotStatus(plotId) {
-
-      this.$router.push(`/plot-status/${plotId}`);
+    showConfirmationMessage(message) {
+      this.confirmationMessage = message;
+      setTimeout(() => {
+        this.confirmationMessage = '';
+      }, 3000);
+    },
+    showErrorMessage(message) {
+      this.errorMessage = message;
+      setTimeout(() => {
+        this.errorMessage = '';
+      }, 3000);
     }
   }
 };
 </script>
-
 
 
 <style scoped>
@@ -91,6 +188,85 @@ export default {
 * {
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
+}
+
+.install-nodes-btn {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.install-nodes-btn:hover {
+  background-color: #138496;
+}
+
+.install-code input {
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.install-code button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.confirmation-message {
+  color: green;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.edit-plot-btn {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.edit-plot-btn:hover {
+  background-color: #e0a800;
+}
+
+.save-plot-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.save-plot-btn:hover {
+  background-color: #218838;
 }
 
 .plots-status {
@@ -104,21 +280,16 @@ export default {
   margin-bottom: 20px;
 }
 
-.title-and-message {
-  display: flex;
-  align-items: center;
-}
-
 .plots-header {
   font-size: 24px;
-  margin-right: 20px;
 }
 
 .no-plots-message {
   font-size: 16px;
   color: #666;
+  text-align: center;
+  margin-top: 50px;
 }
-
 
 .register-plot-btn {
   background-color: #3D703B;
@@ -128,7 +299,6 @@ export default {
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  margin-right: 20px;
 }
 
 .register-plot-btn:hover {
@@ -141,56 +311,55 @@ export default {
 
 .plots {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   justify-content: center;
-  margin-left: 150px;
-  width: 1000px;
+  padding: 20px;
 }
 
 .plot {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 500px;
-  margin: 10px;
-  margin-bottom: 60px;
-  padding: 15px;
-  background-color: #FFFFF9;
+  background-color: #F7FFF0;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 350px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.plot:hover {
+  transform: translateY(-5px);
 }
 
 .plot-image {
-  width: 60%;
-  height: 260px;
+  width: 100%;
+  height: 200px;
   object-fit: cover;
-  border-radius: 10px;
-  margin-right: 20px;
-}
-
-.plot-details {
-  margin-top: 15px;
-  flex-direction: column;
-  justify-content: flex-start;
+  border-radius: 8px;
+  margin-bottom: 15px;
 }
 
 .plot-details p {
   margin: 5px 0;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
 }
 
-.confirmation-message {
-  color: green;
-  font-weight: bold;
-  margin-top: 20px;
+.delete-plot-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
 }
 
-.error-message {
-  color: red;
-  font-weight: bold;
-  margin-top: 20px;
+.delete-plot-btn:hover {
+  background-color: #c0392b;
 }
 </style>

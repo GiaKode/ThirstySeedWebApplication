@@ -64,10 +64,13 @@
 
     <!-- Modal para la selección de planes -->
     <PlanSelectionModal
-      :show="showPlanModal"
-      @close="showPlanModal = false"
-      @planSelected="handlePlanSelection"
+      v-if="showPlanModal && userId"
+    :show="showPlanModal"
+    :userId="userId"
+    @close="showPlanModal = false"
+    @planSelected="handlePlanSelection"
     />
+
   </div>
 </template>
 
@@ -83,9 +86,10 @@ export default {
       telephone: '+51 ', // Prefijo inicial para Perú
       email: '',
       password: '',
-      imageUrl: '', // Para almacenar la URL de la imagen seleccionada
-      showImageUrlInput: false, // Controla la visualización del input de URL
-      showPlanModal: false
+      imageUrl: '',
+      showImageUrlInput: false,
+      showPlanModal: false,
+      userId: null // Inicializa con null
     };
   },
   components: {
@@ -102,7 +106,7 @@ export default {
       }
     },
     validateTelephone(event) {
-      // Asegura que el valor comience con "+51 " y elimina caracteres no numéricos
+
       if (!this.telephone.startsWith("+51 ")) {
         this.telephone = "+51 ";
       }
@@ -114,16 +118,22 @@ export default {
       this.telephone = "+51 " + cleanedNumber.slice(0, 9).replace(/(\d{3})(\d{3})(\d{3})/, '$1-$2-$3');
     },
     async onSubmit() {
-      // Validación de campos
-      // ...
-
       try {
         const response = await fetch('http://localhost:3000/users');
         const users = await response.json();
+
+        this.email = this.email.toLowerCase();
+
         const emailExists = users.some(user => user.email === this.email);
+        const phoneExists = users.some(user => user.telephone === this.telephone);
 
         if (emailExists) {
           alert("Email already exists. Please use a different one.");
+          return;
+        }
+
+        if (phoneExists) {
+          alert("Telephone number already exists. Please use a different one.");
           return;
         }
 
@@ -134,16 +144,20 @@ export default {
           telephone: this.telephone,
           email: this.email,
           password: this.password,
-          imageUrl: this.imageUrl // Guarda la URL de la imagen junto con los datos del usuario
+          imageUrl: this.imageUrl,
+          plan: null
         };
 
-        await fetch('http://localhost:3000/users', {
+        const userResponse = await fetch('http://localhost:3000/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(newUser)
         });
+
+        const createdUser = await userResponse.json();
+        this.userId = createdUser.id; // Guarda el ID del usuario
 
         this.showPlanModal = true;
       } catch (error) {

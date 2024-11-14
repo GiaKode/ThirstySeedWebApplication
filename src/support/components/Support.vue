@@ -13,18 +13,26 @@
       <!-- Formulario de Soporte -->
       <div class="support-form">
         <form @submit.prevent="handleSubmit">
+          <!-- Selección de Plot -->
           <div class="form-group">
             <label for="plotName">Plot name</label>
-            <input type="text" id="plotName" v-model="plotName" disabled />
+            <select id="plotName" v-model="selectedPlot">
+              <option v-for="plot in availablePlots" :key="plot.id" :value="plot.id">
+                {{ plot.name }} - {{ plot.location }}
+              </option>
+            </select>
           </div>
+          <!-- Campo de Nodos -->
           <div class="form-group">
             <label for="installedNodes">Installed nodes</label>
-            <input type="text" id="installedNodes" v-model="installedNodes" disabled />
+            <input type="text" id="installedNodes" v-model="fixedNodes" disabled />
           </div>
+          <!-- Detalle -->
           <div class="form-group">
             <label for="detail">Detail</label>
             <textarea id="detail" v-model="detail" placeholder="Describe your issue here..."></textarea>
           </div>
+          <!-- Botón de Envío -->
           <div class="button-group">
             <button type="submit" class="submit-btn">Submit</button>
           </div>
@@ -35,32 +43,65 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      plotName: 'Pucará', // Ejemplo de nombre de parcela
-      installedNodes: 4, // Ejemplo de nodos instalados
-      detail: ''
+      userId: "9c52", // ID del usuario logueado; puedes actualizarlo según el sistema de autenticación
+      selectedPlot: '',
+      fixedNodes: 5,
+      detail: '',
+      availablePlots: [] // Array donde se almacenarán los plots filtrados
     };
   },
   methods: {
+    async fetchUserPlots() {
+      try {
+        // Obtener información de los usuarios
+        const userResponse = await axios.get("http://localhost:3000/users");
+        const users = userResponse.data;
+
+        // Busca el usuario logueado
+        const loggedInUser = users.find(user => user.id === this.userId);
+
+        if (!loggedInUser) {
+          console.error("Usuario logueado no encontrado:", this.userId);
+          return;
+        }
+
+        // Obtener información de plots
+        const plotResponse = await axios.get("http://localhost:3000/plots");
+        const plots = plotResponse.data;
+
+        // Filtra los plots asociados al usuario logueado
+        this.availablePlots = plots.filter(plot => loggedInUser.plots.includes(plot.id));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
     handleSubmit() {
-      // Aquí puedes manejar el envío del formulario
       console.log("Formulario enviado:", {
-        plotName: this.plotName,
-        installedNodes: this.installedNodes,
+        plotId: this.selectedPlot,
+        installedNodes: this.fixedNodes,
         detail: this.detail
       });
-      alert('Support request sent successfully!');
-      this.detail = ''; // Limpia el campo de detalle después del envío
+      alert("Support request sent successfully!");
+      this.detail = ""; // Limpia el campo de detalle después del envío
     }
+  },
+  created() {
+    this.fetchUserPlots(); // Llama a la función cuando el componente se crea para cargar los datos dinámicamente
   }
 };
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
 .support-container {
   display: flex;
   flex-direction: column;
@@ -77,7 +118,7 @@ export default {
   color: #2B9846;
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 10px; /* Espacio entre el título y la línea */
+  margin-bottom: 8px; /* Espacio entre el título y la línea */
 }
 
 .header-line {
@@ -114,7 +155,8 @@ export default {
 }
 
 input[type="text"],
-textarea {
+textarea,
+select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -150,7 +192,7 @@ textarea {
 .support-image {
   display: flex;
   align-items: center; /* Centra la imagen verticalmente */
-  margin-bottom: 20px; /* Espacio debajo de la imagen */
+  margin-bottom: 10px; /* Espacio debajo de la imagen */
 }
 
 .support-image img {

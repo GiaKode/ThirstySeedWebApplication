@@ -1,4 +1,3 @@
-// src/plot/services/user-service.js
 import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/users';
@@ -23,7 +22,7 @@ export const userService = {
     const currentUser = await this.getCurrentUser();
     if (!currentUser) throw new Error("User not logged in");
 
-    // Asegúrate de que `currentUser.plots` sea un array
+    // Asegurarse de que `currentUser.plots` sea un array
     currentUser.plots = currentUser.plots || [];
 
     // Agregar la parcela a la lista de parcelas del usuario si no está ya presente
@@ -33,6 +32,9 @@ export const userService = {
       // Actualizar el usuario en la base de datos
       await axios.put(`${API_URL}/${currentUser.id}`, currentUser);
     }
-  }
+  },
 
+  async updateUserPlan(userId, plan) {
+    return axios.patch(`${API_URL}/${userId}`, { plan });
+  }
 };

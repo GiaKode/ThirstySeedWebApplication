@@ -24,10 +24,6 @@
           <label for="indicator">Indicator</label>
           <input type="text" v-model="indicator" id="indicator" placeholder="Indicator" />
         </div>
-        <div class="input-group">
-          <label for="indicator">Product Code</label>
-          <input type="text" v-model="productcode" id="productcode" placeholder="Product Code" />
-        </div>
 
         <div v-if="successMessage" class="success-message">
           {{ successMessage }}
@@ -70,7 +66,8 @@ export default {
         const plotId = nodesData.length ? Math.max(...nodesData.map(node => node.plotId)) + 1 : 1;
         const id = nodesData.length ? Math.max(...nodesData.map(node => node.id)) + 1 : 1;
 
-
+        const status = this.moisture > 20 ? 'Correct' : 'Error';
+        const statusClass = status === 'Correct' ? 'status-correct' : 'status-error';
 
         const newNode = {
           id,
@@ -78,8 +75,10 @@ export default {
           location: this.location,
           moisture: this.moisture,
           indicator: this.indicator,
-          isActive: this.isActive,
-          productcode: this.productcode
+          status,
+          statusClass,
+          iconClass: status === 'Correct' ? 'pi pi-check' : 'pi pi-exclamation-triangle',
+          isActive: this.isActive
         };
 
         await nodeService.createNode(newNode);
@@ -99,7 +98,6 @@ export default {
       this.moisture = 0;
       this.indicator = 'Water';
       this.isActive = false;
-      this.productcode = '';
     }
   }
 };
