@@ -10,7 +10,7 @@
       <div class="spinner"></div>
     </div>
 
-    <!-- Contenedor de plots -->
+
     <div v-else class="plots">
       <div class="plot" v-for="plot in plots" :key="plot.id">
         <img
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       plots: [],
-      isLoading: false, // Estado para mostrar el spinner de carga
+      isLoading: false,
     };
   },
   created() {

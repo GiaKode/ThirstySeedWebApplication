@@ -108,7 +108,7 @@ export default {
       }
 
       try {
-        // Obtener el usuario actual
+
         const currentUser = await plotService.getCurrentUser();
         const userId = currentUser?.id;
 
@@ -116,24 +116,24 @@ export default {
           throw new Error("User ID not found. Please log in.");
         }
 
-        // Crear el payload con el userId incluido
+
         const payload = {
           userId,
-          ...this.plot, // Descomponemos el objeto `plot`
+          ...this.plot,
           extension: parseFloat(this.plot.extension), // Convertir a número
           size: parseFloat(this.plot.size), // Convertir a número
         };
 
-        // Llamar al servicio para crear el plot
+
         const createdPlot = await plotService.createPlot(payload);
 
         this.confirmationMessage = `Plot '${createdPlot.name}' registered successfully!`;
         this.errorMessage = "";
 
-        // Reiniciar el formulario
+
         this.resetForm();
 
-        // Ocultar el mensaje de confirmación después de 3 segundos
+
         setTimeout(() => {
           this.confirmationMessage = "";
         }, 3000);
