@@ -65,10 +65,10 @@
     <!-- Modal para la selección de planes -->
     <PlanSelectionModal
       v-if="showPlanModal && userId"
-    :show="showPlanModal"
-    :userId="userId"
-    @close="showPlanModal = false"
-    @planSelected="handlePlanSelection"
+      :show="showPlanModal"
+      :userId="userId"
+      @close="showPlanModal = false"
+      @planSelected="handlePlanSelection"
     />
 
   </div>

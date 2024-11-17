@@ -1,19 +1,23 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+
 import App from './App.vue'
 import router from './router'
+
 import PrimeVue from 'primevue/config'
+
+// PrimeVue Material Design Theme
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
+//import Aura from "@primevue/themes/aura";
+
+// PrimeVue Components
 import ToastService from 'primevue/toastservice'
 import Toast from 'primevue/toast'
-import i18n from '@/i18n';
+const app = createApp(App)
 
-const app = createApp(App);
-
-app.use(createPinia());
-app.use(router);
-app.use(i18n); // Asegúrate de agregar i18n aquí
+app.use(createPinia())
+app.use(router)
 
 // PrimeVue Configuration
 //app.use(PrimeVue, {ripple: true});

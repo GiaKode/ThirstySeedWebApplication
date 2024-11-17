@@ -45,15 +45,18 @@
           <label for="size">Size (in hectares)</label>
           <input
             type="number"
-            v-model.number="plot.size"
+            v-model="plot.size"
             id="size"
             placeholder="Size in hectares"
-            min="0"
-          required
+            required
           />
         </div>
 
         <button type="submit" class="submit-button">Register Plot</button>
+        <router-link to="/register-node">
+          <button class="node-register-button">Register Node</button>
+        </router-link>
+
       </form>
 
       <div v-if="confirmationMessage" class="confirmation-message">
@@ -69,7 +72,6 @@
 
 <script>
 import { plotService } from '@/plot/services/plot.service.js';
-import { userService } from '@/plot/services/user-service.js';
 
 export default {
   data() {
@@ -98,14 +100,12 @@ export default {
         const existingPlots = response.data;
 
         const newId = existingPlots.length > 0
-          ? Math.max(...existingPlots.map(plot => parseInt(plot.id))) + 1
+          ? Math.max(...existingPlots.map(plot => plot.id)) + 1
           : 1;
 
-        this.plot.id = newId.toString();
+        this.plot.id = newId;
 
         await plotService.createPlot(this.plot);
-
-        await userService.addPlotToUser(this.plot.id);
 
         this.confirmationMessage = "Plot registered successfully!";
         this.errorMessage = '';
@@ -120,7 +120,7 @@ export default {
         this.imagePreview = '';
 
         setTimeout(() => {
-          this.$router.push('/manage-parcels'); // Redirige a /manage-parcels después de un registro exitoso
+          this.confirmationMessage = '';
         }, 3000);
       } catch (error) {
         console.error("Error registering plot:", error);
@@ -130,6 +130,9 @@ export default {
     },
     updateImagePreview() {
       this.imagePreview = this.plot.imageUrl;
+    },
+    goToRegisterNode() {
+      this.$router.push('/register-node');
     }
   }
 };
@@ -175,7 +178,6 @@ h1 {
 
 .form-group {
   margin-bottom: 20px;
-  font-family: 'Poppins', sans-serif;
 }
 
 label {
@@ -193,7 +195,6 @@ input {
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.3s ease;
-  font-family: 'Poppins', sans-serif;
 }
 
 input:focus {
@@ -201,7 +202,8 @@ input:focus {
   outline: none;
 }
 
-.submit-button {
+.submit-button,
+.node-register-button {
   width: 100%;
   margin-top: 20px;
   background-color: #28a745;
@@ -212,21 +214,23 @@ input:focus {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family: 'Poppins', sans-serif;
 }
 
 .submit-button:hover {
   background-color: #218838;
 }
 
+.node-register-button {
+  background-color: #007bff;
+}
+
+.node-register-button:hover {
+  background-color: #0056b3;
+}
+
 .confirmation-message {
   margin-top: 20px;
   color: green;
   font-weight: bold;
-}
-
-.error-message {
-  color: red;
-  margin-top: 15px;
 }
 </style>
