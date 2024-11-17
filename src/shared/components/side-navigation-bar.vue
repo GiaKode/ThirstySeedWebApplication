@@ -54,7 +54,6 @@ export default {
         { label: 'View parcels status', to: 'plot-status' },
         { label: 'Scheduled irrigations', to: 'irrigation-schedule' },
         { label: 'Irrigation reports', to: 'irrigation-reports' },
-        { label: 'Notifications', to: 'notifications' },
         { label: 'Account', to: 'account' },
         { label: 'Support', to: 'support' }
       ]
@@ -78,8 +77,6 @@ export default {
           return 'pi pi-calendar'
         case 'Irrigation reports':
           return 'pi pi-file'
-        case 'Notifications':
-          return 'pi pi-bell'
         case 'Account':
           return 'pi pi-user'
         case 'Support':

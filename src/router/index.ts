@@ -8,10 +8,23 @@ import ActivateIrrigationInPlotView from "@/irrigation-management/components/Act
 import ProfileView from '@/profile/components/ProfileView.vue'
 import PlotRegisteredView from '@/plot/components/PlotRegisteredView.vue'
 import NotFoundPage from '@/shared/components/not-found-page.vue'
+import SignInComponent from '@/iam/components/SignInComponent.vue';
+import SignUpComponent from '@/iam/components/SignUpComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/sign-in',
+      name: 'SignIn',
+      component: SignInComponent,
+    },
+    {
+      path: '/sign-up',
+      name: 'SignUp',
+      component: SignUpComponent,
+    },
+    
     { path: '/manage-parcels', name: 'ManageParcels', component: PlotRegisteredView },
     { path: '/set-irrigation-mode', name: 'SetIrrigationMode', component: SetIrrigationMode },
     { path: '/register-plot', name: 'registerplot', component: PlotRegisterComponent },
