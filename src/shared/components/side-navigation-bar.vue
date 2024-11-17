@@ -8,9 +8,9 @@
         <i class="pi pi-bars"></i>
       </button>
     </div>
-      
+
     <hr class="divider"/>
-    
+
     <!-- Collapsed button-->
     <button v-if="isCollapsed" class="toggle-button collapsed" @click="toggleSidebar">
       <i class="pi pi-bars"></i>
@@ -19,10 +19,10 @@
     <!-- Navegation list-->
     <ul>
       <li
-        v-for="item in items"
-        :key="item.label"
-        :class="{ active: activeItem === item.label }"
-        @click="selectItem(item.label)"
+          v-for="item in items"
+          :key="item.label"
+          :class="{ active: activeItem === item.label }"
+          @click="selectItem(item.label)"
       >
         <RouterLink :to="item.to" class="nav-link">
           <i :class="getIconClass(item.label)" class="nav-icon"></i>
@@ -33,15 +33,17 @@
 
     <!-- Logout -->
     <div class="logout">
-      <RouterLink to="/logout" class="nav-link logout-link">
+      <button @click="logout" class="nav-link logout-link">
         <i class="pi pi-sign-out nav-icon"></i>
         <span v-if="!isCollapsed">Logout</span>
-      </RouterLink>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
+
 export default {
   name: 'SideNavigationBar',
   data() {
@@ -61,46 +63,54 @@ export default {
   },
   methods: {
     toggleSidebar() {
-      this.isCollapsed = !this.isCollapsed
+      this.isCollapsed = !this.isCollapsed;
       this.$emit('toggle-collapse');
     },
     selectItem(label) {
-      this.activeItem = label
+      this.activeItem = label;
     },
     getIconClass(label) {
       switch (label) {
         case 'Manage parcels':
-          return 'pi pi-folder'
+          return 'pi pi-folder';
         case 'View parcels status':
-          return 'pi pi-eye'
+          return 'pi pi-eye';
         case 'Scheduled irrigations':
-          return 'pi pi-calendar'
+          return 'pi pi-calendar';
         case 'Irrigation reports':
-          return 'pi pi-file'
+          return 'pi pi-file';
         case 'Account':
-          return 'pi pi-user'
+          return 'pi pi-user';
         case 'Support':
-          return 'pi pi-info-circle'
+          return 'pi pi-info-circle';
         default:
-          return ''
+          return '';
       }
     },
     handleResize() {
-      this.isMobile = window.innerWidth <= 768
+      this.isMobile = window.innerWidth <= 768;
       if (this.isMobile) {
-        this.isCollapsed = true
+        this.isCollapsed = true;
       }
+    },
+    logout() {
+      // Eliminar el token de autenticación
+      localStorage.removeItem('authToken');
+      // Redirigir a la página de inicio de sesión
+      this.$router.push('/sign-in');
     }
   },
   mounted() {
-    this.handleResize()
-    window.addEventListener('resize', this.handleResize)
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize)
+    window.removeEventListener('resize', this.handleResize);
   }
 }
 </script>
+
+
 
 <style scoped>
 .side-nav {

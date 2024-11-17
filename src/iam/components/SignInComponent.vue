@@ -33,13 +33,23 @@ export default defineComponent({
         const user = {
           username: this.username,
           password: this.password
+        };
+        const response = await AuthenticationService.signIn(user);
+
+        // La respuesta ya es response.data
+        if (response) {
+          console.log('Sign in successful:', response);
+          // Almacenar el token y el ID de usuario en localStorage
+          localStorage.setItem('authToken', response.token); // Cambia a response.token
+          localStorage.setItem('userId', response.id); // Cambia a response.id
+
+          // Redirigir al dashboard después del inicio exitoso
+          this.$router.push('/manage-parcels');
+        } else {
+          console.error('Error: No se recibió respuesta válida del servidor');
         }
-        const response = await AuthenticationService.signIn(user)
-        console.log('Sign in successful:', response.data)
-        // Redirigir al dashboard después del login exitoso (ajusta la ruta según tu app)
-        this.$router.push('/account')
       } catch (error) {
-        console.error('Error durante el inicio de sesión:', error)
+        console.error('Error durante el inicio de sesión:', error);
       }
     }
   }

@@ -7,12 +7,12 @@
         <div class="form-group">
           <label for="imageUrl">Image URL</label>
           <input
-            type="url"
-            v-model="plot.imageUrl"
-            id="imageUrl"
-            placeholder="Insert Image URL"
-            @input="updateImagePreview"
-            required
+              type="url"
+              v-model="plot.imageUrl"
+              id="imageUrl"
+              placeholder="Insert Image URL"
+              @input="updateImagePreview"
+              required
           />
           <div class="image-preview" v-if="imagePreview">
             <img :src="imagePreview" alt="Image Preview" />
@@ -22,41 +22,53 @@
         <div class="form-group">
           <label for="landName">Land Name</label>
           <input
-            type="text"
-            v-model="plot.name"
-            id="landName"
-            placeholder="Land Name"
-            required
+              type="text"
+              v-model="plot.name"
+              id="landName"
+              placeholder="Land Name"
+              required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="extension">Extension</label>
+          <input
+              type="text"
+              v-model="plot.extension"
+              id="extension"
+              placeholder="Extension"
+              required
           />
         </div>
 
         <div class="form-group">
           <label for="location">Location</label>
           <input
-            type="text"
-            v-model="plot.location"
-            id="location"
-            placeholder="Location"
-            required
+              type="text"
+              v-model="plot.location"
+              id="location"
+              placeholder="Location"
+              required
           />
         </div>
 
         <div class="form-group">
           <label for="size">Size (in hectares)</label>
           <input
-            type="number"
-            v-model="plot.size"
-            id="size"
-            placeholder="Size in hectares"
-            required
+              type="number"
+              v-model="plot.size"
+              id="size"
+              placeholder="Size in hectares"
+              required
           />
         </div>
 
         <button type="submit" class="submit-button">Register Plot</button>
         <router-link to="/register-node">
-          <button class="node-register-button">Register Node</button>
+          <button type="button" class="node-register-button">
+            Register Node
+          </button>
         </router-link>
-
       </form>
 
       <div v-if="confirmationMessage" class="confirmation-message">
@@ -71,70 +83,80 @@
 </template>
 
 <script>
-import { plotService } from '@/plot/services/plot.service.js';
+import { plotService } from "@/plot/services/plot.service.js";
 
 export default {
   data() {
     return {
       plot: {
-        id: null,
-        name: '',
-        location: '',
-        size: '',
-        imageUrl: ''
+        name: "",
+        location: "",
+        extension: "",
+        size: "",
+        imageUrl: "",
       },
-      confirmationMessage: '',
-      errorMessage: '',
-      imagePreview: ''
+      confirmationMessage: "",
+      errorMessage: "",
+      imagePreview: "",
     };
   },
   methods: {
     async registerPlot() {
-      if (!this.plot.name || !this.plot.location || !this.plot.size || !this.plot.imageUrl) {
+      if (!this.plot.name || !this.plot.location || !this.plot.extension || !this.plot.size || !this.plot.imageUrl) {
         alert("Please fill out all fields.");
         return;
       }
 
       try {
-        const response = await plotService.getAllPlots();
-        const existingPlots = response.data;
+        // Obtener el usuario actual
+        const currentUser = await plotService.getCurrentUser();
+        const userId = currentUser?.id;
 
-        const newId = existingPlots.length > 0
-          ? Math.max(...existingPlots.map(plot => plot.id)) + 1
-          : 1;
+        if (!userId) {
+          throw new Error("User ID not found. Please log in.");
+        }
 
-        this.plot.id = newId;
-
-        await plotService.createPlot(this.plot);
-
-        this.confirmationMessage = "Plot registered successfully!";
-        this.errorMessage = '';
-
-        this.plot = {
-          id: null,
-          name: '',
-          location: '',
-          size: '',
-          imageUrl: ''
+        // Crear el payload con el userId incluido
+        const payload = {
+          userId,
+          ...this.plot, // Descomponemos el objeto `plot`
+          extension: parseFloat(this.plot.extension), // Convertir a número
+          size: parseFloat(this.plot.size), // Convertir a número
         };
-        this.imagePreview = '';
 
+        // Llamar al servicio para crear el plot
+        const createdPlot = await plotService.createPlot(payload);
+
+        this.confirmationMessage = `Plot '${createdPlot.name}' registered successfully!`;
+        this.errorMessage = "";
+
+        // Reiniciar el formulario
+        this.resetForm();
+
+        // Ocultar el mensaje de confirmación después de 3 segundos
         setTimeout(() => {
-          this.confirmationMessage = '';
+          this.confirmationMessage = "";
         }, 3000);
       } catch (error) {
         console.error("Error registering plot:", error);
-        this.errorMessage = `Error registering plot: ${error.message}`;
-        this.confirmationMessage = '';
+        this.errorMessage = `Error registering plot: ${error.response?.data?.message || error.message}`;
+        this.confirmationMessage = "";
       }
     },
     updateImagePreview() {
       this.imagePreview = this.plot.imageUrl;
     },
-    goToRegisterNode() {
-      this.$router.push('/register-node');
-    }
-  }
+    resetForm() {
+      this.plot = {
+        name: "",
+        location: "",
+        extension: "",
+        size: "",
+        imageUrl: "",
+      };
+      this.imagePreview = "";
+    },
+  },
 };
 </script>
 
