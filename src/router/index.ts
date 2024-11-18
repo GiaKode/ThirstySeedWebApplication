@@ -11,6 +11,8 @@ import SignInComponent from '@/iam/components/SignInComponent.vue';
 import SignUpComponent from '@/iam/components/SignUpComponent.vue';
 import ProfileComponent from "@/profile/components/ProfileComponent.vue";
 import AccountComponent from "@/profile/components/AccountComponent.vue";
+import PlanSelectionModal from "@/subscriptions/components/PlanSelectionModal.vue";
+import PaymentForm from "@/subscriptions/components/PaymentForm.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,7 +39,9 @@ const router = createRouter({
     { path: '/plot-status/:id', name: 'plotstatus', component: PlotStatusView,props: true,  },
     { path: '/irrigation-schedule', name: 'irrigationschedule', component: ActivateIrrigationInPlotView },
 
-    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage },
+    { path: '/plan-selection', name: 'Plan', component: PlanSelectionModal, props: true },
+    { path: '/payment', name: 'Pay', component: PaymentForm }
   ]
 })
 

@@ -12,6 +12,7 @@ class AuthenticationService {
         'Content-type': 'application/json',
       },
     });
+
   }
 
   // Método para iniciar sesión
@@ -20,6 +21,16 @@ class AuthenticationService {
       headers: {
         'Content-type': 'application/json',
       },
+    }).then((response) => {
+      // Almacenar el token en localStorage después de un login exitoso
+      if (response.status === 200 && response.data.token) {
+        localStorage.setItem('token', response.data.token); // Guardar token
+        localStorage.setItem('userId', response.data.userId); // Si necesitas también el userId
+      }
+      return response; // Devuelve la respuesta para continuar con el flujo
+    }).catch((error) => {
+      console.error('Error al iniciar sesión:', error);
+      throw error; // Lanza el error para que pueda ser manejado por quien invoque el servicio
     });
   }
 }

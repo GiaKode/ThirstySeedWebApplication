@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ProfileService from '@/profile/services/profile-service';
+import ProfileService from '@/profile/services/profile-service'; // Asegúrate de que el servicio esté correcto
 
 export default defineComponent({
   name: 'ProfileComponent',
@@ -90,10 +90,16 @@ export default defineComponent({
 
         // Llamar al servicio para crear el perfil del usuario
         const response = await ProfileService.createProfile(profileData);
-        console.log('Profile completed successfully:', response.data);
 
-        // Redirigir al usuario a su cuenta o dashboard
-        this.$router.push('/account');
+        // Verificar si el perfil se creó correctamente
+        if (response.status === 201) {
+          console.log('Profile completed successfully:', response.data);
+
+          // Redirigir a la página /selectplan después de completar el perfil
+          this.$router.push('/plan-selection');
+        } else {
+          throw new Error('Failed to create profile');
+        }
       } catch (error) {
         console.error('Error completing profile:', error);
       }
@@ -101,7 +107,6 @@ export default defineComponent({
   },
 });
 </script>
-
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
