@@ -19,6 +19,10 @@
           <label for="moisture">Moisture</label>
           <input type="number" v-model="moisture" id="moisture" placeholder="Moisture" />
         </div>
+        <div class="input-group">
+          <label for="productcode">Product Code</label>
+          <input type="text" v-model="productcode" id="productcode" placeholder="Productcode" />
+        </div>
 
         <div class="input-group">
           <label for="indicator">Indicator</label>
@@ -57,25 +61,24 @@ export default {
       indicator: 'Water',
       successMessage: '',
       errorMessage: '',
-      isActive: false
+      isActive: true,
+      plotId: this.$route.params.id
     };
   },
   methods: {
     async registerNode() {
       try {
+        const plotId = this.$route.params.id
 
-        const nodes = await nodeService.getAllNodes();
+        const nodes = await nodeService.getNodesByPlotId(plotId);
         const nodesData = nodes.data;
-
-        const plotId = nodesData.length ? Math.max(...nodesData.map(node => node.plotId)) + 1 : 1;
         const id = nodesData.length ? Math.max(...nodesData.map(node => node.id)) + 1 : 1;
-
-
+        const status = this.moisture > 20 ? 'Correct' : 'Error';
+        const statusClass = status === 'Correct' ? 'status-correct' : 'status-error';
 
         const newNode = {
-          id,
           plotId,
-          location: this.location,
+          nodelocation: this.location,
           moisture: this.moisture,
           indicator: this.indicator,
           isActive: this.isActive,
@@ -84,9 +87,11 @@ export default {
 
         await nodeService.createNode(newNode);
 
+
         this.successMessage = 'Node registered successfully!';
         this.errorMessage = '';
 
+        // Limpiar el formulario
         this.registerAnotherNode();
       } catch (error) {
         this.errorMessage = 'Error registering node. Please try again.';
@@ -98,8 +103,7 @@ export default {
       this.location = '';
       this.moisture = 0;
       this.indicator = 'Water';
-      this.isActive = false;
-      this.productcode = '';
+      this.isActive = true;
     }
   }
 };

@@ -11,8 +11,7 @@ const toggleSidebar = () => {
 };
 
 // Condición para mostrar el sidebar solo si no está en la ruta de login
-const showSidebar = computed(() => !['/login', '/forgot-password', '/sign-up'].includes(route.path));
-
+const showSidebar = computed(() => !['/sign-up', '/sign-in', '/complete-profile'].includes(route.path));
 </script>
 
 <template>
@@ -26,7 +25,7 @@ const showSidebar = computed(() => !['/login', '/forgot-password', '/sign-up'].i
 </template>
 
 <style scoped>
-/* Estilos globales para asegurar que cubran todo el viewport */
+/* Eliminar márgenes y paddings globales */
 * {
   margin: 0;
   padding: 0;
@@ -41,16 +40,19 @@ html, body, #app {
 
 #app {
   display: flex;
-  flex-direction: column; /* Ajuste para asegurar que el contenido esté en columna */
+  flex-direction: column; /* Asegura que el contenido esté en columna */
 }
 
 /* Ajuste principal del contenido */
 .main-content {
   transition: margin-left 0.3s ease, padding 0.3s ease;
-  padding: 0; /* Asegura que no haya padding adicional */
+  padding: 0;
   margin-left: 250px; /* Ancho inicial del sidebar desplegado */
   width: calc(100% - 250px); /* Ajusta el ancho para ocupar el espacio restante */
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra el contenido vertical y horizontalmente */
 }
 
 /* Cuando el sidebar está colapsado */
@@ -65,6 +67,9 @@ html, body, #app {
   margin-left: 0;
   width: 100%;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra el contenido en vistas como login */
 }
 
 /* Diseño responsivo para pantallas pequeñas */

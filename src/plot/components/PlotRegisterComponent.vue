@@ -7,12 +7,12 @@
         <div class="form-group">
           <label for="imageUrl">Image URL</label>
           <input
-            type="url"
-            v-model="plot.imageUrl"
-            id="imageUrl"
-            placeholder="Insert Image URL"
-            @input="updateImagePreview"
-            required
+              type="url"
+              v-model="plot.imageUrl"
+              id="imageUrl"
+              placeholder="Insert Image URL"
+              @input="updateImagePreview"
+              required
           />
           <div class="image-preview" v-if="imagePreview">
             <img :src="imagePreview" alt="Image Preview" />
@@ -22,10 +22,22 @@
         <div class="form-group">
           <label for="landName">Land Name</label>
           <input
-            type="text"
-            v-model="plot.name"
-            id="landName"
-            placeholder="Land Name"
+              type="text"
+              v-model="plot.name"
+              id="landName"
+              placeholder="Land Name"
+              required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="extension">Extension</label>
+          <input
+            type="number"
+            v-model="plot.extension"
+            id="extension"
+            placeholder="Extension"
+            min="0"
             required
           />
         </div>
@@ -33,11 +45,11 @@
         <div class="form-group">
           <label for="location">Location</label>
           <input
-            type="text"
-            v-model="plot.location"
-            id="location"
-            placeholder="Location"
-            required
+              type="text"
+              v-model="plot.location"
+              id="location"
+              placeholder="Location"
+              required
           />
         </div>
         <div class="form-group">
@@ -57,6 +69,7 @@
             v-model="plot.size"
             id="size"
             placeholder="Size in hectares"
+            min="0"
             required
           />
 
@@ -64,7 +77,9 @@
 
         <button type="submit" class="submit-button">Register Plot</button>
         <router-link to="/register-node">
-          <button class="node-register-button">Register Node</button>
+          <button type="button" class="node-register-button">
+            Register Node
+          </button>
         </router-link>
       </form>
 
@@ -80,78 +95,93 @@
 </template>
 
 <script>
-import { plotService } from '@/plot/services/plot.service.js';
-import { userService } from '@/plot/services/user-service.js'; // Importa el servicio de usuario
+import { plotService } from "@/plot/services/plot.service.js";
 
 export default {
   data() {
     return {
       plot: {
-        id: null,
-        name: '',
-        location: '',
-        size: '',
-        imageUrl: ''
+        name: "",
+        location: "",
+        extension: "",
+        size: "",
+        imageUrl: "",
       },
-      confirmationMessage: '',
-      errorMessage: '',
-      imagePreview: ''
+      confirmationMessage: "",
+      errorMessage: "",
+      imagePreview: "",
     };
   },
   methods: {
     async registerPlot() {
-      if (!this.plot.name || !this.plot.location || !this.plot.size || !this.plot.imageUrl) {
+      // Verificar campos vacíos
+      if (!this.plot.name || !this.plot.location || !this.plot.extension || !this.plot.size || !this.plot.imageUrl) {
         alert("Please fill out all fields.");
         return;
       }
 
+      // Verificar que size y extension no sean negativos
+      if (this.plot.size <= 0 || this.plot.extension <= 0) {
+        alert("Size and Extension must be positive numbers.");
+        return;
+      }
+
       try {
-        // Obtener la lista de parcelas existentes para generar un nuevo ID
-        const response = await plotService.getAllPlots();
-        const existingPlots = response.data;
+        const currentUser = await plotService.getCurrentUser();
+        const userId = currentUser?.id;
 
-        const newId = existingPlots.length > 0
-          ? Math.max(...existingPlots.map(plot => parseInt(plot.id))) + 1
-          : 1;
+        if (!userId) {
+          throw new Error("User ID not found. Please log in.");
+        }
 
-        this.plot.id = newId.toString(); // Asegúrate de convertir a cadena
-
-        // Crear la nueva parcela
-        await plotService.createPlot(this.plot);
-
-        // Asociar la parcela al usuario autenticado
-        await userService.addPlotToUser(this.plot.id);
-
-        this.confirmationMessage = "Plot registered successfully!";
-        this.errorMessage = '';
-
-        // Limpiar el formulario después del registro exitoso
-        this.plot = {
-          id: null,
-          name: '',
-          location: '',
-          size: '',
-          imageUrl: ''
+        const payload = {
+          userId,
+          ...this.plot,
+          extension: parseFloat(this.plot.extension), // Convertir a número
+          size: parseFloat(this.plot.size), // Convertir a número
         };
-        this.imagePreview = '';
+
+        const createdPlot = await plotService.createPlot(payload);
+
+        this.confirmationMessage = `Plot '${createdPlot.name}' registered successfully!`;
+        this.errorMessage = "";
+
+        this.resetForm();
 
         setTimeout(() => {
-          this.confirmationMessage = '';
+          this.confirmationMessage = "";
         }, 3000);
       } catch (error) {
         console.error("Error registering plot:", error);
-        this.errorMessage = `Error registering plot: ${error.message}`;
-        this.confirmationMessage = '';
+        this.errorMessage = `Error registering plot: ${error.response?.data?.message || error.message}`;
+        this.confirmationMessage = "";
       }
     },
     updateImagePreview() {
       this.imagePreview = this.plot.imageUrl;
-    }
-  }
+    },
+    resetForm() {
+      this.plot = {
+        name: "",
+        location: "",
+        extension: "",
+        size: "",
+        imageUrl: "",
+      };
+      this.imagePreview = "";
+    },
+  },
 };
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -245,10 +275,5 @@ input:focus {
   margin-top: 20px;
   color: green;
   font-weight: bold;
-}
-
-.error-message {
-  color: red;
-  margin-top: 15px;
 }
 </style>

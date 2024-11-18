@@ -19,10 +19,10 @@
     <!-- Navegación con soporte para i18n -->
     <ul>
       <li
-        v-for="item in items"
-        :key="item.label"
-        :class="{ active: activeItem === item.label }"
-        @click="selectItem(item.label)"
+          v-for="item in items"
+          :key="item.label"
+          :class="{ active: activeItem === item.label }"
+          @click="selectItem(item.label)"
       >
         <RouterLink :to="item.to" class="nav-link">
           <i :class="getIconClass(item.label)" class="nav-icon"></i>
@@ -35,11 +35,7 @@
     <div class="language-toggle">
       <span class="language-label">Inglés</span>
       <label class="switch">
-        <input
-          type="checkbox"
-          :checked="!isEnglish"
-        @change="toggleLanguage"
-        />
+        <input type="checkbox" :checked="!isEnglish" @change="toggleLanguage" />
         <span class="slider"></span>
       </label>
       <span class="language-label">Español</span>
@@ -57,39 +53,86 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
-import { nextTick } from 'vue';
+import { watch, ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { plotService } from "@/plot/services/plot.service.js";
 
 export default {
   name: 'SideNavigationBar',
   setup() {
     const { locale } = useI18n();
-    return { locale };
-  },
-  data() {
-    return {
-      isCollapsed: false,
-      isMobile: false,
-      activeItem: 'manage_parcels',
-      isEnglish: true, // Ahora está en inglés al inicio
-      items: [
-        { label: 'manage_parcels', to: 'manage-parcels' },
-        { label: 'view_parcels_status', to: 'plot-status' },
-        { label: 'scheduled_irrigations', to: 'irrigation-schedule' },
-        { label: 'irrigation_reports', to: 'irrigation-reports' },
-        { label: 'notifications', to: 'notifications' },
-        { label: 'account', to: 'account' },
-        { label: 'support', to: 'support' }
-      ]
-    };
-  },
-  created() {
-    // Configura el idioma predeterminado a inglés
-    this.$i18n.locale = 'en';
+    const route = useRoute();
 
-    // Asegura que el estado inicial de `isEnglish` esté encendido
-    nextTick(() => {
-      this.isEnglish = true;
+    const isCollapsed = ref(false);
+    const isMobile = ref(window.innerWidth <= 768);
+    const activeItem = ref('manage_parcels');
+    const isEnglish = ref(true);
+    const firstPlotId = ref(null);
+
+    // Función para obtener el primer plotId
+    const fetchFirstPlotId = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
+        const response = await plotService.getPlotsByUserId(userId);
+        const plots = response.data;
+        if (plots.length > 0) {
+          firstPlotId.value = plots[0].id;
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos del primer plot:", error);
+      }
+    };
+
+    // Computed para actualizar los ítems con el plotId
+    const items = computed(() => [
+      { label: 'manage_parcels', to: '/manage-parcels' },
+      { label: 'view_parcels_status', to: firstPlotId.value ? `/plot-status/${firstPlotId.value}` : '/manage-parcels' },
+      { label: 'scheduled_irrigations', to: '/irrigation-schedule' },
+      { label: 'irrigation_reports', to: '/irrigation-reports' },
+      { label: 'account', to: '/account' },
+      { label: 'support', to: '/support' }
+    ]);
+
+    // Función para actualizar isMobile al redimensionar la ventana
+    const handleResize = () => {
+      isMobile.value = window.innerWidth <= 768;
+    };
+
+    onMounted(() => {
+      fetchFirstPlotId();
+      window.addEventListener('resize', handleResize);
+      locale.value = 'en';
+      isEnglish.value = true;
+      setActiveItemFromRoute();
     });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', handleResize);
+    });
+
+    const setActiveItemFromRoute = () => {
+      const currentPath = route.path;
+      const activeMenuItem = items.value.find(item => item.to === currentPath);
+      activeItem.value = activeMenuItem ? activeMenuItem.label : '';
+    };
+
+    watch(
+        () => route.path,
+        () => setActiveItemFromRoute(),
+        { immediate: true }
+    );
+
+    return {
+      locale,
+      isCollapsed,
+      isMobile,
+      activeItem,
+      isEnglish,
+      items,
+      setActiveItemFromRoute
+    };
   },
   methods: {
     toggleSidebar() {
@@ -121,20 +164,24 @@ export default {
     },
     toggleLanguage() {
       this.isEnglish = !this.isEnglish;
-      this.$i18n.locale = this.isEnglish ? 'en' : 'es'; // Cambia el idioma usando $i18n.locale
-      console.log('Idioma cambiado a:', this.isEnglish ? 'Inglés' : 'Español');
-      // Guarda el idioma preferido en localStorage para próximas visitas
+      this.$i18n.locale = this.isEnglish ? 'en' : 'es';
       localStorage.setItem('preferredLanguage', this.$i18n.locale);
     },
     handleLogout() {
       localStorage.removeItem('authToken');
-      this.$router.push('/login');
+      this.$router.push('/sign-in');
     }
   }
 };
 </script>
 
 <style scoped>
+
+li.active .nav-link {
+  background-color: #dfffda;
+  color: #2b9846; /* Asegúrate de que el color se aplica para el texto */
+}
+
 .side-nav {
   width: 250px;
   background-color: #ffffff;

@@ -1,11 +1,11 @@
 <template>
   <div class="node-status">
-    <img src="https://static.vecteezy.com/system/resources/previews/020/813/640/non_2x/watering-icon-for-your-website-design-logo-app-ui-free-vector.jpg" alt="Water Indicator" class="icon"/>
+    <img :src="node.iconClass" alt="Node Icon" class="icon" />
     <p><strong>Location:</strong> {{ node.nodelocation }}</p>
     <p><strong>Moisture:</strong> {{ node.moisture }}%</p>
-    <p><strong>Indicator:</strong> Water</p>
-    <p><strong>Product Code:</strong>  {{ node.productcode }}</p>
+    <p><strong>Indicator:</strong> {{ node.indicator }}</p>
     <p :class="node.statusClass"><strong>Node status:</strong> {{ node.status }}</p>
+    <p><strong>Product Code:</strong> {{ node.productcode }}</p>
   </div>
 </template>
 

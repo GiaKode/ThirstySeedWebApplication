@@ -39,18 +39,22 @@ export default {
       try {
         const response = await fetch('http://localhost:3000/users');
         const users = await response.json();
+
+        // Normaliza el correo ingresado a minúsculas para la comparación
+        const normalizedEmail = this.email.toLowerCase();
+
+        // Encuentra el usuario comparando el correo en minúsculas y la contraseña
         const user = users.find(
-          user => user.email === this.email && user.password === this.password
+            user => user.email.toLowerCase() === normalizedEmail && user.password === this.password
         );
 
         if (user) {
           console.log('Autenticación exitosa');
           localStorage.setItem('authToken', 'authenticated');
           localStorage.setItem('userEmail', user.email);
-          console.log('Email guardado en localStorage:', user.email); // <-- Añadir este log
+          console.log('Email guardado en localStorage:', user.email);
           this.$router.push({ path: '/manage-parcels' });
-        }
-        else {
+        } else {
           alert('Credenciales incorrectas. Por favor, intente nuevamente.');
         }
       } catch (error) {
