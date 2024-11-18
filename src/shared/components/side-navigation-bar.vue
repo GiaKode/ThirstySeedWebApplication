@@ -9,14 +9,14 @@
       </button>
     </div>
 
-    <hr class="divider"/>
+    <hr class="divider" />
 
     <!-- Collapsed button-->
     <button v-if="isCollapsed" class="toggle-button collapsed" @click="toggleSidebar">
       <i class="pi pi-bars"></i>
     </button>
 
-    <!-- Navegation list-->
+    <!-- Navegación con soporte para i18n -->
     <ul>
       <li
           v-for="item in items"
@@ -26,40 +26,102 @@
       >
         <RouterLink :to="item.to" class="nav-link">
           <i :class="getIconClass(item.label)" class="nav-icon"></i>
-          <span v-if="!isCollapsed">{{ item.label }}</span>
+          <span v-if="!isCollapsed">{{ $t(item.label) }}</span>
         </RouterLink>
       </li>
     </ul>
 
+    <!-- Botón de cambio de idioma -->
+    <div class="language-toggle">
+      <span class="language-label">Inglés</span>
+      <label class="switch">
+        <input
+            type="checkbox"
+            :checked="!isEnglish"
+            @change="toggleLanguage"
+        />
+        <span class="slider"></span>
+      </label>
+      <span class="language-label">Español</span>
+    </div>
+
     <!-- Logout -->
     <div class="logout">
-      <button @click="logout" class="nav-link logout-link">
+      <RouterLink to="/" @click.prevent="handleLogout" class="nav-link logout-link">
         <i class="pi pi-sign-out nav-icon"></i>
-        <span v-if="!isCollapsed">Logout</span>
-      </button>
+        <span v-if="!isCollapsed">{{ $t('logout') }}</span>
+      </RouterLink>
     </div>
   </div>
 </template>
 
 <script>
-import { useRouter } from 'vue-router';
+import {useI18n} from 'vue-i18n';
+import {watch, ref, onMounted, onBeforeUnmount} from 'vue';
+import {useRoute} from 'vue-router';
 
 export default {
   name: 'SideNavigationBar',
-  data() {
+  setup() {
+    const {locale} = useI18n();
+    const route = useRoute();
+
+    const isCollapsed = ref(false);
+    const isMobile = ref(window.innerWidth <= 768); // Detecta si la vista es móvil
+    const activeItem = ref('manage_parcels');
+    const isEnglish = ref(true);
+
+    // Función para actualizar isMobile al redimensionar la ventana
+    const handleResize = () => {
+      isMobile.value = window.innerWidth <= 768;
+    };
+
+    // Escucha el evento de redimensionamiento de la ventana
+    onMounted(() => {
+      window.addEventListener('resize', handleResize);
+      locale.value = 'en';
+      isEnglish.value = true;
+      setActiveItemFromRoute(); // Establece el elemento activo inicial después de montar el componente
+    });
+
+    // Limpia el evento de redimensionamiento al desmontar
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', handleResize);
+    });
+
+    // Configuración inicial de elementos de menú
+    const items = [
+      {label: 'manage_parcels', to: '/manage-parcels'},
+      {label: 'view_parcels_status', to: '/plot-status'},
+      {label: 'scheduled_irrigations', to: '/irrigation-schedule'},
+      {label: 'irrigation_reports', to: '/irrigation-reports'},
+      {label: 'account', to: '/account'},
+      {label: 'support', to: '/support'}
+    ];
+
+    // Función para establecer el elemento activo basado en la ruta actual
+    const setActiveItemFromRoute = () => {
+      const currentPath = route.path;
+      const activeMenuItem = items.find(item => item.to === currentPath);
+      activeItem.value = activeMenuItem ? activeMenuItem.label : '';
+    };
+
+    // Observa los cambios en la ruta para actualizar el elemento activo
+    watch(
+        () => route.path,
+        () => setActiveItemFromRoute(),
+        {immediate: true}
+    );
+
     return {
-      isCollapsed: false,
-      isMobile: false,
-      activeItem: '',
-      items: [
-        { label: 'Manage parcels', to: '/manage-parcels' },
-        { label: 'View parcels status', to: '/plot-status' },
-        { label: 'Scheduled irrigations', to: '/irrigation-schedule' },
-        { label: 'Irrigation reports', to: '/irrigation-reports' },
-        { label: 'Account', to: '/account' },
-        { label: 'Support', to: '/support' }
-      ]
-    }
+      locale,
+      isCollapsed,
+      isMobile,
+      activeItem,
+      isEnglish,
+      items,
+      setActiveItemFromRoute
+    };
   },
   methods: {
     toggleSidebar() {
@@ -71,48 +133,45 @@ export default {
     },
     getIconClass(label) {
       switch (label) {
-        case 'Manage parcels':
+        case 'manage_parcels':
           return 'pi pi-folder';
-        case 'View parcels status':
+        case 'view_parcels_status':
           return 'pi pi-eye';
-        case 'Scheduled irrigations':
+        case 'scheduled_irrigations':
           return 'pi pi-calendar';
-        case 'Irrigation reports':
+        case 'irrigation_reports':
           return 'pi pi-file';
-        case 'Account':
+        case 'notifications':
+          return 'pi pi-bell';
+        case 'account':
           return 'pi pi-user';
-        case 'Support':
+        case 'support':
           return 'pi pi-info-circle';
         default:
           return '';
       }
     },
-    handleResize() {
-      this.isMobile = window.innerWidth <= 768;
-      if (this.isMobile) {
-        this.isCollapsed = true;
-      }
+    toggleLanguage() {
+      this.isEnglish = !this.isEnglish;
+      this.$i18n.locale = this.isEnglish ? 'en' : 'es';
+      localStorage.setItem('preferredLanguage', this.$i18n.locale);
     },
-    logout() {
-      // Eliminar el token de autenticación
+    handleLogout() {
       localStorage.removeItem('authToken');
-      // Redirigir a la página de inicio de sesión
-      this.$router.push('/sign-in');
+      this.$router.push('/login');
     }
-  },
-  mounted() {
-    this.handleResize();
-    window.addEventListener('resize', this.handleResize);
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize);
   }
-}
+};
 </script>
 
 
-
 <style scoped>
+
+li.active .nav-link {
+  background-color: #dfffda;
+  color: #2b9846; /* Asegúrate de que el color se aplica para el texto */
+}
+
 .side-nav {
   width: 250px;
   background-color: #ffffff;
@@ -202,6 +261,69 @@ li {
 
 li.active .nav-link {
   background-color: #dfffda;
+}
+
+/* Estilos para el toggle button de idioma */
+.language-toggle {
+  padding: 10px 20px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-right: 10px; /* Espacio entre el botón y la etiqueta */
+}
+
+.switch input {
+  opacity: 0; /* Esconde el checkbox */
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc; /* Color de fondo por defecto */
+  transition: .4s;
+  border-radius: 34px; /* Bordes redondeados */
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white; /* Color del círculo */
+  border-radius: 50%; /* Círculo perfecto */
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #4caf50; /* Color cuando está ON */
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px); /* Mueve el círculo hacia la derecha */
+}
+
+.language-label {
+  color: #2b9846;
+  font-weight: bold; /* Estilo de la etiqueta de idioma */
+}
+
+.language-toggle .language-label:first-child {
+  margin-right: 10px; /* Ajusta este valor según el espacio que necesites */
 }
 
 .logout {
