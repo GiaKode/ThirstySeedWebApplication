@@ -1,14 +1,23 @@
 <template>
   <div class="plot-status-view">
     <div v-if="plot" class="plot-info">
+
       <div class="plot-image-container">
         <img :src="plot.imageUrl" alt="Plot Image" class="plot-image" />
       </div>
       <div class="plot-details">
         <p><strong>Plot name:</strong> <span class="highlight">{{ plot.name }}</span></p>
         <p><strong>Plot size:</strong> <span class="highlight">{{ plot.size }} m²</span></p>
-        <p><strong>Installed nodes:</strong> <span class="highlight">{{ plot.nodes }}</span></p>
-        <p><strong>Last irrigation date:</strong> <span class="highlight">{{ formatDate(plot.lastIrrigationDate) }}</span></p>
+        <p><strong>Installed nodes:</strong> <span class="highlight">{{ plot.nodes !== undefined ? plot.nodes : 0 }}</span></p>
+
+
+      </div>
+
+
+      <div class="add-node-button-container">
+        <router-link :to="'/register-node/' + plot.id" class="add-node-link">
+          <button class="add-node-button">Agregar Nodo</button>
+        </router-link>
       </div>
     </div>
 
@@ -57,23 +66,21 @@ export default {
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
       return new Date(dateString).toLocaleDateString('en-GB', options);
     },
-    fetchPlotAndNodes() {
-      plotService.getPlotById(1)
-          .then(response => {
-            this.plot = response.data;
-          })
-          .catch(error => {
-            console.error('Error fetching plot:', error);
-          });
+    async fetchPlotAndNodes() {
+      try {
+        const plotId = this.$route.params.id;
 
-      nodeService.getNodesByPlotId(1)
-          .then(response => {
-            this.nodes = response.data;
-            this.plot.nodes = this.nodes.length;
-          })
-          .catch(error => {
-            console.error('Error fetching nodes:', error);
-          });
+        const plotResponse = await plotService.getPlotById(plotId);
+        this.plot = plotResponse.data;
+
+        const nodesResponse = await nodeService.getNodesByPlotId(plotId);
+        this.nodes = nodesResponse.data;
+
+
+        this.plot.nodes = this.nodes.length;
+      } catch (error) {
+        console.error('Error fetching plot and nodes:', error);
+      }
     }
   },
   mounted() {
@@ -96,8 +103,7 @@ export default {
 .plot-info {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between; /* Alineación de la imagen y la información */
   width: 100%;
 }
 
@@ -128,6 +134,25 @@ export default {
   background-color: #d5f3e3;
   padding: 5px 10px;
   border-radius: 5px;
+}
+
+/* Botón "Agregar Nodo" alineado a la derecha */
+.add-node-button-container {
+  display: flex;
+  justify-content: flex-end; /* Alineamos el botón a la derecha */
+  margin-left: auto; /* Alineación a la derecha */
+  margin-top: 10px; /* Espacio para que no se superponga con la información */
+}
+
+.add-node-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px; /* Para darle un poco de espacio desde la parte superior */
 }
 
 .node-status-container {

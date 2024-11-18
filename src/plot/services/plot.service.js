@@ -32,13 +32,9 @@ export const plotService = {
 
 
     async getPlotById(id) {
-        const token = localStorage.getItem('authToken');
-        return axios.get(`${API_URL}/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
+        return axios.get(`${API_URL}/${id}`);
     },
+
 
 
     async updatePlot(id, plotData) {

@@ -29,9 +29,9 @@ const router = createRouter({
     { path: '/manage-parcels', name: 'ManageParcels', component: PlotRegisteredView },
     { path: '/set-irrigation-mode', name: 'SetIrrigationMode', component: SetIrrigationMode },
     { path: '/register-plot', name: 'registerplot', component: PlotRegisterComponent },
-    { path: '/register-node', name: 'registernode', component: NodeRegisterComponent },
+    { path: '/register-node/:id', name: 'registernode', component: NodeRegisterComponent },
     {path: '/activate-irrigation-nodes', name: 'activateirrigationnodes', component: ActivateIrrigationNodes},
-    { path: '/plot-status', name: 'plotstatus', component: PlotStatusView },
+    { path: '/plot-status/:id', name: 'plotstatus', component: PlotStatusView,props: true,  },
     { path: '/irrigation-schedule', name: 'irrigationschedule', component: ActivateIrrigationInPlotView },
     { path: '/account', name: 'Account', component: ProfileView },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }

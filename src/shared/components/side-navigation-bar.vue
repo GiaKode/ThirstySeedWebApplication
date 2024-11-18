@@ -52,12 +52,12 @@ export default {
       isMobile: false,
       activeItem: '',
       items: [
-        { label: 'Manage parcels', to: 'manage-parcels' },
-        { label: 'View parcels status', to: 'plot-status' },
-        { label: 'Scheduled irrigations', to: 'irrigation-schedule' },
-        { label: 'Irrigation reports', to: 'irrigation-reports' },
-        { label: 'Account', to: 'account' },
-        { label: 'Support', to: 'support' }
+        { label: 'Manage parcels', to: '/manage-parcels' },
+        { label: 'View parcels status', to: '/plot-status' },
+        { label: 'Scheduled irrigations', to: '/irrigation-schedule' },
+        { label: 'Irrigation reports', to: '/irrigation-reports' },
+        { label: 'Account', to: '/account' },
+        { label: 'Support', to: '/support' }
       ]
     }
   },

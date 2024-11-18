@@ -16,7 +16,9 @@
 
 
     <div v-else class="plots">
-      <div class="plot" v-for="plot in plots" :key="plot.id">
+      <router-link
+
+       class="plot" v-for="plot in plots" :key="plot.id":to="`/plot-status/${plot.id}`">
         <img
             :src="plot.imageUrl || 'https://via.placeholder.com/150'"
             :alt="`Imagen del plot ${plot.name || 'No disponible'}`"
@@ -33,7 +35,8 @@
             </span>
           </p>
         </div>
-      </div>
+        </router-link>
+
     </div>
   </div>
 </template>
