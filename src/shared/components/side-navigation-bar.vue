@@ -35,11 +35,7 @@
     <div class="language-toggle">
       <span class="language-label">Inglés</span>
       <label class="switch">
-        <input
-            type="checkbox"
-            :checked="!isEnglish"
-            @change="toggleLanguage"
-        />
+        <input type="checkbox" :checked="!isEnglish" @change="toggleLanguage" />
         <span class="slider"></span>
       </label>
       <span class="language-label">Español</span>
@@ -56,61 +52,76 @@
 </template>
 
 <script>
-import {useI18n} from 'vue-i18n';
-import {watch, ref, onMounted, onBeforeUnmount} from 'vue';
-import {useRoute} from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { watch, ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { plotService } from "@/plot/services/plot.service.js";
 
 export default {
   name: 'SideNavigationBar',
   setup() {
-    const {locale} = useI18n();
+    const { locale } = useI18n();
     const route = useRoute();
 
     const isCollapsed = ref(false);
-    const isMobile = ref(window.innerWidth <= 768); // Detecta si la vista es móvil
+    const isMobile = ref(window.innerWidth <= 768);
     const activeItem = ref('manage_parcels');
     const isEnglish = ref(true);
+    const firstPlotId = ref(null);
+
+    // Función para obtener el primer plotId
+    const fetchFirstPlotId = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
+        const response = await plotService.getPlotsByUserId(userId);
+        const plots = response.data;
+        if (plots.length > 0) {
+          firstPlotId.value = plots[0].id;
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos del primer plot:", error);
+      }
+    };
+
+    // Computed para actualizar los ítems con el plotId
+    const items = computed(() => [
+      { label: 'manage_parcels', to: '/manage-parcels' },
+      { label: 'view_parcels_status', to: firstPlotId.value ? `/plot-status/${firstPlotId.value}` : '/manage-parcels' },
+      { label: 'scheduled_irrigations', to: '/irrigation-schedule' },
+      { label: 'irrigation_reports', to: '/irrigation-reports' },
+      { label: 'account', to: '/account' },
+      { label: 'support', to: '/support' }
+    ]);
 
     // Función para actualizar isMobile al redimensionar la ventana
     const handleResize = () => {
       isMobile.value = window.innerWidth <= 768;
     };
 
-    // Escucha el evento de redimensionamiento de la ventana
     onMounted(() => {
+      fetchFirstPlotId();
       window.addEventListener('resize', handleResize);
       locale.value = 'en';
       isEnglish.value = true;
-      setActiveItemFromRoute(); // Establece el elemento activo inicial después de montar el componente
+      setActiveItemFromRoute();
     });
 
-    // Limpia el evento de redimensionamiento al desmontar
     onBeforeUnmount(() => {
       window.removeEventListener('resize', handleResize);
     });
 
-    // Configuración inicial de elementos de menú
-    const items = [
-      {label: 'manage_parcels', to: '/manage-parcels'},
-      {label: 'view_parcels_status', to: '/plot-status'},
-      {label: 'scheduled_irrigations', to: '/irrigation-schedule'},
-      {label: 'irrigation_reports', to: '/irrigation-reports'},
-      {label: 'account', to: '/account'},
-      {label: 'support', to: '/support'}
-    ];
-
-    // Función para establecer el elemento activo basado en la ruta actual
     const setActiveItemFromRoute = () => {
       const currentPath = route.path;
-      const activeMenuItem = items.find(item => item.to === currentPath);
+      const activeMenuItem = items.value.find(item => item.to === currentPath);
       activeItem.value = activeMenuItem ? activeMenuItem.label : '';
     };
 
-    // Observa los cambios en la ruta para actualizar el elemento activo
     watch(
         () => route.path,
         () => setActiveItemFromRoute(),
-        {immediate: true}
+        { immediate: true }
     );
 
     return {
@@ -158,12 +169,11 @@ export default {
     },
     handleLogout() {
       localStorage.removeItem('authToken');
-      this.$router.push('/login');
+      this.$router.push('/sign-in');
     }
   }
 };
 </script>
-
 
 <style scoped>
 

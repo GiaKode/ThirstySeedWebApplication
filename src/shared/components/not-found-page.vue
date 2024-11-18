@@ -5,7 +5,7 @@
       <p>Oops! The page you're looking for doesn't exist.</p>
       <img src="https://cdn-icons-png.flaticon.com/512/497/497738.png" alt="Lost" />
       <br>
-      <button @click="goToAccount">Go to Sing In</button>
+      <button @click="goToAccount">Go to Sign In</button>
     </div>
   </div>
 </template>
