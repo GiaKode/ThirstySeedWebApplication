@@ -92,6 +92,10 @@
             <button class="delete-plot-btn" @click="deletePlot(plot.id)">
               {{ $t('plotsStatus.deletePlot') }}
             </button>
+            <!-- Nuevo botón para ver el estado del plot -->
+            <button class="status-plot-btn" @click="goToPlotStatus(plot.id)">
+              {{ $t('plotsStatus.statusPlot') }}
+            </button>
           </div>
         </div>
       </div>
@@ -146,10 +150,8 @@ export default {
           location: plot.location,
           extension: plot.extension,
           size: plot.size || 0,
-          imageUrl: plot.imageUrl || '', // Incluye el enlace de la imagen
+          imageUrl: plot.imageUrl || '',
         };
-
-        console.log("Datos enviados al backend:", updatedPlot);
 
         await plotService.updatePlot(plot.id, updatedPlot);
         plot.isEditing = false;
@@ -170,6 +172,10 @@ export default {
         console.error("Error al eliminar el plot:", error.response?.data || error.message);
         alert(this.$t('plotsStatus.errorDeletingPlot'));
       }
+    },
+
+    goToPlotStatus(plotId) {
+      this.$router.push({ path: `/plot-status/${plotId}` });
     },
   },
 };
@@ -263,6 +269,7 @@ export default {
 
 .edit-plot-btn,
 .save-plot-btn,
+.status-plot-btn,
 .delete-plot-btn {
   margin: 10px 5px 0 5px;
   padding: 8px 12px;
@@ -285,7 +292,9 @@ export default {
 .save-plot-btn {
   background-color: #28a745;
 }
-
+.status-plot-btn{
+  background-color: #28a745;
+}
 .save-plot-btn:hover {
   background-color: #218838;
 }

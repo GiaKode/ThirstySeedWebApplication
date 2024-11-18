@@ -28,6 +28,7 @@
     "enterImageUrl": "Ingrese la URL de la imagen",
     "edit": "Editar",
     "save": "Guardar",
+
     "installNodes": "Instalar Nodos",
     "enterCode": "Ingresar Código",
     "validate": "Validar",
@@ -42,6 +43,7 @@
     "estimatedTime": "Tiempo estimado (horas)",
     "pressure": "Presión (psi)",
     "deletePlot": "Eliminar nodo",
+    "statusPlot": "Estado",
     "imageAlt": "Imagen del Plot",
     "enterSize": "Introducir talla",
     "enterLandName": "Ingresa el nombre de la parcela",
