@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ProfileService from '@/profile/services/profile-service'; // Asegúrate de que el servicio esté correcto
+import ProfileService from '@/profile/services/profile-service';
 
 export default defineComponent({
   name: 'ProfileComponent',

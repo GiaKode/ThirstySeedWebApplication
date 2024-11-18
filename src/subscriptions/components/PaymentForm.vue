@@ -10,17 +10,17 @@
 </template>
 
 <script>
-import SubscriptionService from "@/subscriptions/services/subscription-service.ts";
+import SubscriptionService from '@/subscriptions/services/subscription-service.ts'
 
 export default {
   props: {
-    selectedPlan: { type: String, required: true },
+    selectedPlan: { type: String, required: true }
   },
   data() {
     return {
       paymentSuccess: false,
-      error: null,
-    };
+      error: null
+    }
   },
   methods: {
     async handlePayment() {
@@ -28,51 +28,54 @@ export default {
         const currentUser = await SubscriptionService.getCurrentUser();
         const userId = currentUser?.id;
 
-        // Agregar console.log para verificar el valor de userId
         console.log('User ID:', userId);
 
         if (!userId) {
-          throw new Error("User ID not found. Please log in.");
+          console.error('Error: No se pudo obtener el ID de usuario');
+          throw new Error('User ID not found. Please log in.');
         }
 
-        // Definir planType y nodeCount basados en el plan seleccionado
-        const planDetails = this.selectedPlan === 'premium'
-            ? { planType: 'PREMIUM', nodeCount: 12 }  // Usar valores según el plan
-            : { planType: 'PLUS', nodeCount: 5 };    // Usar valores según el plan
+        const planDetails =
+          this.selectedPlan === 'premium'
+            ? { planType: 'PREMIUM', nodeCount: 12 }
+            : { planType: 'PLUS', nodeCount: 5 };
 
-        // Crear los datos de la suscripción en el formato adecuado
         const subscriptionData = {
-          userId: userId,  // Usar el userId obtenido
-          planType: planDetails.planType,  // planType (ej. 'PREMIUM' o 'PLUS')
-          nodeCount: planDetails.nodeCount, // nodeCount según el plan
-          validationCode: 'TSeed-XWPXNDYL',  // Código de validación (puede ser dinámico si es necesario)
+          userId: userId,
+          planType: planDetails.planType,
+          nodeCount: planDetails.nodeCount,
+          validationCode: 'TSeed-XWPXNDYL',
         };
 
-        // Mostrar en la consola para verificar la estructura de los datos
-        console.log('Subscription Data:', subscriptionData);
+        console.log('Datos enviados al backend:', subscriptionData);
 
-        // Usar el servicio para crear la suscripción
         const response = await SubscriptionService.createSubscription(subscriptionData);
 
-        // Verificar respuesta exitosa
-        if (response.status === 200) {
+        console.log('Respuesta del servidor:', response);
+
+        // Cambiar validación del código de estado
+        if (response.status === 200 || response.status === 201) {
           this.paymentSuccess = true;
           this.$emit('success');
         } else {
+          console.error('Error en la respuesta del servidor:', response.data);
           this.error = `Pago fallido: ${response.data.message || 'Error desconocido'}`;
         }
       } catch (error) {
         if (error.response) {
+          console.error('Error en la respuesta del servidor:', error.response.data);
           this.error = error.response.data.message || 'Error al procesar el pago.';
         } else if (error.request) {
+          console.error('No se recibió respuesta del servidor:', error.request);
           this.error = 'No se recibió respuesta del servidor. Verifique su conexión.';
         } else {
+          console.error('Error al procesar la solicitud:', error.message);
           this.error = `Error: ${error.message}`;
         }
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>

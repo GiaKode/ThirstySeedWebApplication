@@ -1,6 +1,8 @@
 export interface Subscription {
-    userId: Long;
-    planType: String;
-    nodeCount: Integer;
-    validationCode: String;
+    id: number;
+    userId: number;
+    planType: string;
+    nodeCount: number;
+    validationCode: string;
+    active: boolean;
 }
