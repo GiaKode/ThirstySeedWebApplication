@@ -33,11 +33,12 @@
         <div class="form-group">
           <label for="extension">Extension</label>
           <input
-              type="text"
-              v-model="plot.extension"
-              id="extension"
-              placeholder="Extension"
-              required
+            type="number"
+            v-model="plot.extension"
+            id="extension"
+            placeholder="Extension"
+            min="0"
+            required
           />
         </div>
 
@@ -55,11 +56,12 @@
         <div class="form-group">
           <label for="size">Size (in hectares)</label>
           <input
-              type="number"
-              v-model="plot.size"
-              id="size"
-              placeholder="Size in hectares"
-              required
+            type="number"
+            v-model="plot.size"
+            id="size"
+            placeholder="Size in hectares"
+            min="0"
+            required
           />
         </div>
 
@@ -102,20 +104,25 @@ export default {
   },
   methods: {
     async registerPlot() {
+      // Verificar campos vacíos
       if (!this.plot.name || !this.plot.location || !this.plot.extension || !this.plot.size || !this.plot.imageUrl) {
         alert("Please fill out all fields.");
         return;
       }
 
-      try {
+      // Verificar que size y extension no sean negativos
+      if (this.plot.size <= 0 || this.plot.extension <= 0) {
+        alert("Size and Extension must be positive numbers.");
+        return;
+      }
 
+      try {
         const currentUser = await plotService.getCurrentUser();
         const userId = currentUser?.id;
 
         if (!userId) {
           throw new Error("User ID not found. Please log in.");
         }
-
 
         const payload = {
           userId,
@@ -124,15 +131,12 @@ export default {
           size: parseFloat(this.plot.size), // Convertir a número
         };
 
-
         const createdPlot = await plotService.createPlot(payload);
 
         this.confirmationMessage = `Plot '${createdPlot.name}' registered successfully!`;
         this.errorMessage = "";
 
-
         this.resetForm();
-
 
         setTimeout(() => {
           this.confirmationMessage = "";
@@ -161,6 +165,13 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
   justify-content: center;

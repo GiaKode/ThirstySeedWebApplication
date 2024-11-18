@@ -1,8 +1,12 @@
 <template>
   <div class="plots-status">
     <div class="header-container">
+
+
       <h1 class="plots-header">Registered Plots</h1>
       <button class="register-plot-btn" @click="goToRegisterPlot">Register Plot</button>
+
+
     </div>
 
     <!-- Spinner de carga -->
@@ -76,12 +80,96 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos generales del componente */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+.install-nodes-btn {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.install-nodes-btn:hover {
+  background-color: #138496;
+}
+
+.install-code input {
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.install-code button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.confirmation-message {
+  color: green;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.edit-plot-btn {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.edit-plot-btn:hover {
+  background-color: #e0a800;
+}
+
+.save-plot-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.save-plot-btn:hover {
+  background-color: #218838;
+}
+
 .plots-status {
   margin: 20px;
 }
 
-/* Encabezado y botón */
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -91,7 +179,13 @@ export default {
 
 .plots-header {
   font-size: 24px;
-  margin-left: 130px;
+}
+
+.no-plots-message {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+  margin-top: 50px;
 }
 
 .register-plot-btn {
@@ -102,80 +196,67 @@ export default {
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  margin-right: 20px;
 }
 
 .register-plot-btn:hover {
   background-color: #2c522a;
 }
 
-/* Estilos para el texto de estado */
 .not-supplied {
   color: red;
 }
 
-/* Diseño responsivo de los plots */
 .plots {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   justify-content: center;
-  max-width: 100%;
-  padding: 0 20px;
+  padding: 20px;
 }
 
-/* Estilo de cada plot */
 .plot {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 15px;
-  background-color: #f9f9f9;
+  background-color: #F7FFF0;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 350px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s;
 }
 
-/* Imagen del plot */
+.plot:hover {
+  transform: translateY(-5px);
+}
+
 .plot-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 15px;
 }
 
-/* Detalles del plot */
-.plot-details {
-  text-align: left;
-  width: 100%;
+.plot-details p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
 }
 
-/* Spinner de carga */
-.spinner-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
+.delete-plot-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 15px;
 }
 
-.spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3D703B;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.delete-plot-btn:hover {
+  background-color: #c0392b;
 }
 </style>
