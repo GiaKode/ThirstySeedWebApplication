@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { User } from '../model/user';
+import type { User } from '../model/User';
 
 class AuthenticationService {
   // URL base de la API de autenticación

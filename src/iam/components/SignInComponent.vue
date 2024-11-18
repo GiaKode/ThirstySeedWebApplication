@@ -56,31 +56,25 @@ export default defineComponent({
 
         console.log("Sign in successful:", response.data);
 
-        // Suponiendo que la respuesta contiene el token
-        const token = response.data.token;  // Verifica que el token esté presente en la respuesta
-        localStorage.setItem("authToken", token);
-        localStorage.setItem("userId", response.data.id);
+        const token = response.data.token;
+        const userId = response.data.id;
 
-        // Verificar si el perfil está completo
-        if (!response.data.profileCompleted) {
-          // Si no está completo, redirige a CompleteProfile
-          this.$router.push({ path: "/complete-profile", query: { email: this.username } });
-        } else {
-          // Si el perfil está completo, redirige a ManageParcels
-          this.$router.push("/manage-parcels");
-        }
+        // Guardar token y userId en localStorage
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("userId", userId);
+
+        // Redirigir al perfil del usuario
+        this.$router.push("/account");
       } catch (error) {
         console.error("Error during sign in:", error);
       }
-    }
-    ,
+    },
     goToSignUp() {
       this.$router.push("/sign-up");
     },
   },
 });
 </script>
-
 
 <style scoped>
 /* Asegúrate de que el html y body ocupen el 100% del viewport */

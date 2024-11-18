@@ -54,8 +54,13 @@ export default defineComponent({
         };
         const response = await AuthenticationService.signUp(user);
         console.log("Signup successful:", response.data);
-        // Después de registrarse, redirigir al login
-        this.$router.push("/sign-in");
+
+        // Guardar el ID del usuario
+        const userId = response.data.id;
+        localStorage.setItem('userId', userId);
+
+        // Redirigir a la página de completar perfil
+        this.$router.push('/complete-profile');
       } catch (error) {
         console.error("Error during sign up:", error);
       }
