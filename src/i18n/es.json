@@ -16,7 +16,6 @@
     "location": "Ubicación",
     "extensionOfLand": "Extensión de la Parcela",
     "plotStatus": "Estado de la Parcela",
-    "deletePlot": "Eliminar",
     "plotDeletedMessage": "¡Parcela eliminada exitosamente!",
     "noPlotsRegistered": "No tienes parcelas registradas. ¡Agrega una nueva parcela!",
     "errorFetchingData": "Error al obtener los datos de las parcelas.",
@@ -42,7 +41,12 @@
     "expectedMoisture": "Humedad esperada (%)",
     "estimatedTime": "Tiempo estimado (horas)",
     "pressure": "Presión (psi)",
-    "removeNode": "Eliminar nodo"
+    "deletePlot": "Eliminar nodo",
+    "imageAlt": "Imagen del Plot",
+    "enterSize": "Introducir talla",
+    "enterLandName": "Ingresa el nombre de la parcela",
+    "enterLocation": "Ingresa la ubicación",
+    "enterExtension": "Ingresa la extensión"
   },
 
   "profile": {

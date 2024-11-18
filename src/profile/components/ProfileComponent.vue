@@ -110,113 +110,103 @@ export default defineComponent({
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-.profile-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.profile-button {
-  margin-bottom: 1rem;
-  background-color: #4caf50;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.profile-icon {
-  width: 120px;
-  margin-bottom: 1rem; /* Añadido un margen inferior para separar la imagen del título */
-}
-
-.image-url-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-}
-
 * {
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.signup-container {
-  display: flex;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background-color: #ffffff;
-}
-
-.signup-card {
-  background-color: rgba(255, 255, 249, 1);
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.profile-container {
+  max-width: 450px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  width: 400px;
-  text-align: center;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: #333;
+  text-align: center;
   margin-bottom: 2rem;
 }
 
 .input-group {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   margin-bottom: 1rem;
 }
 
 .input-group input {
-  width: 48%;
-  padding: 0.75rem;
+  flex: 1;
+  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 1%;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.3s ease;
 }
 
 .input-field {
-  width: 100%;
   margin-bottom: 1.5rem;
 }
 
 .input-field input {
   width: 100%;
-  padding: 0.75rem;
+  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #2B9846;
+  outline: none;
+  box-shadow: 0 0 4px rgba(43, 152, 70, 0.3);
 }
 
 .btn {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #4caf50;
+  padding: 14px;
+  background-color: #2B9846;
   color: white;
   font-size: 1rem;
   font-weight: 600;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.return-link {
-  display: block;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #4caf50;
-  text-decoration: none;
+.btn:hover {
+  background-color: #1e7a36;
 }
 
-.return-link:hover {
-  text-decoration: underline;
+.profile-container input::placeholder {
+  color: #999;
 }
+
+.profile-container input:focus::placeholder {
+  color: transparent;
+}
+
+.profile-container input, .btn {
+  font-family: 'Poppins', sans-serif;
+}
+
+@media (max-width: 480px) {
+  .input-group {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .input-group input {
+    margin-bottom: 1rem;
+  }
+}
+
 </style>

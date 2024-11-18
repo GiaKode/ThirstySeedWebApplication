@@ -77,7 +77,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Asegúrate de que el html y body ocupen el 100% del viewport */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;
@@ -145,14 +151,14 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #2B9846;
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
 }
 
 .btn-primary {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #2B9846;
   color: white;
   border: none;
   border-radius: 5px;
@@ -162,7 +168,7 @@ input:focus {
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #12723D;
 }
 
 .signup-link {
@@ -175,7 +181,7 @@ input:focus {
 }
 
 .signup-link a {
-  color: #007bff;
+  color: #2B9846;
   text-decoration: none;
   font-weight: bold;
   cursor: pointer;

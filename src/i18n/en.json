@@ -42,7 +42,12 @@
     "expectedMoisture": "Expected Moisture (%)",
     "estimatedTime": "Estimated Time (hours)",
     "pressure": "Pressure (psi)",
-    "removeNode": "Remove Node"
+    "deletePlot": "Delete Node",
+    "imageAlt": "Plot Image",
+    "enterSize": "Enter size",
+    "enterLandName": "Enter land name",
+    "enterLocation": "Enter location",
+    "enterExtension": "Enter extension"
   },
 
   "profile": {
