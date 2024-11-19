@@ -16,7 +16,7 @@
           <!-- Selección de Plot -->
           <div class="form-group">
             <label for="plotName">Plot name</label>
-            <select id="plotName" v-model="selectedPlot">
+            <select id="plotName" v-model="selectedPlot" @change="updateNodes">
               <option v-for="plot in availablePlots" :key="plot.id" :value="plot.id">
                 {{ plot.name }} - {{ plot.location }}
               </option>
@@ -45,7 +45,6 @@
 <script>
 import { plotService } from "@/plot/services/plot.service.js";
 import { nodeService } from '@/node/sevices/node.service.js'
-
 
 export default {
   data() {
@@ -95,7 +94,6 @@ export default {
     this.fetchUserPlots(); // Carga los plots al crear el componente
   },
 };
-
 </script>
 
 <style scoped>

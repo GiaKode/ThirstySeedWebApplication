@@ -10,7 +10,7 @@ import Toolbar from 'primevue/toolbar';
 import Divider from 'primevue/divider';
 import Toast from 'primevue/toast'
 import i18n from '@/i18n';
-
+import 'sweetalert2/dist/sweetalert2.min.css';
 const app = createApp(App);
 
 app.use(createPinia());
