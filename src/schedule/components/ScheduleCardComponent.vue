@@ -17,7 +17,7 @@
       </div>
       <div class="detail">
         <label>Water Amount:</label>
-        <span>{{ schedule.requiredWaterAmount }}</span>
+        <span>{{ schedule.waterAmount }}</span>
       </div>
       <div class="detail">
         <label>Pressure:</label>
