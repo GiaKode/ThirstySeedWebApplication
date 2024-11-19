@@ -92,7 +92,9 @@
             <button class="delete-plot-btn" @click="deletePlot(plot.id)">
               {{ $t('plotsStatus.deletePlot') }}
             </button>
-            <!-- Nuevo botón para ver el estado del plot -->
+            <button class="install-node-btn" @click="openInstallNodeModal">
+              {{ $t('plotsStatus.installNode') }}
+            </button>
             <button class="status-plot-btn" @click="goToPlotStatus(plot.id)">
               {{ $t('plotsStatus.statusPlot') }}
             </button>
@@ -100,13 +102,25 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal para instalar nodo -->
+    <div v-if="showInstallNodeModal" class="modal-overlay">
+      <div class="modal">
+        <h2>{{ $t('plotsStatus.installNode') }}</h2>
+        <p>{{ $t('plotsStatus.enterCode') }}</p>
+        <input
+          type="text"
+          v-model="installNodeCode"
+          :placeholder="$t('plotsStatus.enterCodePlaceholder')"
+        />
+        <div class="modal-buttons">
+          <button @click="confirmInstallNode">{{ $t('plotsStatus.confirm') }}</button>
+          <button @click="closeInstallNodeModal">{{ $t('plotsStatus.cancel') }}</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
-
-
-
-
 
 <script>
 import { plotService } from "@/plot/services/plot.service.js";
@@ -116,6 +130,8 @@ export default {
     return {
       plots: [],
       isLoading: false,
+      showInstallNodeModal: false,
+      installNodeCode: "",
     };
   },
   created() {
@@ -173,7 +189,20 @@ export default {
         alert(this.$t('plotsStatus.errorDeletingPlot'));
       }
     },
-
+    openInstallNodeModal() {
+      this.showInstallNodeModal = true;
+    },
+    closeInstallNodeModal() {
+      this.showInstallNodeModal = false;
+      this.installNodeCode = "";
+    },
+    confirmInstallNode() {
+      if (this.installNodeCode === "TSeed-XWPXNDYL") {
+        this.$router.push("/register-plot");
+      } else {
+        alert(this.$t('plotsStatus.invalidCode'));
+      }
+    },
     goToPlotStatus(plotId) {
       this.$router.push({ path: `/plot-status/${plotId}` });
     },
@@ -181,8 +210,57 @@ export default {
 };
 </script>
 
-
 <style scoped>
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modal-buttons button {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.modal-buttons button:first-child {
+  background: #3d703b;
+  color: white;
+}
+
+.modal-buttons button:last-child {
+  background: #e74c3c;
+  color: white;
+}
+
+
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
 
 * {
@@ -191,9 +269,10 @@ export default {
 }
 
 .plots-status {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
 }
 
 .header-container {
@@ -226,7 +305,7 @@ export default {
 
 .plots {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
   margin-top: 20px;
 }
@@ -266,10 +345,10 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-
+.status-plot-btn,
+.install-node-btn,
 .edit-plot-btn,
 .save-plot-btn,
-.status-plot-btn,
 .delete-plot-btn {
   margin: 10px 5px 0 5px;
   padding: 8px 12px;
@@ -281,6 +360,8 @@ export default {
   transition: background-color 0.3s ease;
 }
 
+
+
 .edit-plot-btn {
   background-color: #ffc107;
 }
@@ -288,30 +369,34 @@ export default {
 .edit-plot-btn:hover {
   background-color: #e0a800;
 }
-
-.save-plot-btn {
-  background-color: #28a745;
+.install-node-btn{
+  background-color: #0082cf;
+}
+.install-node-btn:hover{
+  background-color: #00639a;
 }
 .status-plot-btn{
+  background-color: #8f00ff;
+}
+.status-plot-btn:hover{
+  background-color: #5000bf;
+}
+.save-plot-btn {
   background-color: #28a745;
 }
 .save-plot-btn:hover {
   background-color: #218838;
 }
-
 .delete-plot-btn {
   background-color: #e74c3c;
 }
-
 .delete-plot-btn:hover {
   background-color: #c0392b;
 }
-
 .no-plots-message {
   font-size: 1rem;
   color: #666;
   text-align: center;
   margin-top: 20px;
 }
-
 </style>

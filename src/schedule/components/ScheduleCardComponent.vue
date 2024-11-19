@@ -1,7 +1,7 @@
 <template>
   <div class="schedule-card">
     <div class="card-header">
-      <h3>{{ schedule.plotName || 'Unknown Plot' }}</h3> <!-- Mostrar el nombre del plot -->
+      <h3>{{ schedule.plotName || 'Unknown Plot' }}</h3>
       <span :class="['status', schedule.isAutomatic ? 'automatic' : 'manual']">
         {{ schedule.isAutomatic ? 'Automatic' : 'Manual' }}
       </span>
@@ -27,31 +27,81 @@
     <div class="card-actions">
       <button @click="$emit('edit', schedule)">Edit</button>
       <button @click="deleteSchedule" class="delete-button">Delete</button>
-      <button v-if="!schedule.isAutomatic" @click="activateSprinklers">Activate Sprinklers</button>
+      <button v-if="!schedule.isAutomatic" @click="activateSprinklers">
+        Activate Sprinklers
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+
 export default {
   name: 'ScheduleCardComponent',
   props: {
     schedule: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+  },
+  data() {
+    return {
+      progress: 0,
+      intervalId: null,
+    };
   },
   methods: {
     deleteSchedule() {
       this.$emit('delete', this.schedule.id);
     },
     activateSprinklers() {
-      console.log('Activating sprinklers for schedule:', this.schedule.id);
+      this.progress = 0;
+      this.showProgressToast();
+      this.animateProgress();
     },
-  }
+    animateProgress() {
+      const targetMoisture = this.schedule.expectedMoisture;
+      this.intervalId = setInterval(() => {
+        if (this.progress < targetMoisture) {
+
+          const increment = Math.min(10, targetMoisture - this.progress);
+          this.progress += increment;
+          this.updateToast();
+        } else {
+          clearInterval(this.intervalId);
+          Swal.close();
+        }
+      }, 500);
+    },
+    showProgressToast() {
+      Swal.fire({
+        title: 'Activating Sprinklers',
+        html: `
+            Sprinklers will run until a moisture level of <strong>${this.schedule.expectedMoisture}%</strong> is reached.
+            <br><br>
+                Progress: <strong id="progress-value">${this.progress}%</strong>
+            `,
+        icon: 'info',
+        timer: 10000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+        willClose: () => {
+          clearInterval(this.intervalId);
+        },
+      });
+    },
+    updateToast() {
+      const progressElement = Swal.getHtmlContainer()?.querySelector('#progress-value');
+      if (progressElement) {
+        progressElement.textContent = `${this.progress}%`;
+      }
+    },
+  },
 };
 </script>
-
 
 <style scoped>
 .schedule-card {
@@ -64,7 +114,6 @@ export default {
   flex-direction: column;
   gap: 10px;
 }
-
 
 .card-header {
   display: flex;
