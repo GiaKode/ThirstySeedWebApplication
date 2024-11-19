@@ -90,7 +90,7 @@ export default {
       { label: 'manage_parcels', to: '/manage-parcels' },
       { label: 'view_parcels_status', to: firstPlotId.value ? `/plot-status/${firstPlotId.value}` : '/manage-parcels' },
       { label: 'scheduled_irrigations', to: '/schedule' },
-      { label: 'irrigation_reports', to: '/irrigation-reports' },
+      //{ label: 'irrigation_reports', to: '/irrigation-reports' },
       { label: 'account', to: '/account' },
       { label: 'support', to: '/support' }
     ]);
