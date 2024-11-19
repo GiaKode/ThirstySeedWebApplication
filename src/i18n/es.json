@@ -48,7 +48,14 @@
     "enterSize": "Introducir talla",
     "enterLandName": "Ingresa el nombre de la parcela",
     "enterLocation": "Ingresa la ubicación",
-    "enterExtension": "Ingresa la extensión"
+    "enterExtension": "Ingresa la extensión",
+    "validateCode": "Validar código",
+    "close": "Cerrar",
+    "installNode": "Instalar Nodo",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "invalidCode": "Código inválido",
+    "enterCodePlaceholder": "Introducir código de marcador de posición"
   },
 
   "profile": {
@@ -66,6 +73,22 @@
     "nodeCount": "Cantidad de nodos",
     "validationCode": "Código de validación",
     "copyCode": "Copiar código",
-    "codeCopied": "¡Código copiado al portapapeles!"
+    "codeCopied": "¡Código copiado al portapapeles!",
+
+
+
+    "loading": "Cargando Perfil...",
+    "yourAccount": "Tu Cuenta",
+    "accountInformation": "Información de la Cuenta",
+    "noPlots": "No hay parcelas disponibles",
+    "name": "Nombre",
+    "telephone": "Teléfono",
+    "email": "Correo",
+    "city": "Locación",
+    "profileImage": "Foto de Perfil",
+    "uploadNewProfileImage": "Sube una imagen",
+    "save": "Guardar",
+    "cancel": "Cancelar"
+
   }
 }

@@ -43,12 +43,18 @@
     "expectedMoisture": "Expected Moisture (%)",
     "estimatedTime": "Estimated Time (hours)",
     "pressure": "Pressure (psi)",
-    "deletePlot": "Delete Node",
     "imageAlt": "Plot Image",
     "enterSize": "Enter size",
     "enterLandName": "Enter land name",
     "enterLocation": "Enter location",
-    "enterExtension": "Enter extension"
+    "enterExtension": "Enter extension",
+    "validateCode": "Validate Code",
+    "close": "Close",
+    "installNode": "Install Node",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "invalidCode": "Invalid code",
+    "enterCodePlaceholder": "Enter Code Place Holder"
   },
 
   "profile": {
@@ -66,6 +72,20 @@
     "nodeCount": "Node Count",
     "validationCode": "Validation Code",
     "copyCode": "Copy Code",
-    "codeCopied": "Code copied to clipboard!"
+    "codeCopied": "Code copied to clipboard!",
+
+    "loading": "Loading Profile...",
+    "yourAccount": "Your Account",
+    "accountInformation": "Account Information",
+    "noPlots": "No plots available",
+    "name": "Name",
+    "telephone": "Telephone",
+    "email": "Email",
+    "city": "Location",
+    "profileImage": "Image Profile",
+    "uploadNewProfileImage": "Upload Image",
+    "save": "Save",
+    "cancel": "Cancel"
+
   }
 }

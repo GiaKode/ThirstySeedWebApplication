@@ -12,6 +12,7 @@ import PlanSelectionModal from "@/subscriptions/components/PlanSelectionModal.vu
 import PaymentForm from "@/subscriptions/components/PaymentForm.vue";
 import SchedulesViewComponent from '@/schedule/components/SchedulesViewComponent.vue';
 import ScheduleFormComponent from '@/schedule/components/ScheduleFormComponent.vue';
+import SupportProfile from '@/support/components/SupportProfile.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,7 +27,7 @@ const router = createRouter({
     { path: '/plan-selection', name: 'Plan', component: PlanSelectionModal, props: true },
     { path: '/payment', name: 'Pay', component: PaymentForm },
     { path: '/account', name: 'Account', component: AccountComponent },
-
+    {path: '/support', name: 'Support', component: SupportProfile},
     //PLOTS AND NODES
     { path: '/register-plot', name: 'registerplot', component: PlotRegisterComponent },
     { path: '/register-node/:id', name: 'registernode', component: NodeRegisterComponent },
