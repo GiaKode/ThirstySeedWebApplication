@@ -37,12 +37,12 @@
           <input type="number" v-model.number="scheduleData.expectedMoisture" :disabled="scheduleData.isAutomatic" />
         </div>
         <div class="form-group">
-          <label>Required Water Amount (l)</label>
-          <input type="number" v-model.number="scheduleData.requiredWaterAmount" :disabled="scheduleData.isAutomatic" />
+          <label>Water Amount (l)</label>
+          <input type="number" v-model.number="scheduleData.waterAmount" :disabled="scheduleData.isAutomatic" />
         </div>
         <div class="form-group">
           <label>Estimated Time (h)</label>
-          <input type="number" v-model.number="scheduleData.estimatedTime" :disabled="scheduleData.isAutomatic" />
+          <input type="number" v-model.number="scheduleData.estimatedTimeHours" :disabled="scheduleData.isAutomatic" />
         </div>
       </div>
       <div class="column">
@@ -86,11 +86,12 @@ export default defineComponent({
     return {
       plots: [] as Plot[],
       selectedPlot: null as Plot | null,
+      isEditMode: false,
       scheduleData: {
         plotId: null,
         expectedMoisture: 40,
-        requiredWaterAmount: 500,
-        estimatedTime: 3,
+        waterAmount: 500,
+        estimatedTimeHours: 3,
         sprinklerRadius: 7,
         setTime: '08:15 PM',
         angle: 30,
@@ -115,8 +116,8 @@ export default defineComponent({
         this.scheduleData = {
           ...this.scheduleData,
           expectedMoisture: 70,
-          requiredWaterAmount: 500,
-          estimatedTime: 3,
+          waterAmount: 500,
+          estimatedTimeHours: 3,
           sprinklerRadius: 7,
           setTime: '08:15 PM',
           angle: 30,
@@ -125,39 +126,29 @@ export default defineComponent({
       }
     },
     async save() {
-      if (!this.validateForm()) return;
-
       try {
-        // Construcción del objeto Schedule
         const scheduleData: Schedule = {
           plotId: this.scheduleData.plotId!,
-          waterAmount: Number(this.scheduleData.requiredWaterAmount),
-          pressure: Number(this.scheduleData.pressure),
-          sprinklerRadius: Number(this.scheduleData.sprinklerRadius),
-          expectedMoisture: Number(this.scheduleData.expectedMoisture),
-          estimatedTimeHours: Number(this.scheduleData.estimatedTime),
+          waterAmount: this.scheduleData.waterAmount,
+          pressure: this.scheduleData.pressure,
+          sprinklerRadius: this.scheduleData.sprinklerRadius,
+          expectedMoisture: this.scheduleData.expectedMoisture,
+          estimatedTimeHours: this.scheduleData.estimatedTimeHours,
           setTime: this.scheduleData.setTime,
-          angle: Number(this.scheduleData.angle),
+          angle: this.scheduleData.angle,
           isAutomatic: this.scheduleData.isAutomatic,
         };
 
-        // Lógica de creación o actualización
-        if (this.isEditMode) {
+        if (this.isEditMode && this.scheduleData.id) {
           await ScheduleService.updateSchedule(String(this.scheduleData.id), scheduleData);
-          this.message = 'Schedule updated successfully!';
         } else {
+          delete scheduleData.id;
           await ScheduleService.createSchedule(scheduleData);
-          this.message = 'Schedule created successfully!';
         }
 
-        this.messageClass = 'success-message';
-        setTimeout(() => {
-          this.$router.push({ name: 'schedule' });
-        }, 1000);
-      } catch (error: any) {
-        this.message = 'Failed to save schedule.';
-        this.messageClass = 'error-message';
-        console.error('Error al guardar el schedule:', error.response || error.message);
+        this.$router.push({ name: 'schedule' });
+      } catch (error) {
+        console.error('Error al guardar el schedule:', error);
       }
     },
     cancel() {
@@ -166,12 +157,27 @@ export default defineComponent({
   },
   mounted() {
     this.getAllPlots();
+    const scheduleId = this.$route.params.id;
+    if (scheduleId) {
+      this.isEditMode = true;
+      ScheduleService.getScheduleById(scheduleId)
+        .then(schedule => {
+          this.scheduleData = schedule;
+          this.updatePlotDetails();
+        })
+        .catch(error => {
+          console.error('Error al cargar el schedule:', error);
+        });
+    } else {
+      this.isEditMode = false;
+    }
   },
 });
 </script>
 
 <style scoped>
 .schedule-form {
+  flex: auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
