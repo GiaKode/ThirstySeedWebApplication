@@ -1,7 +1,7 @@
 <template>
   <div class="schedule-card">
     <div class="card-header">
-      <h3>{{ getPlotNameById(schedule.plotId) }}</h3>
+      <h3>{{ schedule.plotName || 'Unknown Plot' }}</h3> <!-- Mostrar el nombre del plot -->
       <span :class="['status', schedule.isAutomatic ? 'automatic' : 'manual']">
         {{ schedule.isAutomatic ? 'Automatic' : 'Manual' }}
       </span>
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import PlotService from '../services/plot-service.ts';
-
 export default {
   name: 'ScheduleCardComponent',
   props: {
@@ -50,12 +48,10 @@ export default {
     activateSprinklers() {
       console.log('Activating sprinklers for schedule:', this.schedule.id);
     },
-    getPlotNameById(plotId) {
-      return PlotService.getPlotById(plotId).name;
-    }
   }
 };
 </script>
+
 
 <style scoped>
 .schedule-card {
