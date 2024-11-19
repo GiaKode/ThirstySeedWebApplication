@@ -1,12 +1,12 @@
 export interface Schedule {
   id?: number;
   plotId: number;
+  waterAmount: number;
+  pressure: number;
+  sprinklerRadius: number;
   expectedMoisture: number;
   estimatedTimeHours: number;
-  waterAmount: number;
-  sprinklerRadius: number;
   setTime: string;
   angle: number;
-  pressure: number;
   isAutomatic: boolean;
 }

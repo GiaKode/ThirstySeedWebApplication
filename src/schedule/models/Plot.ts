@@ -1,10 +1,12 @@
 export interface Plot {
   id: number;
+  userId: number;
   name: string;
   location: string;  
   extension: string; 
-  status: string;    
   size: string;
-  lastIrrigationDate: string;
-  imageUrl: string;   
+  status: string;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }

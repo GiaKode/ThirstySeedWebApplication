@@ -69,6 +69,7 @@ export default {
   gap: 10px;
 }
 
+
 .card-header {
   display: flex;
   justify-content: space-between;

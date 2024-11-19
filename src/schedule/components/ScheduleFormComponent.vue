@@ -1,61 +1,71 @@
 <template>
   <div class="schedule-form">
-    <h2>{{ isEditMode ? 'Edit Schedule' : 'Create Schedule' }}</h2>
-    <div v-if="message" :class="messageClass" class="message">
-      {{ message }}
-    </div>
-    <div class="plot-select">
-      <label for="plot">Select plot:</label>
-      <select id="plot" v-model="scheduleData.plotId">
-        <option value="" disabled>Select a plot</option>
-        <option v-for="plot in plots" :key="plot.id" :value="plot.id">
-          {{ plot.name }} ({{ plot.size }} m2)
-        </option>
-      </select>
+    <!-- Toolbar con dropdown -->
+    <pv-toolbar class="toolbar">
+      <template #start>
+        <label for="plot">Select plot:</label>
+        <select id="plot" v-model="scheduleData.plotId" @change="updatePlotDetails">
+          <option value="" disabled>Select a plot</option>
+          <option v-for="plot in plots" :key="plot.id" :value="plot.id">
+            {{ plot.name }}
+          </option>
+        </select>
+      </template>
+    </pv-toolbar>
+
+    <!-- Datos del Plot + Switch -->
+    <div class="plot-info-row">
+      <div class="plot-info">
+        <img :src="selectedPlot?.imageUrl || 'https://via.placeholder.com/300'" alt="Plot image" />
+        <div>
+          <h3>{{ selectedPlot?.name || 'Select a plot' }}</h3>
+          <p>Size: {{ selectedPlot?.size || 'N/A' }} m²</p>
+          <p>Status: {{ selectedPlot?.status || 'N/A' }}</p>
+        </div>
+      </div>
+      <div class="switch-container">
+        <label>Automatic Water:</label>
+        <input type="checkbox" v-model="scheduleData.isAutomatic" @change="toggleAutomaticMode" />
+      </div>
     </div>
 
-    <!-- Form Fields -->
-    <div class="form-group">
-      <label>Expected Moisture (%)</label>
-      <input type="number" v-model.number="scheduleData.expectedMoisture" placeholder="Enter expected moisture" />
+    <!-- Formulario principal en dos columnas -->
+    <div class="form-body">
+      <div class="column">
+        <div class="form-group">
+          <label>Expected Moisture (%)</label>
+          <input type="number" v-model.number="scheduleData.expectedMoisture" :disabled="scheduleData.isAutomatic" />
+        </div>
+        <div class="form-group">
+          <label>Required Water Amount (l)</label>
+          <input type="number" v-model.number="scheduleData.requiredWaterAmount" :disabled="scheduleData.isAutomatic" />
+        </div>
+        <div class="form-group">
+          <label>Estimated Time (h)</label>
+          <input type="number" v-model.number="scheduleData.estimatedTime" :disabled="scheduleData.isAutomatic" />
+        </div>
+      </div>
+      <div class="column">
+        <div class="form-group">
+          <label>Set Time (hh:mm AM/PM)</label>
+          <input type="text" v-model="scheduleData.setTime" :disabled="scheduleData.isAutomatic" />
+        </div>
+        <div class="form-group">
+          <label>Sprinkler Radius (m)</label>
+          <input type="number" v-model.number="scheduleData.sprinklerRadius" :disabled="scheduleData.isAutomatic" />
+        </div>
+        <div class="form-group">
+          <label>Angle (degrees)</label>
+          <input type="number" v-model.number="scheduleData.angle" :disabled="scheduleData.isAutomatic" />
+        </div>
+        <div class="form-group">
+          <label>Pressure (bar)</label>
+          <input type="number" v-model.number="scheduleData.pressure" :disabled="scheduleData.isAutomatic" />
+        </div>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Required Water Amount (l)</label>
-      <input type="number" v-model.number="scheduleData.requiredWaterAmount" placeholder="Enter water amount in liters" />
-    </div>
-
-    <div class="form-group">
-      <label>Estimated Time (h)</label>
-      <input type="number" v-model.number="scheduleData.estimatedTime" placeholder="Enter estimated time in minutes" />
-    </div>
-
-    <div class="form-group">
-      <label>Sprinkler Radius (m)</label>
-      <input type="number" v-model.number="scheduleData.sprinklerRadius" placeholder="Enter sprinkler radius in meters" />
-    </div>
-
-    <div class="form-group">
-      <label>Set Time (hh:mm AM/PM)</label>
-      <input type="text" v-model="scheduleData.setTime" placeholder="Enter time (e.g., 08:00 AM)" />
-    </div>
-
-    <div class="form-group">
-      <label>Angle (degrees)</label>
-      <input type="number" v-model.number="scheduleData.angle" placeholder="Enter angle in degrees" />
-    </div>
-
-    <div class="form-group">
-      <label>Pressure (bar)</label>
-      <input type="number" v-model.number="scheduleData.pressure" placeholder="Enter pressure in bar" />
-    </div>
-
-    <div class="form-group">
-      <label>Automatic</label>
-      <input type="checkbox" v-model="scheduleData.isAutomatic" />
-    </div>
-
-    <!-- Buttons -->
+    <!-- Botones -->
     <div class="button-group">
       <button @click="save">Save</button>
       <button @click="cancel">Cancel</button>
@@ -67,34 +77,26 @@
 import { defineComponent } from 'vue';
 import PlotService from '../services/plot-service.ts';
 import ScheduleService from '../services/schedule-service.ts';
+import type { Plot } from '../models/Plot';
 import type { Schedule } from '../models/Schedule';
 
 export default defineComponent({
   name: 'ScheduleFormComponent',
-  props: {
-    schedule: {
-      type: Object,
-      required: true,
-      default: (): Schedule => ({
-        plotId: null,
-        expectedMoisture: 0,
-        estimatedTimeHours: 0,
-        waterAmount: 0,
-        sprinklerRadius: 0,
-        setTime: '',
-        angle: 0,
-        pressure: 0,
-        isAutomatic: false
-      })
-    }
-  },
   data() {
     return {
-      plots: [] as Array<{ id: number; name: string; size: number }>,
-      message: '',
-      messageClass: '',
-      isEditMode: Boolean((this.schedule as Schedule).id),
-      scheduleData: { ...this.schedule } as Schedule
+      plots: [] as Plot[],
+      selectedPlot: null as Plot | null,
+      scheduleData: {
+        plotId: null,
+        expectedMoisture: 40,
+        requiredWaterAmount: 500,
+        estimatedTime: 3,
+        sprinklerRadius: 7,
+        setTime: '08:15 PM',
+        angle: 30,
+        pressure: 50,
+        isAutomatic: false,
+      } as Schedule,
     };
   },
   methods: {
@@ -105,114 +107,151 @@ export default defineComponent({
         console.error('Error al obtener las parcelas:', error);
       }
     },
-    validateTimeFormat(time: string): boolean {
-      const timeFormat = /^(0[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/;
-      return timeFormat.test(time);
+    updatePlotDetails() {
+      this.selectedPlot = this.plots.find(plot => plot.id === this.scheduleData.plotId) || null;
     },
-    validateForm() {
-      const { plotId, expectedMoisture, requiredWaterAmount, setTime } = this.scheduleData;
-      if (!plotId || !expectedMoisture || !requiredWaterAmount || !setTime) {
-        this.message = 'Please fill in all required fields.';
-        this.messageClass = 'error-message';
-        return false;
+    toggleAutomaticMode() {
+      if (this.scheduleData.isAutomatic) {
+        this.scheduleData = {
+          ...this.scheduleData,
+          expectedMoisture: 70,
+          requiredWaterAmount: 500,
+          estimatedTime: 3,
+          sprinklerRadius: 7,
+          setTime: '08:15 PM',
+          angle: 30,
+          pressure: 50,
+        };
       }
-
-      if (!this.validateTimeFormat(setTime)) {
-        this.message = 'Invalid time format. Use hh:mm AM/PM.';
-        this.messageClass = 'error-message';
-        return false;
-      }
-
-      return true;
     },
     async save() {
       if (!this.validateForm()) return;
 
       try {
-        const scheduleToSend = {
-          ...this.scheduleData,
-          estimatedTimeHours: Number(this.scheduleData.estimatedTime), // Ajustar nombre y convertir a número
-          waterAmount: Number(this.scheduleData.requiredWaterAmount), // Ajustar nombre y convertir a número
+        // Construcción del objeto Schedule
+        const scheduleData: Schedule = {
+          plotId: this.scheduleData.plotId!,
+          waterAmount: Number(this.scheduleData.requiredWaterAmount),
+          pressure: Number(this.scheduleData.pressure),
           sprinklerRadius: Number(this.scheduleData.sprinklerRadius),
           expectedMoisture: Number(this.scheduleData.expectedMoisture),
-          pressure: Number(this.scheduleData.pressure),
+          estimatedTimeHours: Number(this.scheduleData.estimatedTime),
+          setTime: this.scheduleData.setTime,
           angle: Number(this.scheduleData.angle),
           isAutomatic: this.scheduleData.isAutomatic,
-          setTime: this.scheduleData.setTime // Validar formato hh:mm AM/PM
         };
 
+        // Lógica de creación o actualización
         if (this.isEditMode) {
-          await ScheduleService.updateSchedule(this.scheduleData.id, scheduleToSend);
+          await ScheduleService.updateSchedule(String(this.scheduleData.id), scheduleData);
           this.message = 'Schedule updated successfully!';
         } else {
-          await ScheduleService.createSchedule(scheduleToSend);
+          await ScheduleService.createSchedule(scheduleData);
           this.message = 'Schedule created successfully!';
         }
 
         this.messageClass = 'success-message';
         setTimeout(() => {
-          this.message = '';
-          this.$emit('saved');
-        }, 2000);
-      } catch (error) {
+          this.$router.push({ name: 'schedule' });
+        }, 1000);
+      } catch (error: any) {
         this.message = 'Failed to save schedule.';
         this.messageClass = 'error-message';
-        console.error('Error:', error);
+        console.error('Error al guardar el schedule:', error.response || error.message);
       }
     },
     cancel() {
-      this.$emit('cancelled');
-    }
+      this.$router.push({ name: 'schedule' });
+    },
   },
   mounted() {
     this.getAllPlots();
-  }
+  },
 });
 </script>
 
 <style scoped>
 .schedule-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding: 20px;
+  height: 100vh;
+}
+
+/* Toolbar */
+.toolbar {
+  margin-bottom: 20px;
+}
+
+.toolbar select {
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* Datos del Plot */
+.plot-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.plot-info {
+  display: flex;
+  gap: 20px;
+}
+
+.plot-info img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.switch-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Formulario */
+.form-body {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 5px;
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="number"],
-select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  box-sizing: border-box;
-}
-
-.message {
-  margin-bottom: 15px;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-.success-message {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.error-message {
-  background-color: #f8d7da;
-  color: #721c24;
+/* Botones */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .button-group button {
-  margin-right: 10px;
-  padding: 10px 15px;
+  padding: 10px 20px;
   border-radius: 4px;
   border: none;
   cursor: pointer;

@@ -10,7 +10,7 @@ import ProfileComponent from "@/profile/components/ProfileComponent.vue";
 import AccountComponent from "@/profile/components/AccountComponent.vue";
 import PlanSelectionModal from "@/subscriptions/components/PlanSelectionModal.vue";
 import PaymentForm from "@/subscriptions/components/PaymentForm.vue";
-import ScheduleListComponent from '@/schedule/components/ScheduleListComponent.vue';
+import SchedulesViewComponent from '@/schedule/components/SchedulesViewComponent.vue';
 import ScheduleFormComponent from '@/schedule/components/ScheduleFormComponent.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,7 +33,7 @@ const router = createRouter({
     { path: '/plot-status/:id', name: 'plotstatus', component: PlotStatusView,props: true},
 
     //IRRIGATION
-    { path: '/schedule', name: 'schedule', component: ScheduleListComponent },
+    { path: '/schedule', name: 'schedule', component: SchedulesViewComponent },
     { path: '/schedule-form/:id?', name: 'scheduleform', component: ScheduleFormComponent },
     
     //NOT FOUND
