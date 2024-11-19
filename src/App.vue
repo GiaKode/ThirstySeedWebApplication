@@ -11,7 +11,7 @@ const toggleSidebar = () => {
 };
 
 // Condición para mostrar el sidebar solo si no está en la ruta de login
-const showSidebar = computed(() => !['/sign-up', '/sign-in', '/complete-profile'].includes(route.path));
+const showSidebar = computed(() => !['/sign-up', '/sign-in', '/complete-profile', '/plan-selection', '/payment'].includes(route.path));
 </script>
 
 <template>
