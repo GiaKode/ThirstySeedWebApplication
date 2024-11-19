@@ -95,6 +95,9 @@
             <button class="install-node-btn" @click="openInstallNodeModal">
               {{ $t('plotsStatus.installNode') }}
             </button>
+            <button class="status-plot-btn" @click="goToPlotStatus(plot.id)">
+              {{ $t('plotsStatus.statusPlot') }}
+            </button>
           </div>
         </div>
       </div>
@@ -199,6 +202,9 @@ export default {
       } else {
         alert(this.$t('plotsStatus.invalidCode'));
       }
+    },
+    goToPlotStatus(plotId) {
+      this.$router.push({ path: `/plot-status/${plotId}` });
     },
   },
 };
@@ -339,6 +345,7 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+.status-plot-btn,
 .install-node-btn,
 .edit-plot-btn,
 .save-plot-btn,
@@ -368,22 +375,24 @@ export default {
 .install-node-btn:hover{
   background-color: #00639a;
 }
+.status-plot-btn{
+  background-color: #8f00ff;
+}
+.status-plot-btn:hover{
+  background-color: #5000bf;
+}
 .save-plot-btn {
   background-color: #28a745;
 }
-
 .save-plot-btn:hover {
   background-color: #218838;
 }
-
 .delete-plot-btn {
   background-color: #e74c3c;
 }
-
 .delete-plot-btn:hover {
   background-color: #c0392b;
 }
-
 .no-plots-message {
   font-size: 1rem;
   color: #666;

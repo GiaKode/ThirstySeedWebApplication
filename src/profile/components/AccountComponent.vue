@@ -72,6 +72,7 @@
     <div class="plots-section">
       <div class="header-container">
         <h3><i class="fas fa-seedling"></i> {{ $t('profile.registeredPlots') }}</h3>
+        <!-- Cambia el botón para redirigir a la vista de manejo de parcelas -->
         <button class="see-more-btn" @click="goToManageParcels">{{ $t('profile.seeMore') }}</button>
       </div>
       <hr class="green-line" />
@@ -144,6 +145,9 @@ export default {
     }
   },
   methods: {
+    goToManageParcels() {
+      this.$router.push('/manage-parcels');
+    },
     // Copiar código de validación (comentado porque no es necesario en este caso)
     copyCode() {
       // navigator.clipboard.writeText(this.subscription.validationCode)
